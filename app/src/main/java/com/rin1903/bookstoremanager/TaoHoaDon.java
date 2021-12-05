@@ -9,6 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -88,7 +91,12 @@ public class TaoHoaDon extends Activity {
                TaoHoaDon.super.onBackPressed();
             }
         });
-
+        arrayList=new ArrayList<>();
+        if(adapter!=null){
+            if(adapter.getItemCount()!=0){
+                arrayList=adapter.getArrayList();
+            }
+        }
 
 
     }
@@ -114,21 +122,66 @@ public class TaoHoaDon extends Activity {
         sachArrayList = MainActivity.sachArrayList;
         if(result.getContents()!=null&sachArrayList.size()>0) {
             int so= Integer.parseInt(result.getContents());
-            for(int i=0;i<sachArrayList.size();i++){
-                if(so==sachArrayList.get(i).getMASACH()){
-                    arrayList.add(new SACH_TRONG_HOADON(sachArrayList.get(i).getTENSACH(),
-                            sachArrayList.get(i).getMASACH(),sachArrayList.get(i).getSOQUYEN(),
-                            sachArrayList.get(i).getGIABAN()));
-                    adapter= new ChiTietHoaDonAdapter(getApplication(),arrayList);
-                    recyclerView_thongtinhoadon.setAdapter(adapter);
-                    Toast.makeText(getApplication(), "add succes", Toast.LENGTH_SHORT).show();
-                }
+            if(arrayList.size()>0){
+                for(int i=0;i<sachArrayList.size();i++){
+                    for (int j =0;j<arrayList.size();j++){
+                        if(so==sachArrayList.get(i).getMASACH()& so!=arrayList.get(j).getMaSach()){
+                            arrayList.add(new SACH_TRONG_HOADON(sachArrayList.get(i).getTENSACH(),
+                                    sachArrayList.get(i).getMASACH(),sachArrayList.get(i).getSOQUYEN(),
+                                    sachArrayList.get(i).getGIABAN()));
+                            adapter= new ChiTietHoaDonAdapter(getApplication(),arrayList);
+                            recyclerView_thongtinhoadon.setAdapter(adapter);
 
+                        }
+                        else {
+
+                            Toast.makeText(getApplication(), "Sách này đã có trong hoá đơn", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                }
             }
+            else {
+                for(int i=0;i<sachArrayList.size();i++){
+                    if(so==sachArrayList.get(i).getMASACH()){
+                        arrayList.add(new SACH_TRONG_HOADON(sachArrayList.get(i).getTENSACH(),
+                                sachArrayList.get(i).getMASACH(),sachArrayList.get(i).getSOQUYEN(),
+                                sachArrayList.get(i).getGIABAN()));
+                        adapter= new ChiTietHoaDonAdapter(getApplication(),arrayList);
+                        recyclerView_thongtinhoadon.setAdapter(adapter);
+//
+                    }
+                }
+            }
+
 
         }
     }
-
+    public void dialog_add_hoadon(String chuoi){
+                        Dialog dialog= new Dialog(getApplication());
+                        dialog.setContentView(R.layout.dialog_xacnhan);
+                        TextView tv= dialog.findViewById(R.id.tv_noidung_dialog_xacnhan);
+                        Button btn_xacnhan=dialog.findViewById(R.id.btn_xacnhan_dialog_xacnhan);
+                        Button btn_huy= dialog.findViewById(R.id.btn_huy_dialog_xacnhan);
+                        tv.setText(chuoi);
+                        btn_xacnhan.setText("Tiếp Tục");
+                        btn_huy.setText("Rời khỏi");
+                        btn_xacnhan.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                scancode();
+                                dialog.cancel();
+                            }
+                        });
+                        btn_huy.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                dialog.cancel();
+                            }
+                        });
+                        dialog.show();
+    }
     @Override
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() > 0) {
