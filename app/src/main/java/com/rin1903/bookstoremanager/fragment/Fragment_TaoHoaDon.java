@@ -243,13 +243,14 @@ public class Fragment_TaoHoaDon extends Fragment {
             @Override
             public void onClick(View view) {
                 refesh_adapter();
-                StringBuilder chuoi= new StringBuilder("Thông Tin Hoá Đơn");
+                StringBuilder chuoi= new StringBuilder("Thông Tin Hoá Đơn \n Tên Sách \t Giá Bán \t Số Lượng \t Thành Tiền ");
                 if(arrayList.size()>0){
                     for (i=0;i<arrayList.size();i++){
                         chuoi.append("\n Tên Sách: ").append(arrayList.get(i).getTenSach()).append("\t").append(String.valueOf(arrayList.get(i).getGiaban())).append("\t").append(String.valueOf(arrayList.get(i).getSoluongtronghoadon())).append("\t").append(String.valueOf(arrayList.get(i).getThanhtien()));
                     }
                     chuoi.append("\n Tổng thành tiền:").append(adapter.getthanhtientong());
-                    Toast.makeText(getActivity(), chuoi.toString(), Toast.LENGTH_SHORT).show();
+                    Dialog dialog = new Dialog(getActivity());
+                    dialog.setTitle(chuoi);
                 }
             }
         });
