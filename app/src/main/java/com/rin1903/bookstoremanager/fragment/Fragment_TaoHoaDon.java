@@ -1,19 +1,28 @@
 package com.rin1903.bookstoremanager.fragment;
 
+import static com.rin1903.bookstoremanager.MainActivity.Tag;
+import static com.rin1903.bookstoremanager.MainActivity.database;
+import static com.rin1903.bookstoremanager.MainActivity.khachhangArrayList;
+import static com.rin1903.bookstoremanager.MainActivity.refesh_khachhang;
+import static com.rin1903.bookstoremanager.MainActivity.refesh_sach;
 import static com.rin1903.bookstoremanager.MainActivity.sachArrayList;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,10 +54,9 @@ public class Fragment_TaoHoaDon extends Fragment {
     @BindView(R.id.btn_thanhtoan_fragment_taohoadon) Button btn_thanhtoan;
     @BindView(R.id.image_themsach_taohoadon)
     ImageView img_themsachtheospinner;
-    @BindView(R.id.img_quetsach_fragment_taohoadon) ImageView img_quet_sach_hoadon;
-    @BindView(R.id.image_khachhang_taohoadon) ImageView img_quetmakhachhang;
-    @BindView(R.id.tv_thanhtien_fragment_taohoadon)
-    TextView tv_thanhtien;
+    @BindView(R.id.tv_themsachvaohoadon_taohoadon) TextView tv_themsachvaohoadon;
+    @BindView(R.id.image_themkhachhangmoi_taohoadon) ImageView img_themkhachhangmoi;
+    @BindView(R.id.layout_sach_taohoadon) LinearLayout layout_sach;
     @BindView(R.id.tv_tensach_taohoadon) TextView tv_tensach;
     @BindView(R.id.tv_tenkhachhang_taohoadon) TextView tv_tenkhachhang;
     @BindView(R.id.recycleview_fragment_taohoadon)
@@ -60,18 +68,29 @@ public class Fragment_TaoHoaDon extends Fragment {
     LinearLayout linearLayout;
     @BindView(R.id.scanner_view)
     CodeScannerView scannerview;
+    @BindView(R.id.btn_quetma_taohoadon) Button btn_quetmabarcode;
     private CodeScanner mCodeScanner;
+    private int i,j;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_taohoadon,container,false);
         final Activity activity = getActivity();
         unbinder= ButterKnife.bind(this,view);
+        Tag= Fragment_TaoHoaDon.class.getName();
+
+        refesh_spinner_sach();
+        refesh_spinner_khachhang();
+
 
         arrayList = new ArrayList<>();
         recyclerView_thongtinhoadon.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
         recyclerView_thongtinhoadon.setLayoutManager(linearLayoutManager);
+
+        arrayList=new ArrayList<>();
+
+
 
         mCodeScanner = new CodeScanner(activity, scannerview);
         scannerview.setVisibility(View.GONE);
@@ -82,60 +101,135 @@ public class Fragment_TaoHoaDon extends Fragment {
                     @Override
                     public void run() {
                         MainActivity.refesh_sach();
-                        if (result.getText() != null & sachArrayList.size() > 0) {
-                            int so = Integer.parseInt(result.getText());
-                            if (arrayList.size() > 0) {
-                                for (int i = 0; i < sachArrayList.size(); i++) {
-                                    for (int j = 0; j < arrayList.size(); j++) {
-                                        if(so != arrayList.get(j).getMaSach()){
-                                            if (so == sachArrayList.get(i).getMASACH()) {
-                                                arrayList.add(new SACH_TRONG_HOADON(sachArrayList.get(i).getTENSACH(),
-                                                        sachArrayList.get(i).getMASACH(), sachArrayList.get(i).getSOQUYEN(),
-                                                        sachArrayList.get(i).getGIABAN()));
-                                                adapter = new ChiTietHoaDonAdapter(getActivity(), arrayList);
-                                                recyclerView_thongtinhoadon.setAdapter(adapter);
-
-                                                dialog("Bạn đã thêm "+sachArrayList.get(i).getTENSACH().toString()+" Thành Công!!!\n Bạn có muốn tiếp tục thêm sách???",
-                                                        "Tiếp Tục","Huỷ");
-                                            }
-                                        }
-                                        else if(so==sachArrayList.get(i).getMASACH()) {
-
-                                            dialog(sachArrayList.get(i).getTENSACH().toString()+" Đã tồn tại trong hoá đơn!!!\n Bạn có muốn tiếp tục thêm sách???",
-                                                    "Tiếp Tục","Huỷ");
-                                        }
-
+                        refesh_adapter();
+                        int so= Integer.parseInt(result.getText().toString());
+                        if(sachArrayList.size()>0){
+                            for(i=0;i<sachArrayList.size();i++){
+                                if (so==sachArrayList.get(i).getMASACH()){
+                                    if(arrayList.size()>0)
+                                    {
+                                       if( kiemtra_sachtronghoadon(sachArrayList.get(i).getMASACH())!=0)
+                                       {
+                                           arrayList.add(new SACH_TRONG_HOADON(sachArrayList.get(i).getTENSACH(),sachArrayList.get(i).getMASACH(),
+                                                   sachArrayList.get(i).getSOQUYEN(),sachArrayList.get(i).getGIABAN()));
+                                           adapter= new ChiTietHoaDonAdapter(getActivity(),arrayList);
+                                           recyclerView_thongtinhoadon.setAdapter(adapter);
+                                           dialog(sachArrayList.get(i).getTENSACH()+" đã được thêm thành công! \n Bạn có muốn thêm sách khác không?","Tiếp tục","Rời Khỏi");
+                                           break;
+                                       }
+                                       else {
+                                           dialog(sachArrayList.get(i).getTENSACH()+" đã tồn tại! \n Bạn có muốn thêm sách khác không?","Tiếp tục","Rời Khỏi");
+                                       }
 
                                     }
-
-                                }
-                            } else {
-                                for (int i = 0; i < sachArrayList.size(); i++) {
-                                    if (so == sachArrayList.get(i).getMASACH()) {
-                                        arrayList.add(new SACH_TRONG_HOADON(sachArrayList.get(i).getTENSACH(),
-                                                sachArrayList.get(i).getMASACH(), sachArrayList.get(i).getSOQUYEN(),
-                                                sachArrayList.get(i).getGIABAN()));
-                                        adapter = new ChiTietHoaDonAdapter(getActivity(), arrayList);
+                                    else {
+                                        arrayList.add(new SACH_TRONG_HOADON(sachArrayList.get(i).getTENSACH(),sachArrayList.get(i).getMASACH(),
+                                                sachArrayList.get(i).getSOQUYEN(),sachArrayList.get(i).getGIABAN()));
+                                        adapter= new ChiTietHoaDonAdapter(getActivity(),arrayList);
                                         recyclerView_thongtinhoadon.setAdapter(adapter);
-                                        dialog("Bạn đã thêm "+sachArrayList.get(i).getTENSACH().toString()+" Thành Công!!!\n Bạn có muốn tiếp tục thêm sách???",
-                                                "Tiếp Tục","Huỷ");
-
+                                        dialog(sachArrayList.get(i).getTENSACH()+" đã được thêm thành công! \n Bạn có muốn thêm sách khác không?","Tiếp tục","Rời Khỏi");
+                                        break;
                                     }
+                                }
+                                else {
+                                    dialog(sachArrayList.get(i).getTENSACH()+" Chưa có sách nào vui lòng thêm! \n Bạn có muốn thêm sách khác không?","Thêm","Rời Khỏi");
+                                    break;
                                 }
                             }
+                        }
+                        else {
+                            Toast.makeText(getActivity(), "Chưa có sách nào vui lòng thêm", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
             }
         });
-        img_quet_sach_hoadon.setOnClickListener(new View.OnClickListener() {
+
+
+
+        img_themkhachhangmoi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle1= new Bundle();
+                bundle1.putString("guidulieu","tao-Khách Hàng-sach");
+                Fragment_KhachHang fragment=new Fragment_KhachHang();
+                fragment.setArguments(bundle1);
+                getFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment).addToBackStack(Tag).commit();
+            }
+        });
+
+        img_themsachtheospinner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle1= new Bundle();
+                bundle1.putString("guidulieu","tao-Sách-sach");
+                Fragment_Sach fragment=new Fragment_Sach();
+                fragment.setArguments(bundle1);
+                getFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment).addToBackStack(Tag).commit();
+            }
+        });
+
+        tv_themsachvaohoadon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                refesh_sach();
+                refesh_adapter();
+                int dem=0;
+                String[] mang=spinner_masach.getSelectedItem().toString().split(" - ");
+                int so= Integer.parseInt(mang[0].toString().trim());
+                if(sachArrayList.size()>0){
+                    for (i=0;i<sachArrayList.size();i++){
+                        if(so == sachArrayList.get(i).getMASACH()&sachArrayList.get(i).getSOQUYEN()>0){
+                            if(arrayList.size()>0){
+                                if(kiemtra_sachtronghoadon(sachArrayList.get(i).getMASACH())!=0){
+                                    Toast.makeText(getActivity(), "Đã tồn tại sách này trong hoá đơn", Toast.LENGTH_SHORT).show();
+                                }
+                                else {
+                                    arrayList.add(new SACH_TRONG_HOADON(sachArrayList.get(i).getTENSACH(),sachArrayList.get(i).getMASACH()
+                                            ,sachArrayList.get(i).getSOQUYEN(),sachArrayList.get(i).getGIABAN()));
+                                    adapter= new ChiTietHoaDonAdapter(getActivity(),arrayList);
+                                    recyclerView_thongtinhoadon.setAdapter(adapter);
+                                }
+                            }
+                            else {
+                                arrayList.add(new SACH_TRONG_HOADON(sachArrayList.get(i).getTENSACH(),sachArrayList.get(i).getMASACH()
+                                ,sachArrayList.get(i).getSOQUYEN(),sachArrayList.get(i).getGIABAN()));
+                                adapter= new ChiTietHoaDonAdapter(getActivity(),arrayList);
+                                recyclerView_thongtinhoadon.setAdapter(adapter);
+                            }
+                        }
+                    }
+                }
+                else {
+                    Toast.makeText(getActivity(), "Không có sách nào! vui lòng thêm!!!", Toast.LENGTH_SHORT).show();
+                }
+
+
+
+            }
+        });
+
+        btn_quetmabarcode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                scancode();
-                scannerview.setVisibility(View.VISIBLE);
-                mCodeScanner.startPreview();
+                if(btn_quetmabarcode.getText().toString().toLowerCase().contains("quét mã")){
+                    tv_themsachvaohoadon.setVisibility(View.GONE);
+                    layout_sach.setVisibility(View.GONE);
+                    refesh_adapter();
+                    scannerview.setVisibility(View.VISIBLE);
+                    mCodeScanner.startPreview();
+                    btn_quetmabarcode.setText("Huỷ");
+                }
+                else {
+                    tv_themsachvaohoadon.setVisibility(View.VISIBLE);
+                    layout_sach.setVisibility(View.VISIBLE);
+                    scannerview.setVisibility(View.GONE);
+                    btn_quetmabarcode.setText("Quét Mã");
+                }
             }
         });
+
         btn_huy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,12 +238,22 @@ public class Fragment_TaoHoaDon extends Fragment {
                 }
             }
         });
-        arrayList=new ArrayList<>();
-        if(adapter!=null){
-            if(adapter.getItemCount()!=0){
-                arrayList=adapter.getArrayList();
+
+        btn_thanhtoan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                refesh_adapter();
+                StringBuilder chuoi= new StringBuilder("Thông Tin Hoá Đơn");
+                if(arrayList.size()>0){
+                    for (i=0;i<arrayList.size();i++){
+                        chuoi.append("\n Tên Sách: ").append(arrayList.get(i).getTenSach()).append("\t").append(String.valueOf(arrayList.get(i).getGiaban())).append("\t").append(String.valueOf(arrayList.get(i).getSoluongtronghoadon())).append("\t").append(String.valueOf(arrayList.get(i).getThanhtien()));
+                    }
+                    chuoi.append("\n Tổng thành tiền:").append(adapter.getthanhtientong());
+                    Toast.makeText(getActivity(), chuoi.toString(), Toast.LENGTH_SHORT).show();
+                }
             }
-        }
+        });
+
 
         return view;
     }
@@ -188,6 +292,9 @@ public class Fragment_TaoHoaDon extends Fragment {
             @Override
             public void onClick(View view) {
                 scannerview.setVisibility(View.GONE);
+                tv_themsachvaohoadon.setVisibility(View.VISIBLE);
+                layout_sach.setVisibility(View.VISIBLE);
+                btn_quetmabarcode.setText("Quét Mã");
                 dialog.cancel();
 
             }
@@ -195,4 +302,54 @@ public class Fragment_TaoHoaDon extends Fragment {
         dialog.show();
 
     }
+    public void refesh_spinner_khachhang(){
+        refesh_khachhang();
+        ArrayList<String> arrayList_spinner_khachhang= new ArrayList<>();
+        if(khachhangArrayList.size()>0){
+            for(i=0;i<khachhangArrayList.size();i++){
+                arrayList_spinner_khachhang.add(String.valueOf(khachhangArrayList.get(i).getMAKHACHHANG()+" - "+khachhangArrayList.get(i).getTENKHACHHANG()));
+            }
+        }  else {
+            arrayList_spinner_khachhang.add("Vui Lòng Thêm Khách Hàng");
+        }
+        ArrayAdapter adapter_khachhang= new ArrayAdapter(getActivity(),R.layout.support_simple_spinner_dropdown_item,arrayList_spinner_khachhang);
+        spinner_makhachhang.setAdapter(adapter_khachhang);
+
+    }
+    public void refesh_spinner_sach() {
+        refesh_sach();
+        ArrayList<String> arrayList_spinner_sach= new ArrayList<>();
+        if(sachArrayList.size()>0){
+            for(i=0;i<sachArrayList.size();i++){
+                if(sachArrayList.get(i).getSOQUYEN()>0){
+                    arrayList_spinner_sach.add(String.valueOf(sachArrayList.get(i).getMASACH())+" - "+sachArrayList.get(i).getTENSACH());
+                }
+            }
+        }
+        else {
+            arrayList_spinner_sach.add("Vui Lòng Thêm Sách");
+        }
+        ArrayAdapter adapter_sach= new ArrayAdapter(getActivity(),R.layout.support_simple_spinner_dropdown_item,arrayList_spinner_sach);
+        spinner_masach.setAdapter(adapter_sach);
+    }
+    public void refesh_adapter(){
+        if(adapter!=null){
+            if(adapter.getItemCount()!=0){
+                arrayList=adapter.getArrayList();
+            }
+        }
+    }
+    public int kiemtra_sachtronghoadon(int so){
+        refesh_adapter();
+        int kq=0;
+        for(j=0;j<arrayList.size();j++){
+            if(so==arrayList.get(j).getMaSach()){
+               kq+=1;
+            }
+            else kq+=0;
+        }
+        return kq;
+
+    }
+
 }

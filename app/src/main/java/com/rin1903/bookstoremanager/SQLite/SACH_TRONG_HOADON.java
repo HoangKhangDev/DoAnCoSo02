@@ -38,7 +38,12 @@ public class SACH_TRONG_HOADON implements Serializable {
     }
 
     public int getSoluongtronghoadon() {
-        return soluongtronghoadon;
+         if(this.soluongtronghoadon==0){
+             return 1;
+         }
+         else {
+             return soluongtronghoadon;
+         }
     }
 
     public void setSoluongtronghoadon(int soluongtronghoadon) {

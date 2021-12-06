@@ -40,34 +40,47 @@ public class ChiTietHoaDonAdapter extends  RecyclerView.Adapter<ChiTietHoaDonAda
         holder.tv_soluong.setText("1");
         holder.tv_gia.setText(String.valueOf(arrayList.get(position).getGiaban()));
         SACH_TRONG_HOADON sach_trong_hoadon= arrayList.get(position);
-        if(!holder.tv_soluong.toString().isEmpty()){
-            soluong=Integer.parseInt(holder.tv_soluong.getText().toString());
-        }
+
             holder.imgdow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(soluong>1){
-                        soluong-=1;
+                    soluong = sach_trong_hoadon.getSoluongtronghoadon();
+                    if (soluong > 1) {
+                        soluong -= 1;
                         holder.tv_soluong.setText(String.valueOf(soluong));
                         sach_trong_hoadon.setSoluongtronghoadon(soluong);
-                        arrayList.set(position,sach_trong_hoadon);
+                        arrayList.set(position, sach_trong_hoadon);
                     }
                 }
             });
             holder.img_up.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(soluong<sach_trong_hoadon.getSoLuongconlai()){
-                        soluong+=1;
+                    soluong = sach_trong_hoadon.getSoluongtronghoadon();
+                    if (soluong < sach_trong_hoadon.getSoLuongconlai()) {
+                        soluong += 1;
                         holder.tv_soluong.setText(String.valueOf(soluong));
                         sach_trong_hoadon.setSoluongtronghoadon(soluong);
-                        arrayList.set(position,sach_trong_hoadon);
+                        arrayList.set(position, sach_trong_hoadon);
                     }
                 }
             });
 
 
 
+
+    }
+    public int getthanhtientong(){
+        int tong=0;
+        if(arrayList.size()>0){
+            for(int i=0;i<arrayList.size();i++){
+                tong+=arrayList.get(i).getThanhtien();
+            }
+            return tong;
+        }
+        else {
+            return 0;
+        }
 
     }
 
