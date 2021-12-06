@@ -90,10 +90,10 @@ public class Fragment_HienThi extends Fragment{
             tv_tenhienthi.setText(dulieu[1]);
 
 
-            if(dulieu[1].toLowerCase().contains("thể loại")){
-                refesh_theloai();
+            if(dulieu[1].toLowerCase().contains("phiếu nhập")){
+                refesh_phieunhap();
 
-                if (theloaiArrayList.size()==0){
+                if (phieunhapArrayList.size()==0){
                     Dialog dialog = new Dialog(getActivity());
                     dialog.setContentView(R.layout.dialog_list_null);
 
@@ -108,7 +108,7 @@ public class Fragment_HienThi extends Fragment{
                     dialog.show();
                 }
                 else {
-                    refesh_lv_theloai();
+                    refesh_lv_phieunhap();
                 }
 
             }
@@ -212,26 +212,6 @@ public class Fragment_HienThi extends Fragment{
                     refesh_lv_hoadon();
                 }
             }
-            else if (dulieu[1].toLowerCase().contains("thể loại")){
-                refesh_sach();
-                if (sachArrayList.size()==0){
-                    Dialog dialog = new Dialog(getActivity());
-                    dialog.setContentView(R.layout.dialog_list_null);
-
-                    Button btn= dialog.findViewById(R.id.btn_ok_dialog_list_null);
-
-                    btn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.cancel();
-                        }
-                    });
-                    dialog.show();
-                }
-                else {
-                    refesh_lv_theloai();
-                }
-            }
             else if (dulieu[1].toLowerCase().contains("tác giả")){
                 refesh_tacgia();
                 if (tacgiaArrayList.size()==0){
@@ -266,47 +246,13 @@ public class Fragment_HienThi extends Fragment{
                     fragment_khachhang.setArguments(bundle1);
                     getFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment_khachhang).addToBackStack(Tag).commit();
                 }
-                else if(dulieu[1].toString().toLowerCase().contains("thể loại"))
-                {
-                    Dialog dialog= new Dialog(getActivity());
-                    dialog.setContentView(R.layout.dialog_theloai);
-
-                    EditText edt_tenloai= (EditText) dialog.findViewById(R.id.edt_tenloaisach_theloai);
-                    Button btn_update_add = (Button) dialog.findViewById(R.id.btn_them_theloai);
-                    Button btn_update_huy = (Button) dialog.findViewById(R.id.btn_huy_theloai);
-
-                    btn_update_add.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if(!edt_tenloai.getText().toString().isEmpty()){
-                                if(theloaiArrayList.size()==0){
-                                    database.INSERT_THELOAI("LS-1",edt_tenloai.getText().toString());
-                                    Toast.makeText(getActivity(), "Thêm Loại "+edt_tenloai.getText().toString()+" Thành Công", Toast.LENGTH_SHORT).show();
-                                    edt_tenloai.setText(null);
-                                    dialog.cancel();
-                                }
-                                else {
-                                    int so = theloaiArrayList.size()-1;
-                                   String[] tach= theloaiArrayList.get(so).getMALOAI().split("-");
-                                    so= Integer.parseInt(tach[1])+1;
-                                    database.INSERT_THELOAI("LS-"+String.valueOf(so),edt_tenloai.getText().toString());
-                                    Toast.makeText(getActivity(), "Thêm Loại "+edt_tenloai.getText().toString()+" Thành Công", Toast.LENGTH_SHORT).show();
-                                   dialog.cancel();
-
-                                }
-                            }
-                                    }
-                                });
-                                btn_update_huy.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dialog.cancel();
-                                    }
-                                });
-
-                                dialog.show();
-
-                            }
+                else if(dulieu[1].toString().toLowerCase().contains("phiếu nhập"))
+                { Bundle bundle1= new Bundle();
+                    bundle1.putString("guidulieu","tao-Phiếu Nhập");
+                    Fragment_TaoPhieuNhap fragment= new Fragment_TaoPhieuNhap();
+                    fragment.setArguments(bundle1);
+                    getFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment).addToBackStack(Tag).commit();
+                }
                 else if(dulieu[1].toString().toLowerCase().contains("hoá đơn")){
                     Bundle bundle1= new Bundle();
                     bundle1.putString("guidulieu","tao-Sách");
@@ -332,7 +278,7 @@ public class Fragment_HienThi extends Fragment{
                 else if(dulieu[1].toString().toLowerCase().contains("nhà cung cấp")){
                     Bundle bundle1= new Bundle();
                     bundle1.putString("guidulieu","tao-Nhà Cung Cấp");
-                    fragment_nhacungcap fragment=new fragment_nhacungcap();
+                    Fragment_NhaCungCap fragment=new Fragment_NhaCungCap();
                     getFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment).addToBackStack(Tag).commit();
                 }
             }
@@ -343,7 +289,7 @@ public class Fragment_HienThi extends Fragment{
 
         return view;
     }
-    public void refesh_lv_theloai(){
+    public void refesh_lv_phieunhap(){
         refesh_phieunhap();
         PhieuNhapAdapter adapter;
         adapter= new PhieuNhapAdapter(phieunhapArrayList,getActivity());

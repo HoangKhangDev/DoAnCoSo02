@@ -147,7 +147,7 @@
         android:layout_height="200dp">
         <androidx.cardview.widget.CardView
             android:layout_marginRight="5dp"
-            android:id="@+id/cardview_theloai_main"
+            android:id="@+id/cardview_phieunhap_main"
             android:layout_weight="5"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -163,12 +163,12 @@
                     android:layout_height="135dp"
                     android:padding="15dp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/category"/>
+                    android:src="@drawable/bill"/>
                 <TextView
                     android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Thể Loại"
+                    android:text="Phiếu Nhập"
                     android:textSize="18sp"
                     android:gravity="center"
                     android:textStyle="bold"

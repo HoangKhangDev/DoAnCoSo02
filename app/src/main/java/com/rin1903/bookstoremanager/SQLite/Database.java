@@ -164,26 +164,24 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase database= getWritableDatabase();
         database.execSQL("delete from NHACUNGCAP where MANHACUNGCAP='"+MANHACUNGCAP+"'");
     }
-    public void INSERT_PHIEUNHAP(String MAPHIEUNHAP, String MANHACUNGCAP, int SOLUONG_PN, int THANHTIEN_PN){
+    public void INSERT_PHIEUNHAP(String MAPHIEUNHAP, String MANHACUNGCAP, int THANHTIEN_PN){
         SQLiteDatabase database= getWritableDatabase();
-        String sql= "INSERT INTO PHIEUNHAP VALUES(?,?,(select datetime('now','location')),?,?)";
+        String sql= "INSERT INTO PHIEUNHAP VALUES(?,?,(select datetime('now','location')),?)";
         SQLiteStatement sqLiteStatement= database.compileStatement(sql);
         sqLiteStatement.clearBindings();
         sqLiteStatement.bindString(1,MAPHIEUNHAP);
         sqLiteStatement.bindString(2,MANHACUNGCAP);
-        sqLiteStatement.bindLong(3,SOLUONG_PN);
-        sqLiteStatement.bindLong(4,THANHTIEN_PN);
+        sqLiteStatement.bindLong(3,THANHTIEN_PN);
         sqLiteStatement.executeInsert();
     }
-    public void UPDATE_PHIEUNHAP(String MAPHIEUNHAP, String MANHACUNGCAP, int SOLUONG_PN, int THANHTIEN_PN){
+    public void UPDATE_PHIEUNHAP(String MAPHIEUNHAP, String MANHACUNGCAP, int THANHTIEN_PN){
         SQLiteDatabase database= getWritableDatabase();
-        String sql= "UPDATE PHIEUNHAP SET MANHACUNGCAP=?,SOLUONG_PN=?,THANHTIEN_PN=? WHERE MAPHIEUNHAP=?";
+        String sql= "UPDATE PHIEUNHAP SET MANHACUNGCAP=?,THANHTIEN_PN=? WHERE MAPHIEUNHAP=?";
         SQLiteStatement sqLiteStatement= database.compileStatement(sql);
         sqLiteStatement.clearBindings();
-        sqLiteStatement.bindString(4,MAPHIEUNHAP);
+        sqLiteStatement.bindString(3,MAPHIEUNHAP);
         sqLiteStatement.bindString(1,MANHACUNGCAP);
-        sqLiteStatement.bindLong(2,SOLUONG_PN);
-        sqLiteStatement.bindLong(3,THANHTIEN_PN);
+        sqLiteStatement.bindLong(2,THANHTIEN_PN);
         sqLiteStatement.executeUpdateDelete();
     }
     public void DELETE_PHIEUNHAP(String MAPHIEUNHAP){

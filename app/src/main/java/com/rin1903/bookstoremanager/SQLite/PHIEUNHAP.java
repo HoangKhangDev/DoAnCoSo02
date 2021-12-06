@@ -7,7 +7,6 @@ public class PHIEUNHAP {
                 "   MAPHIEUNHAP          char(50)             not null," +
                 "   MANHACUNGCAP         char(50)             not null," +
                 "   NGAY_PN              DATETIME SECOND              null," +
-                "   SOLUONG_PN           int                  null," +
                 "   THANHTIEN_PN         int          null," +
                 "   constraint PK_PHIEUNHAP primary key (MAPHIEUNHAP)" +
                 ")";
@@ -43,13 +42,6 @@ public class PHIEUNHAP {
         this.NGAY_PN = NGAY_PN;
     }
 
-    public int getSOLUONG_PN() {
-        return SOLUONG_PN;
-    }
-
-    public void setSOLUONG_PN(int SOLUONG_PN) {
-        this.SOLUONG_PN = SOLUONG_PN;
-    }
 
     public int getTHANHTIEN_PN() {
         return THANHTIEN_PN;
@@ -67,11 +59,10 @@ public class PHIEUNHAP {
         this.MANHACUNGCAP = MANHACUNGCAP;
     }
 
-    public PHIEUNHAP(String MAPHIEUNHAP, String MANHACUNGCAP, String NGAY_PN, int SOLUONG_PN, int THANHTIEN_PN) {
+    public PHIEUNHAP(String MAPHIEUNHAP, String MANHACUNGCAP, String NGAY_PN, int THANHTIEN_PN) {
         this.MAPHIEUNHAP = MAPHIEUNHAP;
         this.MANHACUNGCAP = MANHACUNGCAP;
         this.NGAY_PN = NGAY_PN;
-        this.SOLUONG_PN = SOLUONG_PN;
         this.THANHTIEN_PN = THANHTIEN_PN;
     }
 }

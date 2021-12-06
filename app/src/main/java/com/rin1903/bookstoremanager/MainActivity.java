@@ -84,7 +84,6 @@ public class MainActivity extends Activity {
         THELOAI theloai = new THELOAI();
 
 
-
         database.QueryData(chi_tiet_hoa_don.SQL_Createtable());
         database.QueryData(chi_tiet_phieu_nhap.SQL_createtable());
         database.QueryData(hoadon.SQL_createtable());
@@ -234,8 +233,7 @@ public class MainActivity extends Activity {
                 phieunhapArrayList.add(new PHIEUNHAP(cursor.getString(0)
                         ,cursor.getString(1)
                         ,cursor.getString(2)
-                        ,cursor.getInt(3)
-                        ,cursor.getInt(4)));
+                        ,cursor.getInt(3)));
             }
         }
     }

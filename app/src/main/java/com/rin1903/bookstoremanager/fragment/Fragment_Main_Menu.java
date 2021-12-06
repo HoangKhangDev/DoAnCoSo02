@@ -29,7 +29,7 @@ public class Fragment_Main_Menu extends Fragment {
     @BindView(R.id.cardview_tacgia_main) CardView cardview_tacgia;
     @BindView(R.id.cardview_nhacungcap_main) CardView cardview_nhacungcap;
     @BindView(R.id.cardview_hoadon_main) CardView cardview_hoadon;
-    @BindView(R.id.cardview_theloai_main) CardView cardview_theloai;
+    @BindView(R.id.cardview_phieunhap_main) CardView cardview_phieunhap;
     private  BottomNavigationView bottomNavigationView;
     private FragmentManager fragmentManager;
     private  FragmentTransaction fragmentTransaction;
@@ -103,12 +103,12 @@ public class Fragment_Main_Menu extends Fragment {
 
             }
         });
-        cardview_theloai.setOnClickListener(new View.OnClickListener() {
+        cardview_phieunhap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 bottomNavigationView.setVisibility(View.GONE);
                 Bundle bundle= new Bundle();
-                bundle.putString("guidulieu","guidulieu-Thể Loại");
+                bundle.putString("guidulieu","guidulieu-Phiếu Nhập");
                 FragmentManager fragmentManager= getFragmentManager();
                 fragment_hienthi_replace(fragmentManager,bundle);
 
