@@ -237,8 +237,8 @@ public class Fragment_Sach extends Fragment {
                                 Dialog dialog= new Dialog(getActivity());
                                 dialog.setContentView(R.layout.dialog_xacnhan);
 
-                                Button btn_xacnhan= dialog.findViewById(R.id.btn_xacnhan_dialog_xacnhan);
-                                Button btn_huy= dialog.findViewById(R.id.btn_huy_dialog_xacnhan);
+                                TextView btn_xacnhan= dialog.findViewById(R.id.btn_xacnhan_dialog_xacnhan);
+                                TextView btn_huy= dialog.findViewById(R.id.btn_huy_dialog_xacnhan);
                                 TextView tv_noidung = dialog.findViewById(R.id.tv_noidung_dialog_xacnhan);
 
                                 tv_noidung.setText("Tên sách này đã tồn tại bạn vẫn muốn tạo chứ???");

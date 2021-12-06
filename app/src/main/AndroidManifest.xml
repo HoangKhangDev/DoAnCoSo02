@@ -19,9 +19,6 @@
         android:theme="@style/Theme.BookStoreManager"
         tools:ignore="AllowBackup">
         <activity
-            android:name=".TaoHoaDon"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

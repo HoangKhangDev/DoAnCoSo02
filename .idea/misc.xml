@@ -3,7 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/drawable/shape_30.xml" value="0.37864583333333335" />
+        <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/activity_tao_hoa_don.xml" value="0.25" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/dialog_xacnhan.xml" value="0.3625" />
+        <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/fragment_taohoadon.xml" value="0.3074074074074074" />
+        <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/item_list_hienthi_cohinh.xml" value="0.1" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/item_sach_thongtin_hoadon.xml" value="0.33" />
       </map>
     </option>

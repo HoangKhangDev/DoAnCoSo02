@@ -22,7 +22,6 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,7 +44,6 @@ import com.rin1903.bookstoremanager.Adapter.PhieuNhapAdapter;
 import com.rin1903.bookstoremanager.Adapter.SachAdapter;
 import com.rin1903.bookstoremanager.Adapter.TacGiaAdapter;
 import com.rin1903.bookstoremanager.R;
-import com.rin1903.bookstoremanager.TaoHoaDon;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -311,11 +309,10 @@ public class Fragment_HienThi extends Fragment{
                             }
                 else if(dulieu[1].toString().toLowerCase().contains("hoá đơn")){
                     Bundle bundle1= new Bundle();
-                    bundle1.putString("guidulieu","tao-Hoá Đơn");
-                    Intent intent= new Intent(getActivity(), TaoHoaDon.class);
-                    getFragmentManager().beginTransaction().addToBackStack(Tag).commit();
-                    intent.putExtra("guidulieu",bundle1);
-                    startActivity(intent);
+                    bundle1.putString("guidulieu","tao-Sách");
+                    Fragment_TaoHoaDon fragment= new Fragment_TaoHoaDon();
+                    fragment.setArguments(bundle1);
+                    getFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment).addToBackStack(Tag).commit();
                 }
                 else if(dulieu[1].toString().toLowerCase().contains("sách")){
                     Bundle bundle1= new Bundle();
