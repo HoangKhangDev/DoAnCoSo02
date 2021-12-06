@@ -41,7 +41,7 @@ public class HoaDonAdapter extends RecyclerView.Adapter<HoaDonAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.tv_ten.setText(hoadonArrayList.get(position).getMAHOADON());
-        holder.tv_mota1.setText(hoadonArrayList.get(position).getTHANHTIEN_CTHD());
+        holder.tv_mota1.setText(String.valueOf(hoadonArrayList.get(position).getTHANHTIEN_CTHD()));
         holder.tv_mota2.setText(hoadonArrayList.get(position).getNGAY_HD());
 
         if(hoadonArrayList!=null){

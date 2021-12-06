@@ -9,7 +9,7 @@ public class SACH_TRONG_HOADON implements Serializable {
     public SACH_TRONG_HOADON(String tenSach, int maSach, int soLuongconlai, int giaban) {
         TenSach = tenSach;
         MaSach = maSach;
-        SoLuongconlai = soLuongconlai;
+        this.SoLuongconlai= soLuongconlai;
         this.giaban = giaban;
     }
 

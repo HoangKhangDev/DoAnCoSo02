@@ -12,7 +12,7 @@ CHI_TIET_HOA_DON implements Serializable {
                 "MASACH               int                  not null,"+
                 "MAHOADON             char(50)             not null,"+
                 "SOLUONG_HD           int                  null,"+
-                "constraint PK_CHI_TIET_HOA_DON primary key (MASACH, MAHOADON))";
+                "constraint PK_CHI_TIET_HOA_DON primary key (MASACH,MAHOADON))";
     }
 
     public void setMASACH(int MASACH) {

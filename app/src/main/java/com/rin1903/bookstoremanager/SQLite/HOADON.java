@@ -9,15 +9,18 @@ public class HOADON implements Serializable {
     public String SQL_createtable(){
         return "create table if not exists HOADON (" +
                 "   MAHOADON             char(50)             not null," +
-                "   MAKHACHHANG          char(50)             not null," +
+                "   MAKHACHHANG          char(50)             null," +
                 "   THANHTIEN_CTHD       numeric(10)          null," +
                 "   NGAY_HD           DATETIME SECOND             null," +
-                "   SOLUONG_HD           int                  null," +
                 "   constraint PK_HOADON primary key (MAHOADON)" +
                 ")";
     }
 
     public HOADON() {
+    }
+
+    public HOADON(String MAHOADON) {
+        this.MAHOADON = MAHOADON;
     }
 
     public HOADON(String MAHOADON, String MAKHACHHANG) {
@@ -57,25 +60,16 @@ public class HOADON implements Serializable {
         this.NGAY_HD = NGAY_HD;
     }
 
-    public int getSOLUONG_HD() {
-        return SOLUONG_HD;
-    }
 
-    public void setSOLUONG_HD(int SOLUONG_HD) {
-        this.SOLUONG_HD = SOLUONG_HD;
-    }
-
-    public HOADON(String MAHOADON, String MAKHACHHANG, int THANHTIEN_CTHD, String NGAY_HD, int SOLUONG_HD) {
+    public HOADON(String MAHOADON, String MAKHACHHANG, int THANHTIEN_CTHD, String NGAY_HD) {
         this.MAHOADON = MAHOADON;
         this.MAKHACHHANG = MAKHACHHANG;
         this.THANHTIEN_CTHD = THANHTIEN_CTHD;
         this.NGAY_HD = NGAY_HD;
-        this.SOLUONG_HD = SOLUONG_HD;
     }
 
     private String MAHOADON,MAKHACHHANG;
     private int THANHTIEN_CTHD;
     private String NGAY_HD;
-    private int SOLUONG_HD;
 }
 

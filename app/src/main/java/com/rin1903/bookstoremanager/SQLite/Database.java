@@ -74,26 +74,24 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase database= getWritableDatabase();
         database.execSQL("delete from CHI_TIET_PHIEU_NHAP where MAPHIEUNHAP='"+MAPHIEUNHAP+"'");
     }
-    public void INSERT_HOADON(String MAHOADON, String MAKHACHHANG, int THANHTIEN_CTHD, int SOLUONG_HD){
+    public void INSERT_HOADON(String MAHOADON, String MAKHACHHANG, int THANHTIEN_CTHD){
         SQLiteDatabase database= getWritableDatabase();
-        String sql= "INSERT INTO HOADON VALUES(?,?,?,(select datetime('now','location')),?)";
+        String sql= "INSERT INTO HOADON VALUES(?,?,?,(select datetime('now','location')))";
         SQLiteStatement sqLiteStatement= database.compileStatement(sql);
         sqLiteStatement.clearBindings();
         sqLiteStatement.bindString(1,MAHOADON);
         sqLiteStatement.bindString(2,MAKHACHHANG);
         sqLiteStatement.bindLong(3,THANHTIEN_CTHD);
-        sqLiteStatement.bindLong(4,SOLUONG_HD);
         sqLiteStatement.executeInsert();
     }
-    public void UPDATE_HOADON(String MAHOADON, String MAKHACHHANG, int THANHTIEN_CTHD, int SOLUONG_HD){
+    public void UPDATE_HOADON(String MAHOADON, String MAKHACHHANG, int THANHTIEN_CTHD){
         SQLiteDatabase database= getWritableDatabase();
-        String sql= "UPDATE HOADON set MAKHACHHANG=?,THANHTIEN_CTHD=?,SOLUONG_HD=? where MAHOADON=?";
+        String sql= "UPDATE HOADON set MAKHACHHANG=?,THANHTIEN_CTHD=? where MAHOADON=?";
         SQLiteStatement sqLiteStatement= database.compileStatement(sql);
         sqLiteStatement.clearBindings();
-        sqLiteStatement.bindString(4,MAHOADON);
+        sqLiteStatement.bindString(3,MAHOADON);
         sqLiteStatement.bindString(1,MAKHACHHANG);
         sqLiteStatement.bindLong(2,THANHTIEN_CTHD);
-        sqLiteStatement.bindLong(3,SOLUONG_HD);
         sqLiteStatement.executeUpdateDelete();
     }
     public void DELETE_HOADON(String MAHOADON)

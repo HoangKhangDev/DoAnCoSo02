@@ -42,29 +42,7 @@
                 <androidx.cardview.widget.CardView
                     android:layout_marginBottom="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Tên Khách Hàng"
-                            android:textStyle="italic"
-                            android:layout_gravity="left"/>
-                        <TextView
-                            android:padding="5dp"
-                            android:textSize="16sp"
-                            android:textColor="@color/black"
-                            android:layout_marginTop="5dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/tv_tenkhachhang_taohoadon"/>
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
             <ImageView
                 android:layout_gravity="center"
@@ -109,30 +87,7 @@
                 </androidx.cardview.widget.CardView>
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Tên Sách"
-                            android:textStyle="italic"
-                            android:layout_gravity="left"/>
-                        <TextView
-                            android:padding="5dp"
-                            android:inputType="text"
-                            android:textSize="16sp"
-                            android:textColor="@color/black"
-                            android:screenReaderFocusable="true"
-                            android:layout_marginTop="5dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/tv_tensach_taohoadon"/>
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
             <LinearLayout
                 android:gravity="center"
