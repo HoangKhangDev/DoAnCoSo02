@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.rin1903.bookstoremanager.MainActivity;
 import com.rin1903.bookstoremanager.R;
 
 import java.io.ByteArrayOutputStream;
@@ -40,6 +41,7 @@ import butterknife.Unbinder;
 
 public class Fragment_KhachHang extends Fragment {
     Unbinder unbinder;
+
 
     private static final int SELECT_PICTURE = 1;
 
@@ -110,11 +112,18 @@ public class Fragment_KhachHang extends Fragment {
                 datePickerDialog.show();
             }
         });
-
         img_hinhkhachhang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               imageChooser();
+                TedBottomPicker.with(MainActivity.this)
+                        .show(new TedBottomSheetDialogFragment.OnImageSelectedListener() {
+                            @Override
+                            public void onImageSelected(Uri uri) {
+                                // here is selected image uri
+                            }
+                        });
+
+
             }
         });
 
