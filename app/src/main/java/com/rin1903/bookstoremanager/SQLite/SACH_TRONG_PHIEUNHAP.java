@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class SACH_TRONG_PHIEUNHAP implements Serializable {
     private String TenSach;
-    private int MaSach, SoLuongconlai,soluongtronghoadon,giaban,thanhtien;
+    private int MaSach, SoLuongconlai,soluongtrongphieunhap,giaban,thanhtien;
 
     public SACH_TRONG_PHIEUNHAP(String tenSach, int maSach, int soLuongconlai, int giaban) {
         TenSach = tenSach;
@@ -37,12 +37,12 @@ public class SACH_TRONG_PHIEUNHAP implements Serializable {
         SoLuongconlai = soLuongconlai;
     }
 
-    public int getSoluongtronghoadon() {
-        return soluongtronghoadon;
+    public int getsoluongtrongphieunhap() {
+        return soluongtrongphieunhap;
     }
 
-    public void setSoluongtronghoadon(int soluongtronghoadon) {
-        this.soluongtronghoadon = soluongtronghoadon;
+    public void setsoluongtrongphieunhap(int soluongtrongphieunhap) {
+        this.soluongtrongphieunhap = soluongtrongphieunhap;
     }
 
     public int getGiaban() {
@@ -54,7 +54,13 @@ public class SACH_TRONG_PHIEUNHAP implements Serializable {
     }
 
     public int getThanhtien() {
-        return thanhtien;
+        if(giaban>0&soluongtrongphieunhap>0)
+        {
+            return soluongtrongphieunhap*giaban;
+        }
+        else {
+            return 0;
+        }
     }
 
     public void setThanhtien(int thanhtien) {

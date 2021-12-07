@@ -39,15 +39,16 @@ public class ChiTietPhieuNhapAdapter extends  RecyclerView.Adapter<ChiTietPhieuN
         holder.tv_soluong.setText("1");
         holder.tv_gia.setText(String.valueOf(arrayList.get(position).getGiaban()));
         SACH_TRONG_PHIEUNHAP sach_trong_phieunhap= arrayList.get(position);
+        sach_trong_phieunhap.setsoluongtrongphieunhap(soluong);
 
-            holder.imgdow.setOnClickListener(new View.OnClickListener() {
+        holder.imgdow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    soluong = sach_trong_phieunhap.getSoluongtronghoadon();
+                    soluong = sach_trong_phieunhap.getsoluongtrongphieunhap();
                     if (soluong > 1) {
                         soluong -= 1;
                         holder.tv_soluong.setText(String.valueOf(soluong));
-                        sach_trong_phieunhap.setSoluongtronghoadon(soluong);
+                        sach_trong_phieunhap.setsoluongtrongphieunhap(soluong);
                         arrayList.set(position, sach_trong_phieunhap);
                     }
                 }
@@ -55,11 +56,17 @@ public class ChiTietPhieuNhapAdapter extends  RecyclerView.Adapter<ChiTietPhieuN
             holder.img_up.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    soluong = sach_trong_phieunhap.getSoluongtronghoadon();
-                    if (soluong>1) {
+                    soluong = sach_trong_phieunhap.getsoluongtrongphieunhap();
+                    if (soluong>0) {
                         soluong += 1;
                         holder.tv_soluong.setText(String.valueOf(soluong));
-                        sach_trong_phieunhap.setSoluongtronghoadon(soluong);
+                        sach_trong_phieunhap.setsoluongtrongphieunhap(soluong);
+                        arrayList.set(position, sach_trong_phieunhap);
+                    }
+                    else {
+                        soluong = 1;
+                        holder.tv_soluong.setText(String.valueOf(soluong));
+                        sach_trong_phieunhap.setsoluongtrongphieunhap(soluong);
                         arrayList.set(position, sach_trong_phieunhap);
                     }
                 }

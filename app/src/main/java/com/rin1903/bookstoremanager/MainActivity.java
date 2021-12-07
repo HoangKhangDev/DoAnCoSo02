@@ -73,6 +73,7 @@ public class MainActivity extends Activity {
 
         database = new Database(this,"quanlycuahangsach.sqlite",null,1);
 
+
         CHI_TIET_HOA_DON chi_tiet_hoa_don= new CHI_TIET_HOA_DON();
         CHI_TIET_PHIEU_NHAP chi_tiet_phieu_nhap= new CHI_TIET_PHIEU_NHAP();
         HOADON hoadon= new HOADON();

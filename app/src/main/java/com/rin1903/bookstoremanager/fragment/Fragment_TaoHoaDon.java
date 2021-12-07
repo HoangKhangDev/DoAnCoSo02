@@ -103,43 +103,24 @@ public class Fragment_TaoHoaDon extends Fragment {
                     public void run() {
                         MainActivity.refesh_sach();
                         refesh_adapter();
-                        int so= Integer.parseInt(result.getText().toString());
-                        if(sachArrayList.size()>0){
-                            for(i=0;i<sachArrayList.size();i++){
-                                if (so==sachArrayList.get(i).getMASACH()&sachArrayList.get(i).getSOQUYEN()>0){
-                                    if(arrayList.size()>0)
-                                    {
-                                       if( kiemtra_sachtronghoadon(sachArrayList.get(i).getMASACH())!=0)
-                                       {
-                                           arrayList.add(new SACH_TRONG_HOADON(sachArrayList.get(i).getTENSACH(),sachArrayList.get(i).getMASACH(),
-                                                   sachArrayList.get(i).getSOQUYEN(),sachArrayList.get(i).getGIABAN()));
-                                           adapter= new ChiTietHoaDonAdapter(getActivity(),arrayList);
-                                           recyclerView_thongtinhoadon.setAdapter(adapter);
-                                           dialog(sachArrayList.get(i).getTENSACH()+" đã được thêm thành công! \n Bạn có muốn thêm sách khác không?","Tiếp tục","Rời Khỏi");
-                                           break;
-                                       }
-                                       else {
-                                           dialog(sachArrayList.get(i).getTENSACH()+" đã tồn tại! \n Bạn có muốn thêm sách khác không?","Tiếp tục","Rời Khỏi");
-                                       }
+                        int so = Integer.parseInt(result.getText().toString());
+                        Cursor cursor = database.Getdata("select * from Sach where MaSach=" + Integer.parseInt(result.getText()) + " and SoQuyen>0");
+                        if(cursor.getCount()>0){
+                            if(kiemtra_sachtronghoadon(so)==0){
+                                while (cursor.moveToNext()){
+                                    arrayList.add(new SACH_TRONG_HOADON(cursor.getString(3),cursor.getInt(0),cursor.getInt(4),cursor.getInt(6)));
+                                    adapter= new ChiTietHoaDonAdapter(getActivity(),arrayList);
+                                    recyclerView_thongtinhoadon.setAdapter(adapter);
+                                    dialog("Sách này đã thêm vào thành công!!! Bạn có muốn thêm sách khác?","Thêm sách khác","Rời khỏi");
 
-                                    }
-                                    else {
-                                        arrayList.add(new SACH_TRONG_HOADON(sachArrayList.get(i).getTENSACH(),sachArrayList.get(i).getMASACH(),
-                                                sachArrayList.get(i).getSOQUYEN(),sachArrayList.get(i).getGIABAN()));
-                                        adapter= new ChiTietHoaDonAdapter(getActivity(),arrayList);
-                                        recyclerView_thongtinhoadon.setAdapter(adapter);
-                                        dialog(sachArrayList.get(i).getTENSACH()+" đã được thêm thành công! \n Bạn có muốn thêm sách khác không?","Tiếp tục","Rời Khỏi");
-                                        break;
-                                    }
                                 }
-                                else {
-                                    dialog(sachArrayList.get(i).getMASACH()+" Vui lòng kiểm tra lại sách này trên hệ thống! \n Bạn có muốn thêm sách khác không?","Thêm","Rời Khỏi");
-                                    break;
-                                }
+                            }
+                            else {
+                                dialog("Sách này đã có trong hoá đơn!!! Vui lòng thêm sách khác!!!","Thêm sách khác","Rời khỏi");
                             }
                         }
                         else {
-                            Toast.makeText(getActivity(), "Chưa có sách nào vui lòng thêm", Toast.LENGTH_SHORT).show();
+                            dialog("Vui lòng kiểm tra lại sách này trong hệ thống!!!\n Bạn có muốn thêm sách khác vào hoá đơn không???","Thêm sách khác","Rời khỏi");
                         }
                     }
                 });
@@ -175,34 +156,28 @@ public class Fragment_TaoHoaDon extends Fragment {
             public void onClick(View view) {
                 refesh_sach();
                 refesh_adapter();
-                int dem=0;
                 String[] mang=spinner_masach.getSelectedItem().toString().split(" - ");
                 int so= Integer.parseInt(mang[0].toString().trim());
-                if(sachArrayList.size()>0){
-                    for (i=0;i<sachArrayList.size();i++){
-                        if(so == sachArrayList.get(i).getMASACH()&sachArrayList.get(i).getSOQUYEN()>0){
-                            if(arrayList.size()>0){
-                                if(kiemtra_sachtronghoadon(sachArrayList.get(i).getMASACH())!=0){
-                                    Toast.makeText(getActivity(), "Đã tồn tại sách này trong hoá đơn", Toast.LENGTH_SHORT).show();
-                                }
-                                else {
-                                    arrayList.add(new SACH_TRONG_HOADON(sachArrayList.get(i).getTENSACH(),sachArrayList.get(i).getMASACH()
-                                            ,sachArrayList.get(i).getSOQUYEN(),sachArrayList.get(i).getGIABAN()));
-                                    adapter= new ChiTietHoaDonAdapter(getActivity(),arrayList);
-                                    recyclerView_thongtinhoadon.setAdapter(adapter);
-                                }
-                            }
-                            else {
-                                arrayList.add(new SACH_TRONG_HOADON(sachArrayList.get(i).getTENSACH(),sachArrayList.get(i).getMASACH()
-                                ,sachArrayList.get(i).getSOQUYEN(),sachArrayList.get(i).getGIABAN()));
-                                adapter= new ChiTietHoaDonAdapter(getActivity(),arrayList);
-                                recyclerView_thongtinhoadon.setAdapter(adapter);
-                            }
+                MainActivity.refesh_sach();
+                refesh_adapter();
+                Cursor cursor = database.Getdata("select * from Sach where MaSach=" + so + " and SoQuyen>0");
+                if(cursor.getCount()>0){
+                    if(kiemtra_sachtronghoadon(so)==0){
+                        while (cursor.moveToNext()){
+                            arrayList.add(new SACH_TRONG_HOADON(cursor.getString(3),cursor.getInt(0),cursor.getInt(4),cursor.getInt(6)));
+                            adapter= new ChiTietHoaDonAdapter(getActivity(),arrayList);
+                            recyclerView_thongtinhoadon.setAdapter(adapter);
+                            dialog("Sách này đã thêm vào thành công!!! Bạn có muốn thêm sách khác?","Thêm sách khác","Rời khỏi");
+                            linearLayout.setVisibility(View.VISIBLE);
+
                         }
+                    }
+                    else {
+                        dialog("Sách này đã có trong hoá đơn!!! Vui lòng thêm sách khác!!!","Thêm sách khác","Rời khỏi");
                     }
                 }
                 else {
-                    Toast.makeText(getActivity(), "Không có sách nào! vui lòng thêm!!!", Toast.LENGTH_SHORT).show();
+                    dialog("Vui lòng kiểm tra lại sách này trong hệ thống!!!\n Bạn có muốn thêm sách khác vào hoá đơn không???","Thêm sách khác","Rời khỏi");
                 }
 
 

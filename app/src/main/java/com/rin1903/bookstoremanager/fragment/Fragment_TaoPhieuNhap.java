@@ -14,6 +14,7 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,10 +35,12 @@ import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.google.zxing.Result;
+import com.rin1903.bookstoremanager.Adapter.ChiTietHoaDonAdapter;
 import com.rin1903.bookstoremanager.Adapter.ChiTietPhieuNhapAdapter;
 import com.rin1903.bookstoremanager.Adapter.ChiTietPhieuNhapAdapter;
 import com.rin1903.bookstoremanager.MainActivity;
 import com.rin1903.bookstoremanager.R;
+import com.rin1903.bookstoremanager.SQLite.SACH_TRONG_HOADON;
 import com.rin1903.bookstoremanager.SQLite.SACH_TRONG_PHIEUNHAP;
 import com.rin1903.bookstoremanager.SQLite.SACH_TRONG_PHIEUNHAP;
 
@@ -104,42 +107,22 @@ public class Fragment_TaoPhieuNhap extends Fragment {
                         MainActivity.refesh_sach();
                         refesh_adapter();
                         int so= Integer.parseInt(result.getText().toString());
-                        if(sachArrayList.size()>0){
-                            for(i=0;i<sachArrayList.size();i++){
-                                if (so==sachArrayList.get(i).getMASACH()&sachArrayList.get(i).getSOQUYEN()>0){
-                                    if(arrayList.size()>0)
-                                    {
-                                       if( kiemtra_sachtrongphieunhap(sachArrayList.get(i).getMASACH())!=0)
-                                       {
-                                           arrayList.add(new SACH_TRONG_PHIEUNHAP(sachArrayList.get(i).getTENSACH(),sachArrayList.get(i).getMASACH(),
-                                                   sachArrayList.get(i).getSOQUYEN(),sachArrayList.get(i).getGIABAN()));
-                                           adapter= new ChiTietPhieuNhapAdapter(getActivity(),arrayList);
-                                           recyclerView_thongtinhoadon.setAdapter(adapter);
-                                           dialog(sachArrayList.get(i).getTENSACH()+" đã được thêm thành công! \n Bạn có muốn thêm sách khác không?","Tiếp tục","Rời Khỏi");
-                                           break;
-                                       }
-                                       else {
-                                           dialog(sachArrayList.get(i).getTENSACH()+" đã tồn tại! \n Bạn có muốn thêm sách khác không?","Tiếp tục","Rời Khỏi");
-                                       }
-
-                                    }
-                                    else {
-                                        arrayList.add(new SACH_TRONG_PHIEUNHAP(sachArrayList.get(i).getTENSACH(),sachArrayList.get(i).getMASACH(),
-                                                sachArrayList.get(i).getSOQUYEN(),sachArrayList.get(i).getGIABAN()));
-                                        adapter= new ChiTietPhieuNhapAdapter(getActivity(),arrayList);
-                                        recyclerView_thongtinhoadon.setAdapter(adapter);
-                                        dialog(sachArrayList.get(i).getTENSACH()+" đã được thêm thành công! \n Bạn có muốn thêm sách khác không?","Tiếp tục","Rời Khỏi");
-                                        break;
-                                    }
+                        Cursor cursor= database.Getdata("select * from Sach where MaSach="+so);
+                        if(cursor.getCount()>0){
+                            if(kiemtra_sachtrongphieunhap(so)==0){
+                                while (cursor.moveToNext()){
+                                    arrayList.add(new SACH_TRONG_PHIEUNHAP(cursor.getString(3),cursor.getInt(0),cursor.getInt(4),cursor.getInt(6)));
+                                    adapter= new ChiTietPhieuNhapAdapter(getActivity(),arrayList);
+                                    recyclerView_thongtinhoadon.setAdapter(adapter);
+                                    dialog("Sách này đã thêm vào thành công!!! Bạn có muốn thêm sách khác?","Thêm sách khác","Rời khỏi");
                                 }
-                                else {
-                                    dialog(sachArrayList.get(i).getMASACH()+" Vui lòng kiểm tra lại sách này trên hệ thống! \n Bạn có muốn thêm sách khác không?","Thêm","Rời Khỏi");
-                                    break;
-                                }
+                            }
+                            else {
+                                dialog("Sách này đã có trong phiếu nhập!!! Vui lòng thêm sách khác!!!","Thêm sách khác","Rời khỏi");
                             }
                         }
                         else {
-                            Toast.makeText(getActivity(), "Chưa có sách nào vui lòng thêm", Toast.LENGTH_SHORT).show();
+                            dialog("Sách này chưa có trên hệ thống!!! Vui lòng thêm sách mới","Tiếp tục quét","Rời khỏi");
                         }
                     }
                 });
@@ -155,7 +138,7 @@ public class Fragment_TaoPhieuNhap extends Fragment {
                 bundle1.putString("guidulieu","tao-Nhà Cung Cấp-sach");
                 Fragment_NhaCungCap fragment=new Fragment_NhaCungCap();
                 fragment.setArguments(bundle1);
-                getFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment).addToBackStack(Tag).commit();
+                getFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment,Tag).addToBackStack(Tag).commit();
             }
         });
 
@@ -180,7 +163,7 @@ public class Fragment_TaoPhieuNhap extends Fragment {
                 int so= Integer.parseInt(mang[0].toString().trim());
                 if(sachArrayList.size()>0){
                     for (i=0;i<sachArrayList.size();i++){
-                        if(so == sachArrayList.get(i).getMASACH()&sachArrayList.get(i).getSOQUYEN()>0){
+                        if(so == sachArrayList.get(i).getMASACH()){
                             if(arrayList.size()>0){
                                 if(kiemtra_sachtrongphieunhap(sachArrayList.get(i).getMASACH())!=0){
                                     Toast.makeText(getActivity(), "Đã tồn tại sách này trong phiếu nhập", Toast.LENGTH_SHORT).show();
@@ -247,10 +230,10 @@ public class Fragment_TaoPhieuNhap extends Fragment {
             @Override
             public void onClick(View view) {
                 refesh_adapter();
-                StringBuilder chuoi= new StringBuilder("Thông Tin Phiếu Nhập \n Tên Sách \t Giá Bán \t Số Lượng \t Thành Tiền ");
+                StringBuilder chuoi= new StringBuilder("Thông Tin Phiếu Nhập ");
                 if(arrayList.size()>0){
                     for (i=0;i<arrayList.size();i++){
-                        chuoi.append("\n Tên Sách: ").append(arrayList.get(i).getTenSach()).append("\t").append(String.valueOf(arrayList.get(i).getGiaban())).append("\t").append(String.valueOf(arrayList.get(i).getSoluongtronghoadon())).append("\t").append(String.valueOf(arrayList.get(i).getThanhtien()));
+                        chuoi.append("\n Tên Sách: ").append(arrayList.get(i).getTenSach()).append("\t Giá Bán: ").append(String.valueOf(arrayList.get(i).getGiaban())).append("\t Số lượng: ").append(String.valueOf(arrayList.get(i).getsoluongtrongphieunhap())).append("\t Thành Tiền: ").append(String.valueOf(arrayList.get(i).getThanhtien()));
                     }
                     chuoi.append("\n Tổng thành tiền:").append(adapter.getthanhtientong());
                     Dialog dialog = new Dialog(getActivity());
@@ -263,9 +246,16 @@ public class Fragment_TaoPhieuNhap extends Fragment {
                     tv_xacnhan.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                           themhoadon();
-                           dialog.cancel();
-                            getFragmentManager().popBackStack();
+                            if(!spinner_manhacungcap.getSelectedItem().toString().toLowerCase().contains("vui lòng thêm nhà cung cấp")){
+                                themphieunhap(spinner_manhacungcap.getSelectedItem().toString());
+                                dialog.cancel();
+                                getFragmentManager().popBackStack();
+                            }
+                            else {
+                                Toast.makeText(getActivity(), "Vui lòng thêm nhà cung cấp", Toast.LENGTH_SHORT).show();
+                                dialog.cancel();
+                            }
+
 
                         }
                     });
@@ -273,7 +263,6 @@ public class Fragment_TaoPhieuNhap extends Fragment {
                         @Override
                         public void onClick(View view) {
                             dialog.cancel();
-                            getFragmentManager().popBackStack();
 
                         }
                     });
@@ -335,7 +324,7 @@ public class Fragment_TaoPhieuNhap extends Fragment {
         ArrayList<String> arrayList_spinner_nhacungcap= new ArrayList<>();
         if(nhacungcapArrayList.size()>0){
             for(i=0;i<nhacungcapArrayList.size();i++){
-                arrayList_spinner_nhacungcap.add(String.valueOf(nhacungcapArrayList.get(i).getMANHACUNGCAP()+" - "+nhacungcapArrayList.get(i).getTENNHACUNGCAP()));
+                arrayList_spinner_nhacungcap.add(String.valueOf(nhacungcapArrayList.get(i).getMANHACUNGCAP()+"_"+nhacungcapArrayList.get(i).getTENNHACUNGCAP()));
             }
         }  else {
             arrayList_spinner_nhacungcap.add("Vui Lòng Thêm Nhà Cung Cấp");
@@ -349,9 +338,7 @@ public class Fragment_TaoPhieuNhap extends Fragment {
         ArrayList<String> arrayList_spinner_sach= new ArrayList<>();
         if(sachArrayList.size()>0){
             for(i=0;i<sachArrayList.size();i++){
-                if(sachArrayList.get(i).getSOQUYEN()>0){
-                    arrayList_spinner_sach.add(String.valueOf(sachArrayList.get(i).getMASACH())+" - "+sachArrayList.get(i).getTENSACH());
-                }
+                arrayList_spinner_sach.add(String.valueOf(sachArrayList.get(i).getMASACH())+" - "+sachArrayList.get(i).getTENSACH());
             }
         }
         else {
@@ -379,51 +366,40 @@ public class Fragment_TaoPhieuNhap extends Fragment {
         return kq;
 
     }
-    public void themhoadon(){
+    public void themphieunhap(String manhacungcap){
         refesh_adapter();
         refesh_hoadon();
         String maphieunhap="";
         String[] mang = new String[0];
-        String manhacungcap="";
-        if(spinner_manhacungcap.getSelectedItem().toString().trim().toLowerCase().contains("vui lòng thêm nhà cung cấp"))
-        {
-            manhacungcap=null;
-        }
-        else {
-            mang= spinner_manhacungcap.getSelectedItem().toString().split(" - ");
-            manhacungcap=mang[0];
-        }
-        if(hoadonArrayList.size()>0){
-            Cursor cursor= database.Getdata("select maphieunhap from PHIEUNHAP order by maphieunhap desc limit 1");
+        Cursor cursor= database.Getdata("select MAPHIEUNHAP from PHIEUNHAP order by MAPHIEUNHAP desc limit 1");
+        if(cursor.getCount()>0){
             while (cursor.moveToNext()){
-                 mang=cursor.getString(0).toString().split("-");
+                mang= cursor.getString(0).split("-");
             }
-            int so=Integer.parseInt(mang[1].toString());
-            so+=1;
-            maphieunhap=mang[0]+"-"+String.valueOf(so);
-            Toast.makeText(getActivity(), ""+maphieunhap, Toast.LENGTH_SHORT).show();
+            maphieunhap="pn-"+String.valueOf(Integer.parseInt(mang[1])+1);
             if(arrayList.size()>0){
                 for(i=0;i<arrayList.size();i++){
                     Toast.makeText(getActivity(), ""+maphieunhap, Toast.LENGTH_SHORT).show();
-                    database.INSERT_CHITIETPHIEUNHAP(arrayList.get(i).getMaSach(),maphieunhap,arrayList.get(i).getSoluongtronghoadon());
-                    database.QueryData("UPDATE SACH SET SOQUYEN="+(arrayList.get(i).getSoLuongconlai()+arrayList.get(i).getSoluongtronghoadon())+" WHERE MASACH ="+arrayList.get(i).getMaSach());
+                    database.INSERT_CHITIETPHIEUNHAP(arrayList.get(i).getMaSach(),maphieunhap,arrayList.get(i).getsoluongtrongphieunhap());
+                    database.QueryData("UPDATE SACH SET SOQUYEN="+(arrayList.get(i).getSoLuongconlai()+arrayList.get(i).getsoluongtrongphieunhap())+" WHERE MASACH ="+arrayList.get(i).getMaSach());
                 }
                 database.INSERT_PHIEUNHAP(maphieunhap,manhacungcap,adapter.getthanhtientong());
-                Toast.makeText(getActivity(), "Thêm phiếu nhập thành công", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Thêm phiếu nhập đơn thành công", Toast.LENGTH_SHORT).show();
             }
             else {
                 Toast.makeText(getActivity(), "Chưa có sách trong phiếu nhập vui lòng thêm", Toast.LENGTH_SHORT).show();
             }
         }
-        else {
+        else{
             maphieunhap="pn-1";
             if(arrayList.size()>0){
                 for(i=0;i<arrayList.size();i++){
-                    database.INSERT_CHITIETHOADON(arrayList.get(i).getMaSach(),maphieunhap,arrayList.get(i).getSoluongtronghoadon());
-                    database.QueryData("UPDATE SACH SET SOQUYEN="+(arrayList.get(i).getSoLuongconlai()-arrayList.get(i).getSoluongtronghoadon())+" WHERE MASACH ="+arrayList.get(i).getMaSach());
+                    Toast.makeText(getActivity(), ""+maphieunhap, Toast.LENGTH_SHORT).show();
+                    database.INSERT_CHITIETPHIEUNHAP(arrayList.get(i).getMaSach(),maphieunhap,arrayList.get(i).getsoluongtrongphieunhap());
+                    database.QueryData("UPDATE SACH SET SOQUYEN="+(arrayList.get(i).getSoLuongconlai()+arrayList.get(i).getsoluongtrongphieunhap())+" WHERE MASACH ="+arrayList.get(i).getMaSach());
                 }
                 database.INSERT_PHIEUNHAP(maphieunhap,manhacungcap,adapter.getthanhtientong());
-                Toast.makeText(getActivity(), "Thêm phiếu nhập thành công", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Thêm phiếu nhập đơn thành công", Toast.LENGTH_SHORT).show();
             }
             else {
                 Toast.makeText(getActivity(), "Chưa có sách trong phiếu nhập vui lòng thêm", Toast.LENGTH_SHORT).show();
