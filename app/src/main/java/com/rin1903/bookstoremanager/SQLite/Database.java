@@ -76,7 +76,7 @@ public class Database extends SQLiteOpenHelper {
     }
     public void INSERT_HOADON(String MAHOADON, String MAKHACHHANG, int THANHTIEN_CTHD){
         SQLiteDatabase database= getWritableDatabase();
-        String sql= "INSERT INTO HOADON VALUES(?,?,?,(select datetime('now','location')))";
+        String sql= "INSERT INTO HOADON VALUES(?,?,?,(select datetime('now','localtime')))";
         SQLiteStatement sqLiteStatement= database.compileStatement(sql);
         sqLiteStatement.clearBindings();
         sqLiteStatement.bindString(1,MAHOADON);
@@ -165,7 +165,7 @@ public class Database extends SQLiteOpenHelper {
     }
     public void INSERT_PHIEUNHAP(String MAPHIEUNHAP, String MANHACUNGCAP, int THANHTIEN_PN){
         SQLiteDatabase database= getWritableDatabase();
-        String sql= "INSERT INTO PHIEUNHAP VALUES(?,?,(select datetime('now','location')),?)";
+        String sql= "INSERT INTO PHIEUNHAP VALUES(?,?,(select datetime('now','localtime')),?)";
         SQLiteStatement sqLiteStatement= database.compileStatement(sql);
         sqLiteStatement.clearBindings();
         sqLiteStatement.bindString(1,MAPHIEUNHAP);

@@ -55,8 +55,8 @@ public class TacGiaAdapter  extends  RecyclerView.Adapter<TacGiaAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.tv_tieude.setText(tacgiaArrayList.get(position).getTENTACGIA());
-        holder.tv_mota.setText(tacgiaArrayList.get(position).getNGAYSINH_TG());
+        holder.tv_tieude.setText("Tên tác Giả:"+tacgiaArrayList.get(position).getTENTACGIA());
+        holder.tv_mota.setText("Ngày Sinh:"+tacgiaArrayList.get(position).getNGAYSINH_TG());
         byte[] hinh= tacgiaArrayList.get(position).getHINH_TACGIA();
         Bitmap bitmap= BitmapFactory.decodeByteArray(hinh,0,hinh.length);
         holder.img.setImageBitmap(bitmap);

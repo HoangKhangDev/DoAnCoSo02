@@ -338,7 +338,7 @@ public class Fragment_HienThi extends Fragment {
                 }
                 else if(dulieu[1].toString().toLowerCase().contains("hoá đơn")){
                     Bundle bundle1= new Bundle();
-                    bundle1.putString("guidulieu","tao_Sách");
+                    bundle1.putString("guidulieu","tao_Hoá Đơn");
                     Fragment_TaoHoaDon fragment= new Fragment_TaoHoaDon();
                     fragment.setArguments(bundle1);
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment).addToBackStack(Tag).commit();

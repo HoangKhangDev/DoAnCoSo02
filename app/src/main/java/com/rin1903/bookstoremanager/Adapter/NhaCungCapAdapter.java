@@ -56,8 +56,8 @@ public class NhaCungCapAdapter extends RecyclerView.Adapter<NhaCungCapAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
        if(nhacungcapArrayList.get(position)!=null){
-           holder.tv_tieude.setText(nhacungcapArrayList.get(position).getTENNHACUNGCAP());
-           holder.tv_mota.setText(nhacungcapArrayList.get(position).getSDT_NCC());
+           holder.tv_tieude.setText("Tên Nhà Cung Cấp:"+nhacungcapArrayList.get(position).getTENNHACUNGCAP());
+           holder.tv_mota.setText("Số Điện Thoại:"+nhacungcapArrayList.get(position).getSDT_NCC());
            byte[] hinh = nhacungcapArrayList.get(position).getHINH_NHACUNGCAP();
            Bitmap bitmap= BitmapFactory.decodeByteArray(hinh,0,hinh.length);
            holder.img_hinh.setImageBitmap(bitmap);

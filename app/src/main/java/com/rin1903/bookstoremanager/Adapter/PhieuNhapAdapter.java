@@ -53,9 +53,8 @@ public class PhieuNhapAdapter extends RecyclerView.Adapter<PhieuNhapAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.tv_tieude.setText(phieunhapArrayList.get(position).getMAPHIEUNHAP());
+        holder.tv_tieude.setText("Mã Phiếu:"+phieunhapArrayList.get(position).getMAPHIEUNHAP());
         holder.tv_mota1.setText("Thành Tiền: "+phieunhapArrayList.get(position).getTHANHTIEN_PN());
-        holder.tv_mota2.setText("Ngày Lập: "+phieunhapArrayList.get(position).getNGAY_PN());
         PHIEUNHAP phieunhap= phieunhapArrayList.get(position);
         String maphieunhap= phieunhapArrayList.get(position).getMAPHIEUNHAP();
         viewBinderHelper.bind(holder.swipeRevealLayout,phieunhapArrayList.get(position).getMAPHIEUNHAP());
@@ -91,7 +90,7 @@ public class PhieuNhapAdapter extends RecyclerView.Adapter<PhieuNhapAdapter.View
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_tieude,tv_mota1,tv_mota2;
+        TextView tv_tieude,tv_mota1;
         SwipeRevealLayout swipeRevealLayout;
         LinearLayout linearLayout;
         ImageView item_delete,item_edit;
@@ -99,7 +98,6 @@ public class PhieuNhapAdapter extends RecyclerView.Adapter<PhieuNhapAdapter.View
             super(itemView);
             tv_tieude= itemView.findViewById(R.id.tv_item_khongcohinh_hienthi);
             tv_mota1=itemView.findViewById(R.id.tv_item_mota1_khongcohinh_hienthi);
-            tv_mota2=itemView.findViewById(R.id.tv_item_mota2_khongcohinh_hienthi);
             swipeRevealLayout = itemView.findViewById(R.id.swipelayout_item_khongcohinh);
             linearLayout= itemView.findViewById(R.id.linearlayout_item_khongcohinh);
             item_delete= itemView.findViewById(R.id.tv_delete_item_khongcohinh);

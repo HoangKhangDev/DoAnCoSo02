@@ -61,8 +61,8 @@ public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
        if(khachhangArrayList.get(position)!=null){
-           holder.tv_tieude.setText(khachhangArrayList.get(position).getTENKHACHHANG());
-           holder.tv_mota.setText(khachhangArrayList.get(position).getSDT_KH());
+           holder.tv_tieude.setText("Tên Khách Hàng:"+khachhangArrayList.get(position).getTENKHACHHANG());
+           holder.tv_mota.setText("Số điện thoại:"+khachhangArrayList.get(position).getSDT_KH());
            byte[] hinh= khachhangArrayList.get(position).getHINH_KH();
            Bitmap bitmap= BitmapFactory.decodeByteArray(hinh,0,hinh.length);
            holder.img_hinh.setImageBitmap(bitmap);

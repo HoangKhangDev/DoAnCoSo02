@@ -8,7 +8,7 @@ public class PHIEUNHAP implements Serializable {
         return "create table if not exists PHIEUNHAP (" +
                 "   MAPHIEUNHAP          char(50)             not null," +
                 "   MANHACUNGCAP         char(50)             not null," +
-                "   NGAY_PN              DATETIME SECOND              null," +
+                "   NGAY_PN              DATETIME              null," +
                 "   THANHTIEN_PN         int          null," +
                 "   constraint PK_PHIEUNHAP primary key (MAPHIEUNHAP)" +
                 ")";

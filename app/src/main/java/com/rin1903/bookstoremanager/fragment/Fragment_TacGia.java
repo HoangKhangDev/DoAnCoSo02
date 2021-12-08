@@ -144,6 +144,9 @@ public class Fragment_TacGia extends Fragment {
             @Override
             public void onClick(View v) {
                 final Calendar calendar= Calendar.getInstance();
+                int Ngay= calendar.get(Calendar.DATE);
+                int Thang= calendar.get(Calendar.MONTH);
+                int Nam=calendar.get(Calendar.YEAR);
                 final String chuoi = "";
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
                     @Override
@@ -152,9 +155,10 @@ public class Fragment_TacGia extends Fragment {
                         SimpleDateFormat simpleDateFormat= new SimpleDateFormat("dd/MM/yyyy");
                         tv_ngaysinh.setText(simpleDateFormat.format(calendar.getTime()));
                     }
-                },19,03,2000);
+                },Nam,Thang,Ngay);
                 datePickerDialog.show();
             }
+
         });
 
 

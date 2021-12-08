@@ -90,6 +90,7 @@
                     android:id="@+id/edt_sdt_nhacungcap"
                     android:textStyle="normal"
                     android:inputType="phone"
+                    android:maxLength="10"
                     android:backgroundTint="@color/white"
                     android:textColor="@color/black"
                     android:textSize="20sp"/>

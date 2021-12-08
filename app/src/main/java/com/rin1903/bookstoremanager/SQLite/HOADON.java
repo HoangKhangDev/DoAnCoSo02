@@ -11,7 +11,7 @@ public class HOADON implements Serializable {
                 "   MAHOADON             char(50)             not null," +
                 "   MAKHACHHANG          char(50)             null," +
                 "   THANHTIEN_CTHD       numeric(10)          null," +
-                "   NGAY_HD           DATETIME SECOND             null," +
+                "   NGAY_HD           DATETIME             null," +
                 "   constraint PK_HOADON primary key (MAHOADON)" +
                 ")";
     }

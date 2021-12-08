@@ -57,8 +57,8 @@ public class SachAdapter extends RecyclerView.Adapter<SachAdapter.ViewHolder> im
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.tv_tieude.setText(sachArrayList.get(position).getTENSACH());
-        holder.tv_mota.setText(String.valueOf(sachArrayList.get(position).getSOQUYEN()));
+        holder.tv_tieude.setText("Tên Sách:"+sachArrayList.get(position).getTENSACH());
+        holder.tv_mota.setText("Số Quyển:"+String.valueOf(sachArrayList.get(position).getSOQUYEN()));
         byte[] hinh = sachArrayList.get(position).getHINH_SACH();
         Bitmap bitmap = BitmapFactory.decodeByteArray(hinh,0,hinh.length);
         holder.img_hinh.setImageBitmap(bitmap);

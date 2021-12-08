@@ -30,6 +30,9 @@ public class Fragment_Main_Menu extends Fragment {
     @BindView(R.id.cardview_nhacungcap_main) CardView cardview_nhacungcap;
     @BindView(R.id.cardview_hoadon_main) CardView cardview_hoadon;
     @BindView(R.id.cardview_phieunhap_main) CardView cardview_phieunhap;
+    @BindView(R.id.cardview_thongketheohoadon_main) CardView cardview_thongke_hoadon;
+    @BindView(R.id.cardview_thongketheophieunhap_main) CardView cardview_thongke_phieunhap;
+
     private  BottomNavigationView bottomNavigationView;
     private FragmentManager fragmentManager;
     private  FragmentTransaction fragmentTransaction;
@@ -40,7 +43,6 @@ public class Fragment_Main_Menu extends Fragment {
         View view = inflater.inflate(R.layout.fragment_menu,container,false);
         Tag= Fragment_Main_Menu.class.getName();
         unbinder= ButterKnife.bind(this,view);
-        bottomNavigationView = getActivity().findViewById(R.id.navbar_bottom);
 
 
 
@@ -48,7 +50,6 @@ public class Fragment_Main_Menu extends Fragment {
         cardview_hoadon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bottomNavigationView.setVisibility(View.GONE);
                 Bundle bundle= new Bundle();
                 bundle.putString("guidulieu","guidulieu_Hoá Đơn");
                 Fragment_HienThi fragment_hienThi= new Fragment_HienThi();
@@ -59,7 +60,6 @@ public class Fragment_Main_Menu extends Fragment {
         cardview_khachhang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bottomNavigationView.setVisibility(View.GONE);
                 Bundle bundle= new Bundle();
                 bundle.putString("guidulieu","guidulieu_Khách Hàng");
                  Fragment_HienThi fragment_hienThi= new Fragment_HienThi();
@@ -70,7 +70,6 @@ public class Fragment_Main_Menu extends Fragment {
         cardview_nhacungcap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bottomNavigationView.setVisibility(View.GONE);
                 Bundle bundle= new Bundle();
                 bundle.putString("guidulieu","guidulieu_Nhà Cung Cấp");
                 Fragment_HienThi fragment_hienThi= new Fragment_HienThi();
@@ -82,7 +81,6 @@ public class Fragment_Main_Menu extends Fragment {
         cardview_sach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bottomNavigationView.setVisibility(View.GONE);
                 Bundle bundle= new Bundle();
                 bundle.putString("guidulieu","guidulieu_Sách");
                 Fragment_HienThi fragment_hienThi= new Fragment_HienThi();
@@ -94,7 +92,6 @@ public class Fragment_Main_Menu extends Fragment {
         cardview_tacgia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bottomNavigationView.setVisibility(View.GONE);
                 Bundle bundle= new Bundle();
                 bundle.putString("guidulieu","guidulieu_Tác Giả");
                 Fragment_HienThi fragment_hienThi= new Fragment_HienThi();
@@ -105,7 +102,6 @@ public class Fragment_Main_Menu extends Fragment {
         cardview_phieunhap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bottomNavigationView.setVisibility(View.GONE);
                 Bundle bundle= new Bundle();
                 bundle.putString("guidulieu","guidulieu_Phiếu Nhập");
                 Fragment_HienThi fragment_hienThi= new Fragment_HienThi();
@@ -114,6 +110,29 @@ public class Fragment_Main_Menu extends Fragment {
 
             }
         });
+        cardview_thongke_hoadon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle= new Bundle();
+                bundle.putString("guidulieu","guidulieu_hoá đơn");
+                Fragment_thongke fragment_thongke= new Fragment_thongke();
+                fragment_thongke.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment_thongke).addToBackStack(Tag).commit();
+
+            }
+        });
+        cardview_thongke_phieunhap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle= new Bundle();
+                bundle.putString("guidulieu","guidulieu_Phiếu Nhập");
+                Fragment_thongke fragment_thongke= new Fragment_thongke();
+                fragment_thongke.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment_thongke).addToBackStack(Tag).commit();
+
+            }
+        });
+
 
 
         return view;

@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,7 +35,11 @@ import com.rin1903.bookstoremanager.SQLite.TACGIA;
 import com.rin1903.bookstoremanager.SQLite.THELOAI;
 import com.rin1903.bookstoremanager.fragment.Fragment_HienThi;
 import com.rin1903.bookstoremanager.fragment.Fragment_Main_Menu;
+import com.rin1903.bookstoremanager.fragment.Fragment_thongke;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +49,6 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
-    @BindView(R.id.navbar_bottom)  BottomNavigationView navigation;
     public static String Tag= "fragment";
     public static String[] dulieu;
     public static Database database;
@@ -69,7 +73,11 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
 
+
         requestPermissions();
+
+
+
 
         trang= new ArrayList<>();
 
@@ -85,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
         SACH sach= new SACH();
         TACGIA tacgia = new TACGIA();
         THELOAI theloai = new THELOAI();
-
 
         database.QueryData(chi_tiet_hoa_don.SQL_Createtable());
         database.QueryData(chi_tiet_phieu_nhap.SQL_createtable());
@@ -113,28 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-               switch (item.getItemId()){
-                   case R.id.home:
-                   {
-                       Fragment_Main_Menu fragment_menu= new Fragment_Main_Menu();
-                       getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment_menu).commit();
-                       break;
-                   }
-                   case R.id.taohoadon:
-                   {
 
-                       break;
-                   }
-                   case R.id.report:
-                   {
-                   }
-               }
-                return true;
-            }
-        });
 
     }
 

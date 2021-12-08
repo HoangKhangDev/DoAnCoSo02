@@ -52,9 +52,8 @@ public class HoaDonAdapter extends RecyclerView.Adapter<HoaDonAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.tv_ten.setText(hoadonArrayList.get(position).getMAHOADON());
-        holder.tv_mota1.setText(String.valueOf(hoadonArrayList.get(position).getTHANHTIEN_CTHD()));
-        holder.tv_mota2.setText(hoadonArrayList.get(position).getNGAY_HD());
+        holder.tv_ten.setText("Mã Hoá Đơn:"+hoadonArrayList.get(position).getMAHOADON());
+        holder.tv_mota1.setText("Thành Tiền:"+String.valueOf(hoadonArrayList.get(position).getTHANHTIEN_CTHD()));
 
         String mahoadon= hoadonArrayList.get(position).getMAHOADON();
 
@@ -87,7 +86,7 @@ public class HoaDonAdapter extends RecyclerView.Adapter<HoaDonAdapter.ViewHolder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_ten,tv_mota1,tv_mota2;
+        TextView tv_ten,tv_mota1;
         SwipeRevealLayout swipeRevealLayout;
         LinearLayout linearLayout;
         ImageView item_delete,item_edit;
@@ -95,7 +94,6 @@ public class HoaDonAdapter extends RecyclerView.Adapter<HoaDonAdapter.ViewHolder
             super(itemView);
             tv_ten= itemView.findViewById(R.id.tv_item_khongcohinh_hienthi);
             tv_mota1=itemView.findViewById(R.id.tv_item_mota1_khongcohinh_hienthi);
-            tv_mota2=itemView.findViewById(R.id.tv_item_mota2_khongcohinh_hienthi);
             swipeRevealLayout = itemView.findViewById(R.id.swipelayout_item_khongcohinh);
             linearLayout = itemView.findViewById(R.id.linearlayout_item_khongcohinh);
             item_delete= itemView.findViewById(R.id.tv_delete_item_khongcohinh);
