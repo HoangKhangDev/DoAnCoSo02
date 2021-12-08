@@ -57,7 +57,7 @@ public class PhieuNhapAdapter extends RecyclerView.Adapter<PhieuNhapAdapter.View
         holder.tv_mota1.setText("Thành Tiền: "+phieunhapArrayList.get(position).getTHANHTIEN_PN());
         holder.tv_mota2.setText("Ngày Lập: "+phieunhapArrayList.get(position).getNGAY_PN());
         PHIEUNHAP phieunhap= phieunhapArrayList.get(position);
-
+        String maphieunhap= phieunhapArrayList.get(position).getMAPHIEUNHAP();
         viewBinderHelper.bind(holder.swipeRevealLayout,phieunhapArrayList.get(position).getMAPHIEUNHAP());
 
         holder.item_delete.setOnClickListener(new View.OnClickListener() {
@@ -65,7 +65,7 @@ public class PhieuNhapAdapter extends RecyclerView.Adapter<PhieuNhapAdapter.View
             public void onClick(View v) {
                 phieunhapArrayList.remove(holder.getAdapterPosition());
                 notifyItemRemoved(holder.getAdapterPosition());
-                MainActivity.database.DELETE_PHIEUNHAP(phieunhap.getMAPHIEUNHAP());
+                MainActivity.database.DELETE_PHIEUNHAP(maphieunhap);
             }
         });
 
@@ -74,8 +74,7 @@ public class PhieuNhapAdapter extends RecyclerView.Adapter<PhieuNhapAdapter.View
             public void onClick(View v) {
                 Fragment_TaoPhieuNhap fragment= new Fragment_TaoPhieuNhap();
                 Bundle bundle= new Bundle();
-                bundle.putString("guidulieu","chinhsua-phieunhap-tg");
-                bundle.putSerializable("guidulieu",(PHIEUNHAP) phieunhapArrayList.get(position));
+                bundle.putString("guidulieu","chinhsua_phieunhap_"+maphieunhap);
                 fragment.setArguments(bundle);
                 ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_content, fragment).addToBackStack(context.getClass().getName())

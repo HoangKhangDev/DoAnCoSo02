@@ -74,7 +74,8 @@ public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.View
         holder.tv_item_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                khachhangArrayList.remove(position);
+                khachhangArrayList.remove(holder.getAdapterPosition());
+                notifyItemRemoved(holder.getAdapterPosition());
                 MainActivity.database.QueryData("delete from KHACHHANG where MAKHACHHANG='"+makh+"'");
 
             }

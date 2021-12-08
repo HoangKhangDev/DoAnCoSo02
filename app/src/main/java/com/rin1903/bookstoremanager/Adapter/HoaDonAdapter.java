@@ -3,6 +3,7 @@ package com.rin1903.bookstoremanager.Adapter;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
@@ -21,6 +23,7 @@ import com.rin1903.bookstoremanager.MainActivity;
 import com.rin1903.bookstoremanager.R;
 import com.rin1903.bookstoremanager.SQLite.HOADON;
 import com.rin1903.bookstoremanager.SQLite.SACH;
+import com.rin1903.bookstoremanager.fragment.Fragment_TaoHoaDon;
 
 import java.util.ArrayList;
 
@@ -65,7 +68,16 @@ public class HoaDonAdapter extends RecyclerView.Adapter<HoaDonAdapter.ViewHolder
                 MainActivity.database.DELETE_HOADON(mahoadon);
             }
         });
-
+        holder.item_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle= new Bundle();
+                bundle.putString("guidulieu","chinhsua_hoadon_"+mahoadon);
+                Fragment_TaoHoaDon fragment_taoHoaDon= new Fragment_TaoHoaDon();
+                fragment_taoHoaDon.setArguments(bundle);
+                ((FragmentActivity)context).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment_taoHoaDon).addToBackStack(context.getClass().getName()).commit();
+            }
+        });
 
     }
 
