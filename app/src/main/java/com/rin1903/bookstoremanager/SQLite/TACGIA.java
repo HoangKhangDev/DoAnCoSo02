@@ -1,8 +1,9 @@
 package com.rin1903.bookstoremanager.SQLite;
 
 
+import java.io.Serializable;
 
-public class TACGIA {
+public class TACGIA implements Serializable {
     public String SQL_createtable(){
         return "create table if not exists TACGIA (" +
                 "   MATACGIA             varchar(100)         not null," +

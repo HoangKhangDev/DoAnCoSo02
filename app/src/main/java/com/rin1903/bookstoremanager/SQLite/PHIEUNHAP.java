@@ -1,7 +1,9 @@
 package com.rin1903.bookstoremanager.SQLite;
 
 
-public class PHIEUNHAP {
+import java.io.Serializable;
+
+public class PHIEUNHAP implements Serializable {
     public String SQL_createtable(){
         return "create table if not exists PHIEUNHAP (" +
                 "   MAPHIEUNHAP          char(50)             not null," +

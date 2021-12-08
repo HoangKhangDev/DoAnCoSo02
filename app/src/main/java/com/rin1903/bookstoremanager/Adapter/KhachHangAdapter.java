@@ -1,28 +1,42 @@
 package com.rin1903.bookstoremanager.Adapter;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
+import com.rin1903.bookstoremanager.MainActivity;
 import com.rin1903.bookstoremanager.R;
 import com.rin1903.bookstoremanager.SQLite.KHACHHANG;
+import com.rin1903.bookstoremanager.fragment.Fragment_KhachHang;
 
+import java.sql.BatchUpdateException;
 import java.util.ArrayList;
+import java.util.List;
 
-public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.ViewHolder> {
+public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.ViewHolder> implements Filterable {
     private ArrayList<KHACHHANG> khachhangArrayList;
+    private ArrayList<KHACHHANG> khachhangarray_old;
     private Context context;
 
     private ViewBinderHelper viewBinderHelper= new ViewBinderHelper();
@@ -32,6 +46,7 @@ public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.View
     public KhachHangAdapter(ArrayList<KHACHHANG> khachhangArrayList, Context context) {
         this.khachhangArrayList = khachhangArrayList;
         this.context = context;
+        this.khachhangarray_old= khachhangArrayList;
         viewBinderHelper.setOpenOnlyOne(true);
     }
 
@@ -44,7 +59,7 @@ public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
        if(khachhangArrayList.get(position)!=null){
            holder.tv_tieude.setText(khachhangArrayList.get(position).getTENKHACHHANG());
            holder.tv_mota.setText(khachhangArrayList.get(position).getSDT_KH());
@@ -52,14 +67,16 @@ public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.View
            Bitmap bitmap= BitmapFactory.decodeByteArray(hinh,0,hinh.length);
            holder.img_hinh.setImageBitmap(bitmap);
        }
+       String makh= khachhangArrayList.get(position).getMAKHACHHANG();
 
         viewBinderHelper.bind(holder.swipeRevealLayout, khachhangArrayList.get(position).getMAKHACHHANG());
 
         holder.tv_item_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                khachhangArrayList.remove(holder.getAdapterPosition());
-                notifyItemRemoved(holder.getAdapterPosition());
+                khachhangArrayList.remove(position);
+                MainActivity.database.QueryData("delete from KHACHHANG where MAKHACHHANG='"+makh+"'");
+
             }
         });
         KHACHHANG kh= khachhangArrayList.get(position);
@@ -69,11 +86,53 @@ public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.View
                 Toast.makeText(context.getApplicationContext(),kh.getTENKHACHHANG() , Toast.LENGTH_SHORT).show();
             }
         });
+        holder.tv_item_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle= new Bundle();
+                bundle.putString("guidulieu","chinhsua_khachhang_"+makh);
+                Fragment_KhachHang fragment_khachHang= new Fragment_KhachHang();
+                fragment_khachHang.setArguments(bundle);
+                ((FragmentActivity)context).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment_khachHang).addToBackStack(context.getClass().getName()).commit();
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         if(khachhangArrayList!=null) return khachhangArrayList.size(); else return 0;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String stringsearch= constraint.toString();
+                if(stringsearch.isEmpty()){
+                   khachhangArrayList= khachhangarray_old;
+                }
+                else {
+                    ArrayList<KHACHHANG> list= new ArrayList<>();
+                    for(KHACHHANG khachhang:khachhangarray_old){
+                        if(khachhang.getTENKHACHHANG().toLowerCase().contains(stringsearch.toLowerCase())){
+                            list.add(khachhang);
+                        }
+                    }
+                    khachhangArrayList= list;
+                }
+                FilterResults filterResults= new FilterResults();
+                filterResults.values= khachhangArrayList;
+
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                khachhangArrayList = (ArrayList<KHACHHANG>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -83,13 +142,15 @@ public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.View
 
         CardView cardView;
         SwipeRevealLayout swipeRevealLayout;
-        TextView tv_item_delete;
+        LinearLayout tv_item_delete;
+        LinearLayout tv_item_edit;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_tieude= itemView.findViewById(R.id.tv_tieude_item_cohinh_listview_hienthi);
             tv_mota= itemView.findViewById(R.id.tv_mota_item_cohinh_listview_hienthi);
             img_hinh=itemView.findViewById(R.id.image_item_cohinh_list_hienthi);
             tv_item_delete= itemView.findViewById(R.id.tv_delete_item_cohinh);
+            tv_item_edit = itemView.findViewById(R.id.tv_edit_item_cohinh);
             swipeRevealLayout= itemView.findViewById(R.id.swipelayout_item_cohinh);
             cardView=itemView.findViewById(R.id.cardview_item_cohinh);
 

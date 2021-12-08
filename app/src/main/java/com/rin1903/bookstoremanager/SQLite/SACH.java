@@ -1,6 +1,8 @@
 package com.rin1903.bookstoremanager.SQLite;
 
-public class SACH {
+import java.io.Serializable;
+
+public class SACH implements Serializable{
     public String SQL_createtable(){
         return "create table if not exists SACH (" +
                 "   MASACH               int                  not null," +

@@ -11,14 +11,11 @@ import static com.rin1903.bookstoremanager.MainActivity.sachArrayList;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.Fragment;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -29,6 +26,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -74,7 +72,7 @@ public class Fragment_TaoHoaDon extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_taohoadon,container,false);
+        View view = inflater.inflate(R.layout.fragment_hoadon,container,false);
         final Activity activity = getActivity();
         unbinder= ButterKnife.bind(this,view);
         Tag= Fragment_TaoHoaDon.class.getName();
@@ -133,10 +131,10 @@ public class Fragment_TaoHoaDon extends Fragment {
             @Override
             public void onClick(View view) {
                 Bundle bundle1= new Bundle();
-                bundle1.putString("guidulieu","tao-Khách Hàng-sach");
+                bundle1.putString("guidulieu","tao_Khách Hàng_sach");
                 Fragment_KhachHang fragment=new Fragment_KhachHang();
                 fragment.setArguments(bundle1);
-                getFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment).addToBackStack(Tag).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment).addToBackStack(Tag).commit();
             }
         });
 
@@ -144,10 +142,10 @@ public class Fragment_TaoHoaDon extends Fragment {
             @Override
             public void onClick(View view) {
                 Bundle bundle1= new Bundle();
-                bundle1.putString("guidulieu","tao-Sách-sach");
+                bundle1.putString("guidulieu","tao_Sách_sach");
                 Fragment_Sach fragment=new Fragment_Sach();
                 fragment.setArguments(bundle1);
-                getFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment).addToBackStack(Tag).commit();
+//                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment).addToBackStack(Tag).commit();
             }
         });
 
@@ -210,8 +208,8 @@ public class Fragment_TaoHoaDon extends Fragment {
         btn_huy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(getFragmentManager()!=null){
-                    getFragmentManager().popBackStack();
+                if(getActivity().getSupportFragmentManager()!=null){
+                    getActivity().getSupportFragmentManager().popBackStack();
                 }
             }
         });
@@ -238,7 +236,7 @@ public class Fragment_TaoHoaDon extends Fragment {
                         public void onClick(View view) {
                            themhoadon();
                            dialog.cancel();
-                            getFragmentManager().popBackStack();
+                            getActivity().getSupportFragmentManager().popBackStack();
 
                         }
                     });
@@ -246,7 +244,7 @@ public class Fragment_TaoHoaDon extends Fragment {
                         @Override
                         public void onClick(View view) {
                             dialog.cancel();
-                            getFragmentManager().popBackStack();
+                            getActivity().getSupportFragmentManager().popBackStack();
 
                         }
                     });

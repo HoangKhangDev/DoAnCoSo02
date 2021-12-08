@@ -35,14 +35,14 @@ public class Database extends SQLiteOpenHelper {
         sqLiteStatement.bindLong(3,SOLUONG_HD);
         sqLiteStatement.executeInsert();
     }
-    public void UPDATE_CHITIETHOADON(int MASACH, String MAHOADON, int SOLUONG_HD){
+    public void UPDATE_CHITIETHOADON(CHI_TIET_HOA_DON chi_tiet_hoa_don){
         SQLiteDatabase database= getWritableDatabase();
         String sql="UPDATE CHI_TIET_HOA_DON SET MASACH=?,SOLUONG_HD=? where MAHOADON=?";
         SQLiteStatement sqLiteStatement= database.compileStatement(sql);
         sqLiteStatement.clearBindings();
-        sqLiteStatement.bindLong(1,MASACH);
-        sqLiteStatement.bindString(3,MAHOADON);
-        sqLiteStatement.bindLong(2,SOLUONG_HD);
+        sqLiteStatement.bindLong(1,chi_tiet_hoa_don.getMASACH());
+        sqLiteStatement.bindString(3,chi_tiet_hoa_don.getMAHOADON());
+        sqLiteStatement.bindLong(2,chi_tiet_hoa_don.getSOLUONG_HD());
         sqLiteStatement.executeUpdateDelete();
     }
     public void DELETE_CHITIETHOADON(String MAHOADON){
@@ -59,14 +59,14 @@ public class Database extends SQLiteOpenHelper {
         sqLiteStatement.bindLong(3,SOLUONG_PN);
         sqLiteStatement.executeInsert();
     }
-    public void UPDATE_CHITIETPHIEUNHAP(int MASACH, String MAPHIEUNHAP, int SOLUONG_PN){
+    public void UPDATE_CHITIETPHIEUNHAP(CHI_TIET_PHIEU_NHAP chi_tiet_phieu_nhap){
         SQLiteDatabase database= getWritableDatabase();
         String sql="UPDATE CHI_TIET_PHIEU_NHAP SET MASACH=?,SOLUONG_PN=? where MAPHIEUNHAP=?";
         SQLiteStatement sqLiteStatement= database.compileStatement(sql);
         sqLiteStatement.clearBindings();
-        sqLiteStatement.bindLong(1,MASACH);
-        sqLiteStatement.bindString(3,MAPHIEUNHAP);
-        sqLiteStatement.bindLong(2,SOLUONG_PN);
+        sqLiteStatement.bindLong(1,chi_tiet_phieu_nhap.getMASACH());
+        sqLiteStatement.bindString(3,chi_tiet_phieu_nhap.getMAPHIEUNHAP());
+        sqLiteStatement.bindLong(2,chi_tiet_phieu_nhap.getSOLUONG_PN());
         sqLiteStatement.executeUpdateDelete();
     }
     public void DELETE_CHITIETPHIEUNHAP(String MAPHIEUNHAP)
@@ -84,14 +84,14 @@ public class Database extends SQLiteOpenHelper {
         sqLiteStatement.bindLong(3,THANHTIEN_CTHD);
         sqLiteStatement.executeInsert();
     }
-    public void UPDATE_HOADON(String MAHOADON, String MAKHACHHANG, int THANHTIEN_CTHD){
+    public void UPDATE_HOADON(HOADON hoadon){
         SQLiteDatabase database= getWritableDatabase();
         String sql= "UPDATE HOADON set MAKHACHHANG=?,THANHTIEN_CTHD=? where MAHOADON=?";
         SQLiteStatement sqLiteStatement= database.compileStatement(sql);
         sqLiteStatement.clearBindings();
-        sqLiteStatement.bindString(3,MAHOADON);
-        sqLiteStatement.bindString(1,MAKHACHHANG);
-        sqLiteStatement.bindLong(2,THANHTIEN_CTHD);
+        sqLiteStatement.bindString(3,hoadon.getMAHOADON());
+        sqLiteStatement.bindString(1,hoadon.getMAKHACHHANG());
+        sqLiteStatement.bindLong(2,hoadon.getTHANHTIEN_CTHD());
         sqLiteStatement.executeUpdateDelete();
     }
     public void DELETE_HOADON(String MAHOADON)
@@ -114,19 +114,19 @@ public class Database extends SQLiteOpenHelper {
         sqLiteStatement.bindBlob(7  ,HINH_KH);
         sqLiteStatement.executeInsert();
     }
-    public void UPDATE_KHACHHANG(String MAKHACHHANG, String TENKHACHHANG, String GIOITINH_KH, String NGAYSINH_KH, String SDT_KH, String DIACHI_KH, byte[] HINH_KH)
+    public void UPDATE_KHACHHANG(KHACHHANG khachhang)
     {
         SQLiteDatabase database= getWritableDatabase();
         String sql= "update KHACHHANG set TENKHACHHANG=?,GIOITINH_KH=?,NGAYSINH_KH=?,SDT_KH=?,DIACHI_KH=?,HINH_KH=? where MAKHACHHANH=?";
         SQLiteStatement sqLiteStatement= database.compileStatement(sql);
         sqLiteStatement.clearBindings();
-        sqLiteStatement.bindString(7,MAKHACHHANG);
-        sqLiteStatement.bindString(1,TENKHACHHANG);
-        sqLiteStatement.bindString(2,GIOITINH_KH);
-        sqLiteStatement.bindString(3,NGAYSINH_KH);
-        sqLiteStatement.bindString(4,SDT_KH);
-        sqLiteStatement.bindString(5,DIACHI_KH);
-        sqLiteStatement.bindBlob(6,HINH_KH);
+        sqLiteStatement.bindString(7,khachhang.getMAKHACHHANG());
+        sqLiteStatement.bindString(1,khachhang.getTENKHACHHANG());
+        sqLiteStatement.bindString(2,khachhang.getGIOITINH_KH());
+        sqLiteStatement.bindString(3,khachhang.getNGAYSINH_KH());
+        sqLiteStatement.bindString(4,khachhang.getSDT_KH());
+        sqLiteStatement.bindString(5,khachhang.getDIACHI_KH());
+        sqLiteStatement.bindBlob(6,khachhang.getHINH_KH());
         sqLiteStatement.executeUpdateDelete();
     }
     public void DELETE_KHACHHANG(String MAKHACHHANG)
@@ -147,17 +147,16 @@ public class Database extends SQLiteOpenHelper {
         sqLiteStatement.bindBlob(5,HINH_NHACUNGCAP);
         sqLiteStatement.executeInsert();
     }
-    public void UPDATE_NHACUNGCAP(String MANHACUNGCAP, String TENNHACUNGCAP, String DIACHI_NCC, String SDT_NCC, byte[] HINH_NHACUNGCAP)
+    public void UPDATE_NHACUNGCAP(NHACUNGCAP nhacungcap)
     {
         SQLiteDatabase database= getWritableDatabase();
-        String sql= "UPDATE NHACUNGCAP SET TENNHACUNGCAP=?,DIACHI_NCC=?,SDT_NCC=?,HINH_NHACUNGCAP=? WHERE MANHACUNGCAP='"+MANHACUNGCAP+"'";
+        String sql= "UPDATE NHACUNGCAP SET TENNHACUNGCAP=?,DIACHI_NCC=?,SDT_NCC=?,HINH_NHACUNGCAP=? WHERE MANHACUNGCAP='"+nhacungcap.getMANHACUNGCAP()+"'";
         SQLiteStatement sqLiteStatement= database.compileStatement(sql);
         sqLiteStatement.clearBindings();
-        sqLiteStatement.bindString(5,MANHACUNGCAP);
-        sqLiteStatement.bindString(1,TENNHACUNGCAP);
-        sqLiteStatement.bindString(2,DIACHI_NCC);
-        sqLiteStatement.bindString(3,SDT_NCC);
-        sqLiteStatement.bindBlob(4,HINH_NHACUNGCAP);
+        sqLiteStatement.bindString(1,nhacungcap.getTENNHACUNGCAP());
+        sqLiteStatement.bindString(2,nhacungcap.getDIACHI_NCC());
+        sqLiteStatement.bindString(3,nhacungcap.getSDT_NCC());
+        sqLiteStatement.bindBlob(4,nhacungcap.getHINH_NHACUNGCAP());
         sqLiteStatement.executeUpdateDelete();
     }
     public void DELETE_NHACUNGCAP(String MANHACUNGCAP){
@@ -174,14 +173,14 @@ public class Database extends SQLiteOpenHelper {
         sqLiteStatement.bindLong(3,THANHTIEN_PN);
         sqLiteStatement.executeInsert();
     }
-    public void UPDATE_PHIEUNHAP(String MAPHIEUNHAP, String MANHACUNGCAP, int THANHTIEN_PN){
+    public void UPDATE_PHIEUNHAP(PHIEUNHAP phieunhap){
         SQLiteDatabase database= getWritableDatabase();
         String sql= "UPDATE PHIEUNHAP SET MANHACUNGCAP=?,THANHTIEN_PN=? WHERE MAPHIEUNHAP=?";
         SQLiteStatement sqLiteStatement= database.compileStatement(sql);
         sqLiteStatement.clearBindings();
-        sqLiteStatement.bindString(3,MAPHIEUNHAP);
-        sqLiteStatement.bindString(1,MANHACUNGCAP);
-        sqLiteStatement.bindLong(2,THANHTIEN_PN);
+        sqLiteStatement.bindString(3,phieunhap.getMAPHIEUNHAP());
+        sqLiteStatement.bindString(1,phieunhap.getMANHACUNGCAP());
+        sqLiteStatement.bindLong(2,phieunhap.getTHANHTIEN_PN());
         sqLiteStatement.executeUpdateDelete();
     }
     public void DELETE_PHIEUNHAP(String MAPHIEUNHAP){
@@ -204,20 +203,20 @@ public class Database extends SQLiteOpenHelper {
         sqLiteStatement.bindBlob(8,HINH_SACH);
         sqLiteStatement.executeInsert();
     }
-    public void UPDATE_SACH(int MASACH, String MALOAI, String MATACGIA, String TENSACH, int SOQUYEN,String TRANGTHAI, int GIABAN, byte[] HINH_SACH)
+    public void UPDATE_SACH(SACH sach)
     {
         SQLiteDatabase database= getWritableDatabase();
         String sql= "UPDATE SACH SET MALOAI=?,MATACGIA=?,TENSACH=?,SOQUYEN=?,TRANGTHAI=?,GIABAN=?,HINH_SACH=? WHERE MASACH =?";
         SQLiteStatement sqLiteStatement= database.compileStatement(sql);
         sqLiteStatement.clearBindings();
-        sqLiteStatement.bindLong(8,MASACH);
-        sqLiteStatement.bindString(1,MALOAI);
-        sqLiteStatement.bindString(2,MATACGIA);
-        sqLiteStatement.bindString(3,TENSACH);
-        sqLiteStatement.bindLong(4,SOQUYEN);
-        sqLiteStatement.bindString(5,TRANGTHAI);
-        sqLiteStatement.bindLong(6,GIABAN);
-        sqLiteStatement.bindBlob(7,HINH_SACH);
+        sqLiteStatement.bindLong(8,sach.getMASACH());
+        sqLiteStatement.bindString(1,sach.getMALOAI());
+        sqLiteStatement.bindString(2,sach.getMATACGIA());
+        sqLiteStatement.bindString(3,sach.getTENSACH());
+        sqLiteStatement.bindLong(4,sach.getSOQUYEN());
+        sqLiteStatement.bindString(5,sach.getTRANGTHAI());
+        sqLiteStatement.bindLong(6,sach.getGIABAN());
+        sqLiteStatement.bindBlob(7,sach.getHINH_SACH());
         sqLiteStatement.executeUpdateDelete();
     }
     public void DELETE_SACH(int MASACH){
@@ -238,18 +237,18 @@ public class Database extends SQLiteOpenHelper {
         sqLiteStatement.bindBlob(6,HINH_TACGIA);
         sqLiteStatement.executeInsert();
     }
-    public void UPDATE_TACGIA(String MATACGIA, String TENTACGIA, String GIOITINH_TG, String NGAYSINH_TG, String DIACHI_TG, byte[] HINH_TACGIA)
+    public void UPDATE_TACGIA(TACGIA tacgia)
     {
         SQLiteDatabase database= getWritableDatabase();
         String sql= "UPDATE TACGIA SET TENTACGIA=?,GIOITINH_TG=?,NGAYSINH_TG=?,DIACHI_TG=?,HINH_TACGIA=? WHERE MATACGIA=?";
         SQLiteStatement sqLiteStatement= database.compileStatement(sql);
         sqLiteStatement.clearBindings();
-        sqLiteStatement.bindString(6,MATACGIA);
-        sqLiteStatement.bindString(1,TENTACGIA);
-        sqLiteStatement.bindString(2,GIOITINH_TG);
-        sqLiteStatement.bindString(3,NGAYSINH_TG);
-        sqLiteStatement.bindString(4,DIACHI_TG);
-        sqLiteStatement.bindBlob(5,HINH_TACGIA);
+        sqLiteStatement.bindString(6,tacgia.getMATACGIA());
+        sqLiteStatement.bindString(1,tacgia.getTENTACGIA());
+        sqLiteStatement.bindString(2,tacgia.getGIOITINH_TG());
+        sqLiteStatement.bindString(3,tacgia.getNGAYSINH_TG());
+        sqLiteStatement.bindString(4,tacgia.getDIACHI_TG());
+        sqLiteStatement.bindBlob(5,tacgia.getHINH_TACGIA());
         sqLiteStatement.executeUpdateDelete();
     }
     public void DELETE_TACGIA(String MATACGIA){
@@ -265,13 +264,13 @@ public class Database extends SQLiteOpenHelper {
         sqLiteStatement.bindString(2,TENTHELOAI);
         sqLiteStatement.executeInsert();
     }
-    public void UPDATE_THELOAI(String MATHELOAI, String TENTHELOAI){
+    public void UPDATE_THELOAI(THELOAI theloai){
         SQLiteDatabase database= getWritableDatabase();
         String sql= "update THELOAI set TENLOAI=? where MALOAI=?";
         SQLiteStatement sqLiteStatement= database.compileStatement(sql);
         sqLiteStatement.clearBindings();
-        sqLiteStatement.bindString(1,TENTHELOAI);
-        sqLiteStatement.bindString(2,MATHELOAI);
+        sqLiteStatement.bindString(1,theloai.getTENLOAI());
+        sqLiteStatement.bindString(2,theloai.getMALOAI());
         sqLiteStatement.executeUpdateDelete();
     }
     public void DELETE_THELOAI(String MATHELOAI){

@@ -1,14 +1,16 @@
 package com.rin1903.bookstoremanager.fragment;
 
 import static android.app.Activity.RESULT_OK;
+import static com.rin1903.bookstoremanager.MainActivity.SELECT_PICTURE;
+import static com.rin1903.bookstoremanager.MainActivity.Tag;
 import static com.rin1903.bookstoremanager.MainActivity.database;
 import static com.rin1903.bookstoremanager.MainActivity.dulieu;
 
 import android.app.DatePickerDialog;
-import android.app.Fragment;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,9 +27,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.rin1903.bookstoremanager.MainActivity;
 import com.rin1903.bookstoremanager.R;
+import com.rin1903.bookstoremanager.SQLite.KHACHHANG;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
@@ -38,16 +44,18 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import gun0912.tedbottompicker.TedBottomPicker;
+import gun0912.tedbottompicker.TedBottomSheetDialogFragment;
+
 
 public class Fragment_KhachHang extends Fragment {
     Unbinder unbinder;
-
 
     private static final int SELECT_PICTURE = 1;
 
     private String selectedImagePath;
     private String makhachhang="";
-
+    private String check_change_image="false";
     @BindView(R.id.tv_Tieude_dialog_Khachhang) TextView tv_tentieude;
     @BindView(R.id.img_hinh_khachhang_dialog) ImageView img_hinhkhachhang;
     @BindView(R.id.edt_diachi_khachhang) EditText edt_diachi;
@@ -59,6 +67,7 @@ public class Fragment_KhachHang extends Fragment {
     @BindView(R.id.btn_huy_khachhang) Button btn_huy_khachhang;
     @BindView(R.id.spinner_gioitinh_khachhang)
     Spinner spinner;
+    private KHACHHANG khachhang;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -74,7 +83,7 @@ public class Fragment_KhachHang extends Fragment {
         Bundle bundle= getArguments();
         //loadlistview
         if(bundle!=null) {
-            dulieu = bundle.getString("guidulieu").split("-");
+            dulieu = bundle.getString("guidulieu").split("_");
             if(dulieu[0].toLowerCase().contains("tao")){
                 Cursor cursor=database.Getdata("select MAKHACHHANG from KHACHHANG order by MAKHACHHANG desc limit 1");
 
@@ -87,6 +96,34 @@ public class Fragment_KhachHang extends Fragment {
                         tach= cursor.getString(0).split("-");
                     }
                     makhachhang=String.format("%s-%s", tach[0], String.valueOf(Integer.parseInt(tach[1])+1));
+                }
+            }
+            else if(dulieu[0].toLowerCase().contains("chinhsua")){
+                Cursor cursor= database.Getdata("select * from KHACHHANG where MAKHACHHANG='"+dulieu[2].toString()+"'");
+                while (cursor.moveToNext()){
+                    khachhang = new KHACHHANG(cursor.getString(0),
+                            cursor.getString(1),
+                            cursor.getString(2),
+                            cursor.getString(3),
+                            cursor.getString(4),
+                            cursor.getString(5),
+                            cursor.getBlob(6));
+
+                    byte[] hinh= khachhang.getHINH_KH();
+                    Bitmap bitmap= BitmapFactory.decodeByteArray(hinh,0,hinh.length);
+                    img_hinhkhachhang.setImageBitmap(bitmap);
+                    edt_tenkhachhang.setText(khachhang.getTENKHACHHANG());
+                    edt_diachi.setText(khachhang.getDIACHI_KH());
+                    edt_sdtkhachhang.setText(khachhang.getSDT_KH());
+                    tv_calendar_khachhang.setText(khachhang.getNGAYSINH_KH());
+                    if(khachhang.getGIOITINH_KH().toLowerCase().contains("nam")){
+                        spinner.setSelection(0);
+                    }
+                    else if(khachhang.getGIOITINH_KH().toLowerCase().contains("nữ")) {
+                        spinner.setSelection(1);
+                    }
+                    btn_them_khachhang.setText("Update");
+
                 }
             }
         }
@@ -115,16 +152,17 @@ public class Fragment_KhachHang extends Fragment {
         img_hinhkhachhang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TedBottomPicker.with(MainActivity.this)
+                TedBottomPicker.with(getActivity()).setTitle("Vui Lòng Chọn Ảnh").setPreviewMaxCount(19)
                         .show(new TedBottomSheetDialogFragment.OnImageSelectedListener() {
                             @Override
                             public void onImageSelected(Uri uri) {
-                                // here is selected image uri
+                                Picasso.get().load(uri).into(img_hinhkhachhang);
+                                check_change_image="true";
                             }
                         });
 
-
             }
+
         });
 
         btn_them_khachhang.setOnClickListener(new View.OnClickListener() {
@@ -133,27 +171,50 @@ public class Fragment_KhachHang extends Fragment {
                 if(!edt_tenkhachhang.getText().toString().isEmpty()
                 &!edt_diachi.getText().toString().isEmpty()
                 &!edt_sdtkhachhang.getText().toString().isEmpty()
-                &tv_calendar_khachhang.getText().toString()!="dd/mm/yyyy"
-                &img_hinhkhachhang.getDrawable()!= getResources().getDrawable(R.drawable.no_pictures)){
-                    BitmapDrawable bitmapDrawable = (BitmapDrawable) img_hinhkhachhang.getDrawable();
-                    Bitmap bitmap= bitmapDrawable.getBitmap();
-                    ByteArrayOutputStream byteArrayOutputStream= new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
-                    byte[] hinhanh= byteArrayOutputStream.toByteArray();
-                    database.INSERT_KHACHHANG(makhachhang,edt_tenkhachhang.getText().toString(),spinner.getSelectedItem().toString(),
-                            tv_calendar_khachhang.getText().toString(),edt_sdtkhachhang.getText().toString(),edt_diachi.getText().toString(), hinhanh);
-                    Toast.makeText(getActivity(), "Thêm Thành Công", Toast.LENGTH_SHORT).show();
-                    if(getFragmentManager()!=null){
-                        getFragmentManager().popBackStack();
+                &!tv_calendar_khachhang.getText().toString().contains("dd/mm/yyyy")){
+                    if(check_change_image.contains("true")&dulieu[0].toLowerCase().contains("tao")){
+                        BitmapDrawable bitmapDrawable = (BitmapDrawable) img_hinhkhachhang.getDrawable();
+                        Bitmap bitmap= bitmapDrawable.getBitmap();
+                        ByteArrayOutputStream byteArrayOutputStream= new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
+                        byte[] hinhanh= byteArrayOutputStream.toByteArray();
+                        database.INSERT_KHACHHANG(makhachhang,edt_tenkhachhang.getText().toString(),spinner.getSelectedItem().toString(),
+                                tv_calendar_khachhang.getText().toString(),edt_sdtkhachhang.getText().toString(),edt_diachi.getText().toString(), hinhanh);
+                        Toast.makeText(getActivity(), "Thêm Thành Công", Toast.LENGTH_SHORT).show();
+                        if(getActivity().getSupportFragmentManager()!=null){
+                            getActivity().getSupportFragmentManager().popBackStack();
+                        }
                     }
+                    else if(dulieu[0].toLowerCase().contains("chinhsua")) {
+                        BitmapDrawable bitmapDrawable = (BitmapDrawable) img_hinhkhachhang.getDrawable();
+                        Bitmap bitmap= bitmapDrawable.getBitmap();
+                        ByteArrayOutputStream byteArrayOutputStream= new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
+                        byte[] hinhanh= byteArrayOutputStream.toByteArray();
+                        khachhang.setTENKHACHHANG(edt_tenkhachhang.getText().toString());
+                        khachhang.setGIOITINH_KH(spinner.getSelectedItem().toString());
+                        khachhang.setNGAYSINH_KH(tv_calendar_khachhang.getText().toString());
+                        khachhang.setSDT_KH(edt_sdtkhachhang.getText().toString());
+                        khachhang.setDIACHI_KH(edt_diachi.getText().toString());
+                        khachhang.setHINH_KH(hinhanh);
+                        database.UPDATE_KHACHHANG(khachhang);
+                        Toast.makeText(getActivity(), "Chỉnh Sửa Thành Công", Toast.LENGTH_SHORT).show();
+                        if(getActivity().getSupportFragmentManager()!=null){
+                            getActivity().getSupportFragmentManager().popBackStack();
+                        }
+                    }
+                    else {
+                        Toast.makeText(getActivity(), "Please Change Photo", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
             }
         });
         btn_huy_khachhang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(getFragmentManager()!=null){
-                    getFragmentManager().popBackStack();
+                if(getActivity().getSupportFragmentManager()!=null){
+                    getActivity().getSupportFragmentManager().popBackStack();
                 }
             }
         });
@@ -161,38 +222,7 @@ public class Fragment_KhachHang extends Fragment {
     }
 
 
-    //themhinhanh
-    void imageChooser() {
 
-        // create an instance of the
-        // intent of the type image
-        Intent i = new Intent();
-        i.setType("image/*");
-        i.setAction(Intent.ACTION_GET_CONTENT);
-
-        // pass the constant to compare it
-        // with the returned requestCode
-        startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE);
-    }
-    // this function is triggered when user
-    // selects the image from the imageChooser
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == RESULT_OK) {
-
-            // compare the resultCode with the
-            // SELECT_PICTURE constant
-            if (requestCode == SELECT_PICTURE) {
-                // Get the url of the image from data
-                Uri selectedImageUri = data.getData();
-                if (null != selectedImageUri) {
-                    // update the preview image in the layout
-                    img_hinhkhachhang.setImageURI(selectedImageUri);
-                }
-            }
-        }
-    }
 
 
 

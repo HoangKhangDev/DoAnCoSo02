@@ -2,11 +2,13 @@ package com.rin1903.bookstoremanager;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -40,7 +42,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.navbar_bottom)  BottomNavigationView navigation;
     public static String Tag= "fragment";
@@ -106,11 +108,9 @@ public class MainActivity extends Activity {
         refesh_theloai();
 
 
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction= fragmentManager.beginTransaction();
         Fragment_Main_Menu fragment_menu= new Fragment_Main_Menu();
-        fragmentTransaction.add(R.id.fragment_content,fragment_menu);
-        fragmentTransaction.commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_content,fragment_menu).commit();
+
 
 
         navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -119,11 +119,8 @@ public class MainActivity extends Activity {
                switch (item.getItemId()){
                    case R.id.home:
                    {
-                       FragmentManager fragmentManager = getFragmentManager();
-                       FragmentTransaction fragmentTransaction= fragmentManager.beginTransaction();
                        Fragment_Main_Menu fragment_menu= new Fragment_Main_Menu();
-                       fragmentTransaction.add(R.id.fragment_content,fragment_menu);
-                       fragmentTransaction.commit();
+                       getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment_menu).commit();
                        break;
                    }
                    case R.id.taohoadon:
@@ -279,30 +276,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    public static void fragment_menu_replace(FragmentManager fragmentManager){
-        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        Fragment_Main_Menu fragment_menu= new Fragment_Main_Menu();
-        fragmentTransaction.replace(R.id.fragment_content,fragment_menu);
-        fragmentTransaction.commit();
-    }
-    public static void fragment_hienthi_replace(FragmentManager fragmentManager,Bundle bundle){
 
-        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        Fragment_HienThi fragment= new Fragment_HienThi();
-        fragment.setArguments(bundle);
-        fragmentManager.beginTransaction().replace(R.id.fragment_content,fragment).addToBackStack("fragment").commit();
-    }
-
-
-
-    public void scancode(){
-        IntentIntegrator integrator= new IntentIntegrator(MainActivity.this);
-        integrator.setCaptureActivity(CaptureAct.class);
-        integrator.setOrientationLocked(false);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
-        integrator.setPrompt("Scanning ...");
-        integrator.initiateScan();
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -315,12 +289,15 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (getFragmentManager().getBackStackEntryCount() > 0) {
-            getFragmentManager().popBackStack();
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                getSupportFragmentManager().popBackStack();
         } else {
             super.onBackPressed();
         }
     }
+
+
+
 
 
 }

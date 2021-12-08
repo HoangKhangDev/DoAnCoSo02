@@ -19,7 +19,6 @@ import static com.rin1903.bookstoremanager.MainActivity.tacgiaArrayList;
 import static com.rin1903.bookstoremanager.MainActivity.theloaiArrayList;
 
 import android.app.Dialog;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -33,6 +32,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,16 +46,25 @@ import com.rin1903.bookstoremanager.Adapter.SachAdapter;
 import com.rin1903.bookstoremanager.Adapter.TacGiaAdapter;
 import com.rin1903.bookstoremanager.R;
 
+import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class Fragment_HienThi extends Fragment{
+public class Fragment_HienThi extends Fragment {
     Unbinder unbinder;
 
+    private KhachHangAdapter khachHangAdapter;
+    private SachAdapter sachAdapter;
+    private HoaDonAdapter hoaDonAdapter;
+    private NhaCungCapAdapter nhaCungCapAdapter;
+    private PhieuNhapAdapter phieuNhapAdapter;
+    private TacGiaAdapter tacGiaAdapter;
+    @BindView(R.id.search_bar)
+    SearchView searchView;
     @BindView(R.id.recycleview_fragment_hienthi)
     RecyclerView recyclerView_hienthi;
-    @BindView(R.id.tv_tenhienthi_fragment_hienthi) TextView tv_tenhienthi;
     @BindView(R.id.button_float_add_fragment_hienthi) FloatingActionButton btn_add;
     @BindView(R.id.back_fragment_hienthi) ImageView img_back;
 
@@ -65,14 +75,14 @@ public class Fragment_HienThi extends Fragment{
         Tag= Fragment_HienThi.class.getName();
         unbinder=ButterKnife.bind(this,view);
 
+
         img_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager= getFragmentManager();
-                FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-                Fragment_Main_Menu fragment_menu= new Fragment_Main_Menu();
-                fragmentTransaction.replace(R.id.fragment_content,fragment_menu);
-                fragmentTransaction.commit();
+                if(getActivity().getSupportFragmentManager()!=null){
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
+
             }
         });
 
@@ -86,8 +96,7 @@ public class Fragment_HienThi extends Fragment{
         Bundle bundle= getArguments();
         //loadlistview
         if(bundle!=null){
-            dulieu=bundle.getString("guidulieu").split("-");
-            tv_tenhienthi.setText(dulieu[1]);
+            dulieu=bundle.getString("guidulieu").split("_");
 
 
             if(dulieu[1].toLowerCase().contains("phiếu nhập")){
@@ -106,10 +115,26 @@ public class Fragment_HienThi extends Fragment{
                         }
                     });
                     dialog.show();
+                    searchView.setVisibility(View.GONE);
                 }
                 else {
+                    searchView.setVisibility(View.VISIBLE);
                     refesh_lv_phieunhap();
+                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                        @Override
+                        public boolean onQueryTextSubmit(String query) {
+                            phieuNhapAdapter.getFilter().filter(query);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onQueryTextChange(String newText) {
+                            phieuNhapAdapter.getFilter().filter(newText);
+                            return false;
+                        }
+                    });
                 }
+
 
             }
             else if (dulieu[1].toLowerCase().contains("khách hàng")){
@@ -127,10 +152,27 @@ public class Fragment_HienThi extends Fragment{
                         }
                     });
                     dialog.show();
+                    searchView.setVisibility(View.GONE);
+
                 }
                 else {
+                    searchView.setVisibility(View.VISIBLE);
                     refesh_lv_khachhang();
+                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                        @Override
+                        public boolean onQueryTextSubmit(String query) {
+                            khachHangAdapter.getFilter().filter(query);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onQueryTextChange(String newText) {
+                            khachHangAdapter.getFilter().filter(newText);
+                            return false;
+                        }
+                    });
                 }
+
             }
             else if (dulieu[1].toLowerCase().contains("sách")){
                 refesh_sach();
@@ -147,9 +189,25 @@ public class Fragment_HienThi extends Fragment{
                         }
                     });
                     dialog.show();
+                    searchView.setVisibility(View.GONE);
+
                 }
                 else {
+                    searchView.setVisibility(View.VISIBLE);
                     refesh_lv_sach();
+                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                        @Override
+                        public boolean onQueryTextSubmit(String query) {
+                            sachAdapter.getFilter().filter(query);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onQueryTextChange(String newText) {
+                            sachAdapter.getFilter().filter(newText);
+                            return false;
+                        }
+                    });
                 }
             }
             else if (dulieu[1].toLowerCase().contains("nhà cung cấp")){
@@ -167,29 +225,24 @@ public class Fragment_HienThi extends Fragment{
                         }
                     });
                     dialog.show();
+                    searchView.setVisibility(View.GONE);
                 }
                 else {
+                    searchView.setVisibility(View.VISIBLE);
                     refesh_lv_nhacungcap();
-                }
-            }
-            else if (dulieu[1].toLowerCase().contains("sách")){
-                refesh_sach();
-                if (sachArrayList.size()==0){
-                    Dialog dialog = new Dialog(getActivity());
-                    dialog.setContentView(R.layout.dialog_list_null);
-
-                    Button btn= dialog.findViewById(R.id.btn_ok_dialog_list_null);
-
-                    btn.setOnClickListener(new View.OnClickListener() {
+                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                         @Override
-                        public void onClick(View v) {
-                            dialog.cancel();
+                        public boolean onQueryTextSubmit(String query) {
+                            nhaCungCapAdapter.getFilter().filter(query);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onQueryTextChange(String newText) {
+                            nhaCungCapAdapter.getFilter().filter(newText);
+                            return false;
                         }
                     });
-                    dialog.show();
-                }
-                else {
-                    refesh_lv_sach();
                 }
             }
             else if (dulieu[1].toLowerCase().contains("hoá đơn")){
@@ -207,9 +260,24 @@ public class Fragment_HienThi extends Fragment{
                         }
                     });
                     dialog.show();
+                    searchView.setVisibility(View.GONE);
                 }
                 else {
+                    searchView.setVisibility(View.VISIBLE);
                     refesh_lv_hoadon();
+                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                        @Override
+                        public boolean onQueryTextSubmit(String query) {
+                            hoaDonAdapter.getFilter().filter(query);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onQueryTextChange(String newText) {
+                            hoaDonAdapter.getFilter().filter(newText);
+                            return false;
+                        }
+                    });
                 }
             }
             else if (dulieu[1].toLowerCase().contains("tác giả")){
@@ -227,9 +295,24 @@ public class Fragment_HienThi extends Fragment{
                         }
                     });
                     dialog.show();
+                    searchView.setVisibility(View.GONE);
                 }
                 else {
+                    searchView.setVisibility(View.VISIBLE);
                     refesh_lv_tacgia();
+                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                        @Override
+                        public boolean onQueryTextSubmit(String query) {
+                            tacGiaAdapter.getFilter().filter(query);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onQueryTextChange(String newText) {
+                            tacGiaAdapter.getFilter().filter(newText);
+                            return false;
+                        }
+                    });
                 }
             }
         }
@@ -241,45 +324,46 @@ public class Fragment_HienThi extends Fragment{
             public void onClick(View v) {
                 if(dulieu[1].toLowerCase().contains("khách hàng")){
                     Bundle bundle1= new Bundle();
-                    bundle1.putString("guidulieu","tao-Khách Hàng");
+                    bundle1.putString("guidulieu","tao_Khách Hàng");
                     Fragment_KhachHang fragment_khachhang=new Fragment_KhachHang();
                     fragment_khachhang.setArguments(bundle1);
-                    getFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment_khachhang).addToBackStack(Tag).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment_khachhang).addToBackStack(Tag).commit();
                 }
                 else if(dulieu[1].toString().toLowerCase().contains("phiếu nhập"))
                 { Bundle bundle1= new Bundle();
-                    bundle1.putString("guidulieu","tao-Phiếu Nhập");
+                    bundle1.putString("guidulieu","tao_Phiếu Nhập");
                     Fragment_TaoPhieuNhap fragment= new Fragment_TaoPhieuNhap();
                     fragment.setArguments(bundle1);
-                    getFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment).addToBackStack(Tag).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment).addToBackStack(Tag).commit();
                 }
                 else if(dulieu[1].toString().toLowerCase().contains("hoá đơn")){
                     Bundle bundle1= new Bundle();
-                    bundle1.putString("guidulieu","tao-Sách");
+                    bundle1.putString("guidulieu","tao_Sách");
                     Fragment_TaoHoaDon fragment= new Fragment_TaoHoaDon();
                     fragment.setArguments(bundle1);
-                    getFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment).addToBackStack(Tag).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment).addToBackStack(Tag).commit();
                 }
                 else if(dulieu[1].toString().toLowerCase().contains("sách")){
                     Bundle bundle1= new Bundle();
-                    bundle1.putString("guidulieu","tao-Sách");
+                    bundle1.putString("guidulieu","tao_Sách");
                     Fragment_Sach fragment_sach= new Fragment_Sach();
                     fragment_sach.setArguments(bundle1);
-                    getFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment_sach).addToBackStack(Tag).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment_sach).addToBackStack(Tag).commit();
                 }
                 else if(dulieu[1].toString().toLowerCase().contains("tác giả")){
                     Bundle bundle1= new Bundle();
-                    bundle1.putString("guidulieu","tao-Tác Giả-ok");
+                    bundle1.putString("guidulieu","tao_Tác Giả_ok");
                     Fragment_TacGia fragment=new Fragment_TacGia();
                     fragment.setArguments(bundle1);
-                    getFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment).addToBackStack(Tag).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment).addToBackStack(Tag).commit();
 
                 }
                 else if(dulieu[1].toString().toLowerCase().contains("nhà cung cấp")){
                     Bundle bundle1= new Bundle();
-                    bundle1.putString("guidulieu","tao-Nhà Cung Cấp");
+                    bundle1.putString("guidulieu","tao_Nhà Cung Cấp_null");
                     Fragment_NhaCungCap fragment=new Fragment_NhaCungCap();
-                    getFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment).addToBackStack(Tag).commit();
+                    fragment.setArguments(bundle1);
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment).addToBackStack(Tag).commit();
                 }
             }
         });
@@ -291,45 +375,39 @@ public class Fragment_HienThi extends Fragment{
     }
     public void refesh_lv_phieunhap(){
         refesh_phieunhap();
-        PhieuNhapAdapter adapter;
-        adapter= new PhieuNhapAdapter(phieunhapArrayList,getActivity());
-        recyclerView_hienthi.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        phieuNhapAdapter= new PhieuNhapAdapter(phieunhapArrayList,getActivity());
+        recyclerView_hienthi.setAdapter(phieuNhapAdapter);
+        phieuNhapAdapter.notifyDataSetChanged();
     }
     public void refesh_lv_khachhang(){
         refesh_khachhang();
-        KhachHangAdapter adapter_khachhang;
-        adapter_khachhang= new KhachHangAdapter(khachhangArrayList,getActivity());
-        recyclerView_hienthi.setAdapter(adapter_khachhang);
-        adapter_khachhang.notifyDataSetChanged();
+        khachHangAdapter= new KhachHangAdapter(khachhangArrayList,getActivity());
+        recyclerView_hienthi.setAdapter(khachHangAdapter);
+        khachHangAdapter.notifyDataSetChanged();
     }
     public void refesh_lv_tacgia(){
         refesh_tacgia();
-        TacGiaAdapter adapter;
-        adapter= new TacGiaAdapter(tacgiaArrayList,getActivity());
-        recyclerView_hienthi.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        tacGiaAdapter= new TacGiaAdapter(tacgiaArrayList,getActivity());
+        recyclerView_hienthi.setAdapter(tacGiaAdapter);
+        tacGiaAdapter.notifyDataSetChanged();
     }
     public void refesh_lv_sach(){
         refesh_sach();
-        SachAdapter adapter;
-        adapter= new SachAdapter(sachArrayList,getActivity());
-        recyclerView_hienthi.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        sachAdapter= new SachAdapter(sachArrayList,getActivity());
+        recyclerView_hienthi.setAdapter(sachAdapter);
+        sachAdapter.notifyDataSetChanged();
     }
     public void refesh_lv_nhacungcap(){
         refesh_nhacungcap();
-        NhaCungCapAdapter adapter;
-        adapter= new NhaCungCapAdapter(nhacungcapArrayList,getActivity());
-        recyclerView_hienthi.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        nhaCungCapAdapter= new NhaCungCapAdapter(nhacungcapArrayList,getActivity());
+        recyclerView_hienthi.setAdapter(nhaCungCapAdapter);
+        nhaCungCapAdapter.notifyDataSetChanged();
     }
     public void refesh_lv_hoadon(){
         refesh_hoadon();
-        HoaDonAdapter adapter;
-        adapter= new HoaDonAdapter(hoadonArrayList,getActivity());
-        recyclerView_hienthi.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        hoaDonAdapter= new HoaDonAdapter(hoadonArrayList,getActivity());
+        recyclerView_hienthi.setAdapter(hoaDonAdapter);
+        hoaDonAdapter.notifyDataSetChanged();
     }
 
 }

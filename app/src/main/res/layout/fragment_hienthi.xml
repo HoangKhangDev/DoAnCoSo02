@@ -2,7 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -14,31 +15,16 @@
             <ImageView
                 android:id="@+id/back_fragment_hienthi"
                 android:padding="10dp"
+                android:layout_gravity="center"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/back"/>
-            <TextView
-                android:id="@+id/tv_tenhienthi_fragment_hienthi"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="Tên trang"
-                android:textSize="20sp"
-                android:textColor="@color/white"
-                android:textStyle="bold"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:padding="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <SearchView
+            <androidx.appcompat.widget.SearchView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/radius_30"
-                android:backgroundTint="#32787171"
-                android:id="@+id/search_view_fragment_hienthi"/>
+                android:id="@+id/search_bar"/>
         </LinearLayout>
+
         <LinearLayout
             android:padding="10dp"
             android:layout_width="match_parent"

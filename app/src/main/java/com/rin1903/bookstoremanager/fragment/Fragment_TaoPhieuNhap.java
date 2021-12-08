@@ -11,7 +11,6 @@ import static com.rin1903.bookstoremanager.MainActivity.sachArrayList;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.Fragment;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +27,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -135,10 +135,10 @@ public class Fragment_TaoPhieuNhap extends Fragment {
             @Override
             public void onClick(View view) {
                 Bundle bundle1= new Bundle();
-                bundle1.putString("guidulieu","tao-Nhà Cung Cấp-sach");
+                bundle1.putString("guidulieu","tao_Nhà Cung Cấp_sach");
                 Fragment_NhaCungCap fragment=new Fragment_NhaCungCap();
                 fragment.setArguments(bundle1);
-                getFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment,Tag).addToBackStack(Tag).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment).addToBackStack(Tag).commit();
             }
         });
 
@@ -146,10 +146,10 @@ public class Fragment_TaoPhieuNhap extends Fragment {
             @Override
             public void onClick(View view) {
                 Bundle bundle1= new Bundle();
-                bundle1.putString("guidulieu","tao-Sách-sach");
+                bundle1.putString("guidulieu","tao_Sách_sach");
                 Fragment_Sach fragment=new Fragment_Sach();
                 fragment.setArguments(bundle1);
-                getFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment).addToBackStack(Tag).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment).addToBackStack(Tag).commit();
             }
         });
 
@@ -220,8 +220,8 @@ public class Fragment_TaoPhieuNhap extends Fragment {
         btn_huy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(getFragmentManager()!=null){
-                    getFragmentManager().popBackStack();
+                if(getActivity().getSupportFragmentManager()!=null){
+                    getActivity().getSupportFragmentManager().popBackStack();
                 }
             }
         });
@@ -249,7 +249,7 @@ public class Fragment_TaoPhieuNhap extends Fragment {
                             if(!spinner_manhacungcap.getSelectedItem().toString().toLowerCase().contains("vui lòng thêm nhà cung cấp")){
                                 themphieunhap(spinner_manhacungcap.getSelectedItem().toString());
                                 dialog.cancel();
-                                getFragmentManager().popBackStack();
+                                getActivity().getSupportFragmentManager().popBackStack();
                             }
                             else {
                                 Toast.makeText(getActivity(), "Vui lòng thêm nhà cung cấp", Toast.LENGTH_SHORT).show();

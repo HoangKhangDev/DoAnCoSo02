@@ -12,10 +12,10 @@ import static com.rin1903.bookstoremanager.MainActivity.tacgiaArrayList;
 import static com.rin1903.bookstoremanager.MainActivity.theloaiArrayList;
 
 import android.app.Dialog;
-import android.app.Fragment;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -35,13 +35,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
+import com.rin1903.bookstoremanager.MainActivity;
 import com.rin1903.bookstoremanager.R;
+import com.rin1903.bookstoremanager.SQLite.SACH;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -51,6 +55,8 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import gun0912.tedbottompicker.TedBottomPicker;
+import gun0912.tedbottompicker.TedBottomSheetDialogFragment;
 
 public class Fragment_Sach extends Fragment {
     Unbinder unbinder;
@@ -58,6 +64,7 @@ public class Fragment_Sach extends Fragment {
     private OutputStream outputStream;
     private String check_image_change="";
     private int Masach;
+    private SACH sach;
     @BindView(R.id.spinner_trangthai_sach) Spinner spinner_trangthai;
     @BindView(R.id.btn_huy_sach)
     Button btn_huy;
@@ -93,10 +100,10 @@ public class Fragment_Sach extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle1= new Bundle();
-                bundle1.putString("guidulieu","tao-Tác Giả-sach");
+                bundle1.putString("guidulieu","tao_Tác Giả_sach");
                 Fragment_TacGia fragment=new Fragment_TacGia();
                 fragment.setArguments(bundle1);
-                getFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment).addToBackStack(Tag).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment).addToBackStack(Tag).commit();
             }
         });
 
@@ -169,7 +176,7 @@ public class Fragment_Sach extends Fragment {
 
         Bundle bundle = getArguments();
         if(bundle!=null) {
-            dulieu = bundle.getString("guidulieu").split("-");
+            dulieu = bundle.getString("guidulieu").split("_");
             if(dulieu[0].toLowerCase().contains("tao")){
                 Cursor cursor=database.Getdata("select MASACH from SACH order by MASACH desc limit 1");
                 Toast.makeText(getActivity(), ""+cursor.getCount(), Toast.LENGTH_SHORT).show();
@@ -185,6 +192,63 @@ public class Fragment_Sach extends Fragment {
 
                 taomabarcode(String.valueOf(Masach));
                 Toast.makeText(getActivity(), ""+Masach, Toast.LENGTH_SHORT).show();
+            }
+            else {
+                btn_update.setText("Update");
+                Cursor cursor= database.Getdata("select * from SACH where MASACH="+Integer.parseInt(dulieu[2].toString()));
+                while (cursor.moveToNext()){
+                    sach= new SACH(cursor.getInt(0)
+                            ,cursor.getString(1)
+                            ,cursor.getString(2)
+                            ,cursor.getString(3)
+                            ,cursor.getInt(4)
+                            ,cursor.getString(5)
+                            ,cursor.getInt(6)
+                            ,cursor.getBlob(7));
+                    taomabarcode(String.valueOf(sach.getMASACH()));
+                    byte[] hinh= sach.getHINH_SACH();
+                    Bitmap bitmap= BitmapFactory.decodeByteArray(hinh,0,hinh.length);
+                    img_sach.setImageBitmap(bitmap);
+                    edt_tensach.setText(sach.getTENSACH());
+                    edt_giaban.setText(String.valueOf(sach.getGIABAN()));
+                    edt_soquyen.setText(String.valueOf(sach.getSOQUYEN()));
+                    reload_loaisach();
+                    String tenloaisach="";
+
+
+                    Cursor cursor1= database.Getdata("select TENLOAI from THELOAI where MALOAI='"+sach.getMALOAI()+"'");
+                    while (cursor1.moveToNext()){
+                        tenloaisach=cursor1.getString(0);
+                    }
+                    if(spinner_tenloaisach.getCount()>0){
+                        for (int ii=0;ii<spinner_tenloaisach.getCount();ii++){
+                            spinner_tenloaisach.setSelection(ii);
+                            if(spinner_tenloaisach.getSelectedItem().toString().toLowerCase().contains(tenloaisach)){
+                                break;
+                            }
+                        }
+                    }
+                    if(spinner_trangthai.getCount()>0){
+                        for (int i=0;i<spinner_trangthai.getCount();i++){
+                            spinner_trangthai.setSelection(i);
+                            if(spinner_trangthai.getSelectedItem().toString().toLowerCase().contains(sach.getTRANGTHAI())){
+                                break;
+                            }
+                        }
+                    }
+                    Cursor cursor2= database.Getdata("select TENTACGIA from TACGIA where MATACGIA='"+sach.getMATACGIA()+"'");
+                    while (cursor1.moveToNext()){
+                        tenloaisach=cursor1.getString(0);
+                    }
+                    if(spinner_tentacgia.getCount()>0){
+                        for (int ii=0;ii<spinner_tentacgia.getCount();ii++){
+                            spinner_tentacgia.setSelection(ii);
+                            if(spinner_tentacgia.getSelectedItem().toString().toLowerCase().contains(tenloaisach)){
+                                break;
+                            }
+                        }
+                    }
+                }
             }
         }
         edt_soquyen.addTextChangedListener(new TextWatcher() {
@@ -215,7 +279,14 @@ public class Fragment_Sach extends Fragment {
         img_sach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imageChooser();
+                TedBottomPicker.with(getActivity()).setTitle("Vui Lòng Chọn Ảnh").setPreviewMaxCount(19)
+                        .show(new TedBottomSheetDialogFragment.OnImageSelectedListener() {
+                            @Override
+                            public void onImageSelected(Uri uri) {
+                                Picasso.get().load(uri).into(img_sach);
+                                check_image_change="true";
+                            }
+                        });
             }
         });
         btn_update.setOnClickListener(new View.OnClickListener() {
@@ -224,7 +295,7 @@ public class Fragment_Sach extends Fragment {
                 if(!edt_tensach.getText().toString().isEmpty()&!edt_giaban.getText().toString().isEmpty()
                 &!edt_soquyen.getText().toString().isEmpty()&!spinner_tentacgia.getSelectedItem().toString().contains("Không có tác giả,vui lòng thêm")
                 &!spinner_tenloaisach.getSelectedItem().toString().contains("Không có thể loại,vui lòng thêm")){
-                    if(check_image_change.contains("true")){
+                    if(check_image_change.contains("true")&dulieu[0].toLowerCase().contains("tao")){
 
                         if(sachArrayList.size()>0){
                             String ketqua="1";
@@ -265,6 +336,9 @@ public class Fragment_Sach extends Fragment {
                         }
 
                     }
+                    else if(dulieu[0].toLowerCase().toString().contains("chinhsua")){
+                        update_sach();
+                    }
                     else {
                         Toast.makeText(getActivity(), "Vui lòng đổi ảnh", Toast.LENGTH_SHORT).show();
                     }
@@ -278,7 +352,7 @@ public class Fragment_Sach extends Fragment {
         btn_huy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFragmentManager().popBackStack();
+                getActivity().getSupportFragmentManager().popBackStack();
             }
         });
         return view;
@@ -331,39 +405,7 @@ public class Fragment_Sach extends Fragment {
         ArrayAdapter adapter= new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item,list);
         spinner_trangthai.setAdapter(adapter);
     }
-    //themhinhanh
-    void imageChooser() {
 
-        // create an instance of the
-        // intent of the type image
-        Intent i = new Intent();
-        i.setType("image/*");
-        i.setAction(Intent.ACTION_GET_CONTENT);
-
-        // pass the constant to compare it
-        // with the returned requestCode
-        startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE);
-    }
-    // this function is triggered when user
-    // selects the image from the imageChooser
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == RESULT_OK) {
-
-            // compare the resultCode with the
-            // SELECT_PICTURE constant
-            if (requestCode == SELECT_PICTURE) {
-                // Get the url of the image from data
-                Uri selectedImageUri = data.getData();
-                if (null != selectedImageUri) {
-                    // update the preview image in the layout
-                    check_image_change="true";
-                    img_sach.setImageURI(selectedImageUri);
-                }
-            }
-        }
-    }
     private void tao_sach(){
         BitmapDrawable bitmapDrawable = (BitmapDrawable) img_sach.getDrawable();
         Bitmap bitmap= bitmapDrawable.getBitmap();
@@ -388,11 +430,37 @@ public class Fragment_Sach extends Fragment {
                 ,spinner_trangthai.getSelectedItem().toString()
                 ,Integer.parseInt(edt_giaban.getText().toString()),hinhanh);
         Toast.makeText(getActivity(), "Thêm Sách Thành Công", Toast.LENGTH_SHORT).show();
-        Fragment_HienThi fragment_hienThi= new Fragment_HienThi();
-        Bundle bundle1= new Bundle();
-        bundle1.putString("guidulieu","guidulieu-Sách");
-        fragment_hienThi.setArguments(bundle1);
-        getFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment_hienThi).commit();
+        getActivity().getSupportFragmentManager().popBackStack();
+
+    }
+    private void update_sach(){
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) img_sach.getDrawable();
+        Bitmap bitmap= bitmapDrawable.getBitmap();
+        ByteArrayOutputStream byteArrayOutputStream= new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
+        byte[] hinhanh= byteArrayOutputStream.toByteArray();
+        refesh_theloai();
+        reload_tacgia();
+        String maloai = null,matacgia=null;
+        Cursor cursor_theloai=database.Getdata("select MALOAI from THELOAI where TENLOAI='"+spinner_tenloaisach.getSelectedItem().toString()+"'");
+        Cursor cursor_tacgia= database.Getdata("Select MATACGIA from TACGIA where TENTACGIA='"+spinner_tentacgia.getSelectedItem().toString()+"'");
+        while (cursor_tacgia.moveToNext()){
+            matacgia=cursor_tacgia.getString(0);
+        }
+        while (cursor_theloai.moveToNext())
+        {
+            maloai=cursor_theloai.getString(0);
+        }
+        sach.setMALOAI(maloai);
+        sach.setMATACGIA(matacgia);
+        sach.setTENSACH(edt_tensach.getText().toString());
+        sach.setSOQUYEN(Integer.parseInt(edt_soquyen.getText().toString()));
+        sach.setTRANGTHAI(spinner_trangthai.getSelectedItem().toString());
+        sach.setGIABAN(Integer.parseInt(edt_giaban.getText().toString()));
+        sach.setHINH_SACH(hinhanh);
+        database.UPDATE_SACH(sach);
+        Toast.makeText(getActivity(), "Chỉnh Sửa Thành Công", Toast.LENGTH_SHORT).show();
+        getActivity().getSupportFragmentManager().popBackStack();
     }
 
 }
