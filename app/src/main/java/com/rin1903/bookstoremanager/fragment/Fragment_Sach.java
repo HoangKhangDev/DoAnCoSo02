@@ -18,11 +18,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.storage.StorageManager;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,8 +53,11 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -162,7 +169,8 @@ public class Fragment_Sach extends Fragment {
 
                 File mFile = new File("/barcode/"+String.valueOf(Masach)+".jpg");
 
-                //save image in gallery
+                //save image in gallery'
+
                 String savedImageURL = MediaStore.Images.Media.insertImage(
                         getActivity().getContentResolver(),
                         bitmap,
@@ -170,6 +178,20 @@ public class Fragment_Sach extends Fragment {
                         "Image of Barcode"
                 );
                 Uri savedImageURI = Uri.parse(savedImageURL);
+//                try {
+//                    String namFile = Environment.getExternalStorageDirectory() + "/Rin/" + "testtttt.txt";
+//                    File datfile = new File(namFile);
+//                    datfile.mkdirs();
+//                    Toast.makeText(getActivity(), "File is:  " + datfile, Toast.LENGTH_LONG).show(); //##4
+//                    FileOutputStream fOut = new FileOutputStream(datfile);
+//                    OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+//                    myOutWriter.append("mdata");
+//                    myOutWriter.close();
+//                    fOut.close();
+//                    Toast.makeText(getActivity(), "Finished writing to SD", Toast.LENGTH_LONG).show(); //##5
+//                } catch (Exception e) {
+//                    Toast.makeText(getActivity(), "Write failure", Toast.LENGTH_SHORT).show(); //##6
+//                }
 
             }
         });
@@ -179,21 +201,18 @@ public class Fragment_Sach extends Fragment {
             dulieu = bundle.getString("guidulieu").split("_");
             if(dulieu[0].toLowerCase().contains("tao")){
                 Cursor cursor=database.Getdata("select MASACH from SACH order by MASACH desc limit 1");
-                Toast.makeText(getActivity(), ""+cursor.getCount(), Toast.LENGTH_SHORT).show();
                 if(cursor.getCount()==0){
                     Masach= 1000;
                 }
                 else{
                     while (cursor.moveToNext()){
                         Masach=cursor.getInt(0)+1;
-                        Toast.makeText(getActivity(), ""+Masach, Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 taomabarcode(String.valueOf(Masach));
-                Toast.makeText(getActivity(), ""+Masach, Toast.LENGTH_SHORT).show();
             }
-            else {
+            else if(dulieu[0].toLowerCase().contains("chinhsua")){
                 btn_update.setText("Update");
                 Cursor cursor= database.Getdata("select * from SACH where MASACH="+Integer.parseInt(dulieu[2].toString()));
                 while (cursor.moveToNext()){
@@ -250,6 +269,74 @@ public class Fragment_Sach extends Fragment {
                     }
                 }
             }
+            else {
+                Cursor cursor= database.Getdata("select * from SACH where MASACH="+Integer.parseInt(dulieu[2].toString()));
+                while (cursor.moveToNext()){
+                    sach= new SACH(cursor.getInt(0)
+                            ,cursor.getString(1)
+                            ,cursor.getString(2)
+                            ,cursor.getString(3)
+                            ,cursor.getInt(4)
+                            ,cursor.getString(5)
+                            ,cursor.getInt(6)
+                            ,cursor.getBlob(7));
+                    taomabarcode(String.valueOf(sach.getMASACH()));
+                    byte[] hinh= sach.getHINH_SACH();
+                    Bitmap bitmap= BitmapFactory.decodeByteArray(hinh,0,hinh.length);
+                    img_sach.setImageBitmap(bitmap);
+                    edt_tensach.setText(sach.getTENSACH());
+                    edt_giaban.setText(String.valueOf(sach.getGIABAN()));
+                    edt_soquyen.setText(String.valueOf(sach.getSOQUYEN()));
+                    reload_loaisach();
+                    String tenloaisach="";
+
+
+                    Cursor cursor1= database.Getdata("select TENLOAI from THELOAI where MALOAI='"+sach.getMALOAI()+"'");
+                    while (cursor1.moveToNext()){
+                        tenloaisach=cursor1.getString(0);
+                    }
+                    if(spinner_tenloaisach.getCount()>0){
+                        for (int ii=0;ii<spinner_tenloaisach.getCount();ii++){
+                            spinner_tenloaisach.setSelection(ii);
+                            if(spinner_tenloaisach.getSelectedItem().toString().toLowerCase().contains(tenloaisach)){
+                                break;
+                            }
+                        }
+                    }
+                    if(spinner_trangthai.getCount()>0){
+                        for (int i=0;i<spinner_trangthai.getCount();i++){
+                            spinner_trangthai.setSelection(i);
+                            if(spinner_trangthai.getSelectedItem().toString().toLowerCase().contains(sach.getTRANGTHAI())){
+                                break;
+                            }
+                        }
+                    }
+                    Cursor cursor2= database.Getdata("select TENTACGIA from TACGIA where MATACGIA='"+sach.getMATACGIA()+"'");
+                    while (cursor1.moveToNext()){
+                        tenloaisach=cursor1.getString(0);
+                    }
+                    if(spinner_tentacgia.getCount()>0){
+                        for (int ii=0;ii<spinner_tentacgia.getCount();ii++){
+                            spinner_tentacgia.setSelection(ii);
+                            if(spinner_tentacgia.getSelectedItem().toString().toLowerCase().contains(tenloaisach)){
+                                break;
+                            }
+                        }
+                    }
+                }
+                edt_soquyen.setEnabled(false);
+                edt_giaban.setEnabled(false);
+                edt_tensach.setEnabled(false);
+                spinner_tenloaisach.setEnabled(false);
+                spinner_tentacgia.setEnabled(false);
+                spinner_trangthai.setEnabled(false);
+                btn_update.setVisibility(View.GONE);
+                img_sach.setEnabled(false);
+                img_add_loaisach.setVisibility(View.GONE);
+                img_add_tacgia.setVisibility(View.GONE);
+                img_barcode_save.setVisibility(View.GONE);
+            }
+
         }
         edt_soquyen.addTextChangedListener(new TextWatcher() {
             @Override

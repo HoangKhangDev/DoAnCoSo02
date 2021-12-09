@@ -45,7 +45,9 @@ import com.rin1903.bookstoremanager.Adapter.PhieuNhapAdapter;
 import com.rin1903.bookstoremanager.Adapter.SachAdapter;
 import com.rin1903.bookstoremanager.Adapter.TacGiaAdapter;
 import com.rin1903.bookstoremanager.R;
+import com.rin1903.bookstoremanager.SQLite.NHACUNGCAP;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -212,7 +214,7 @@ public class Fragment_HienThi extends Fragment {
             }
             else if (dulieu[1].toLowerCase().contains("nhà cung cấp")){
                 refesh_nhacungcap();
-                if (sachArrayList.size()==0){
+                if (nhacungcapArrayList.size()==0){
                     Dialog dialog = new Dialog(getActivity());
                     dialog.setContentView(R.layout.dialog_list_null);
 
@@ -246,8 +248,8 @@ public class Fragment_HienThi extends Fragment {
                 }
             }
             else if (dulieu[1].toLowerCase().contains("hoá đơn")){
-                refesh_sach();
-                if (sachArrayList.size()==0){
+                refesh_hoadon();
+                if (hoadonArrayList.size()==0){
                     Dialog dialog = new Dialog(getActivity());
                     dialog.setContentView(R.layout.dialog_list_null);
 
@@ -399,7 +401,9 @@ public class Fragment_HienThi extends Fragment {
     }
     public void refesh_lv_nhacungcap(){
         refesh_nhacungcap();
-        nhaCungCapAdapter= new NhaCungCapAdapter(nhacungcapArrayList,getActivity());
+        ArrayList<NHACUNGCAP> arrayList= new ArrayList<>();
+        arrayList=nhacungcapArrayList;
+        nhaCungCapAdapter= new NhaCungCapAdapter(arrayList,getActivity());
         recyclerView_hienthi.setAdapter(nhaCungCapAdapter);
         nhaCungCapAdapter.notifyDataSetChanged();
     }

@@ -59,7 +59,6 @@ public class Fragment_NhaCungCap extends Fragment {
         //loadlistvie
         if(bundle!=null) {
             dulieu=bundle.getString("guidulieu").split("_");
-            Toast.makeText(getActivity(), ""+bundle.getString("guidulieu"), Toast.LENGTH_SHORT).show();
             if(dulieu[0].toLowerCase().contains("tao")){
                 Cursor cursor=database.Getdata("select MANHACUNGCAP from NHACUNGCAP order by MANHACUNGCAP desc limit 1");
                 if(cursor.getCount()==0){
@@ -76,7 +75,7 @@ public class Fragment_NhaCungCap extends Fragment {
             }
             else if(dulieu[0].toLowerCase().contains("chinhsua")){
                 btn_them.setText("Update");
-                Cursor cursor= database.Getdata("select * from MANHACUNGCAP='"+dulieu[2].toString()+"'");
+                Cursor cursor= database.Getdata("select * from NHACUNGCAP WHERE MANHACUNGCAP='"+dulieu[2].toString()+"'");
                 while (cursor.moveToNext()){
                    nhacungcap= new NHACUNGCAP(cursor.getString(0),
                             cursor.getString(1),
@@ -90,6 +89,43 @@ public class Fragment_NhaCungCap extends Fragment {
                 byte[] hinh= nhacungcap.getHINH_NHACUNGCAP();
                 Bitmap bitmap= BitmapFactory.decodeByteArray(hinh,0,hinh.length);
                 image.setImageBitmap(bitmap);
+            }
+            else if(dulieu[0].toLowerCase().contains("chinhsua")){
+                Cursor cursor= database.Getdata("select * from NHACUNGCAP WHERE MANHACUNGCAP='"+dulieu[2].toString()+"'");
+                while (cursor.moveToNext()){
+                    nhacungcap= new NHACUNGCAP(cursor.getString(0),
+                            cursor.getString(1),
+                            cursor.getString(2),
+                            cursor.getString(3),
+                            cursor.getBlob(4));
+                }
+                edt_tennhacungcap.setText(nhacungcap.getTENNHACUNGCAP());
+                edt_diachi.setText(nhacungcap.getDIACHI_NCC());
+                edt_sdt.setText(nhacungcap.getSDT_NCC());
+                byte[] hinh= nhacungcap.getHINH_NHACUNGCAP();
+                Bitmap bitmap= BitmapFactory.decodeByteArray(hinh,0,hinh.length);
+                image.setImageBitmap(bitmap);
+                btn_them.setText("Update");
+            }
+            else {
+                Cursor cursor= database.Getdata("select * from NHACUNGCAP WHERE MANHACUNGCAP='"+dulieu[2].toString()+"'");
+                while (cursor.moveToNext()){
+                    nhacungcap= new NHACUNGCAP(cursor.getString(0),
+                            cursor.getString(1),
+                            cursor.getString(2),
+                            cursor.getString(3),
+                            cursor.getBlob(4));
+                }
+                edt_tennhacungcap.setText(nhacungcap.getTENNHACUNGCAP());
+                edt_diachi.setText(nhacungcap.getDIACHI_NCC());
+                edt_sdt.setText(nhacungcap.getSDT_NCC());
+                byte[] hinh= nhacungcap.getHINH_NHACUNGCAP();
+                Bitmap bitmap= BitmapFactory.decodeByteArray(hinh,0,hinh.length);
+                image.setImageBitmap(bitmap);
+                btn_them.setVisibility(View.GONE);
+                edt_sdt.setEnabled(false);
+                edt_diachi.setEnabled(false);
+                edt_tennhacungcap.setEnabled(false);
             }
         }
 
@@ -110,7 +146,6 @@ public class Fragment_NhaCungCap extends Fragment {
         btn_them.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), ""+dulieu[0], Toast.LENGTH_SHORT).show();
                 if(!edt_tennhacungcap.getText().toString().isEmpty()&!edt_diachi.getText().toString().isEmpty()
                 &!edt_sdt.getText().toString().isEmpty()&dulieu[0].toLowerCase().contains("tao")
                         &check_image_change.contains("true")){

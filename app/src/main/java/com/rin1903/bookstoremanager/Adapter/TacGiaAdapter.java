@@ -16,9 +16,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.beardedhen.androidbootstrap.BootstrapCircleThumbnail;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.rin1903.bookstoremanager.BuildConfig;
@@ -67,7 +69,7 @@ public class TacGiaAdapter  extends  RecyclerView.Adapter<TacGiaAdapter.ViewHold
             public void onClick(View v) {
                 tacgiaArrayList.remove(holder.getAdapterPosition());
                 notifyItemRemoved(holder.getAdapterPosition());
-                MainActivity.database.QueryData("delete from TACGIA where MATACGiA='"+tacgiaArrayList.get(position).getMATACGIA()+"'");
+                MainActivity.database.QueryData("delete from TACGIA where MATACGiA='"+tacgia.getMATACGIA()+"'");
             }
         });
         holder.tv_item_edit.setOnClickListener(new View.OnClickListener() {
@@ -82,6 +84,19 @@ public class TacGiaAdapter  extends  RecyclerView.Adapter<TacGiaAdapter.ViewHold
                         .commit();
             }
         });
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle= new Bundle();
+                bundle.putString("guidulieu","xem_Tac gia_"+tacgia.getMATACGIA());
+                Fragment_TacGia fragment_tacGia= new Fragment_TacGia();
+                fragment_tacGia.setArguments(bundle);
+                ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_content, fragment_tacGia).addToBackStack(context.getClass().getName())
+                        .commit();
+            }
+        });
+
 
         viewBinderHelper.bind(holder.swipeRevealLayout, tacgiaArrayList.get(position).getMATACGIA());
 
@@ -96,10 +111,11 @@ public class TacGiaAdapter  extends  RecyclerView.Adapter<TacGiaAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tv_tieude,tv_mota;
-        private ImageView img;
+        BootstrapCircleThumbnail img;
         LinearLayout tv_item_delete;
         LinearLayout tv_item_edit;
         SwipeRevealLayout swipeRevealLayout;
+        CardView cardView;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_tieude= itemView.findViewById(R.id.tv_tieude_item_cohinh_listview_hienthi);
@@ -108,6 +124,7 @@ public class TacGiaAdapter  extends  RecyclerView.Adapter<TacGiaAdapter.ViewHold
             tv_item_delete= itemView.findViewById(R.id.tv_delete_item_cohinh);
             tv_item_edit = itemView.findViewById(R.id.tv_edit_item_cohinh);
             swipeRevealLayout= itemView.findViewById(R.id.swipelayout_item_cohinh);
+            cardView = itemView.findViewById(R.id.cardview_item_cohinh);
 
         }
     }

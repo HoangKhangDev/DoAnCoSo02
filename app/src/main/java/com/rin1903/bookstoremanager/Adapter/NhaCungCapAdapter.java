@@ -20,6 +20,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.beardedhen.androidbootstrap.BootstrapCircleThumbnail;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.rin1903.bookstoremanager.BuildConfig;
@@ -55,20 +56,20 @@ public class NhaCungCapAdapter extends RecyclerView.Adapter<NhaCungCapAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-       if(nhacungcapArrayList.get(position)!=null){
            holder.tv_tieude.setText("Tên Nhà Cung Cấp:"+nhacungcapArrayList.get(position).getTENNHACUNGCAP());
            holder.tv_mota.setText("Số Điện Thoại:"+nhacungcapArrayList.get(position).getSDT_NCC());
            byte[] hinh = nhacungcapArrayList.get(position).getHINH_NHACUNGCAP();
            Bitmap bitmap= BitmapFactory.decodeByteArray(hinh,0,hinh.length);
            holder.img_hinh.setImageBitmap(bitmap);
-       }
+
+       String manhacungcap= nhacungcapArrayList.get(position).getMANHACUNGCAP();
 
         holder.tv_item_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 nhacungcapArrayList.remove(holder.getAdapterPosition());
                 notifyItemRemoved(holder.getAdapterPosition());
-                MainActivity.database.QueryData("delete from NHACUNGCAP where MANHACUNGCAP='"+nhacungcapArrayList.get(position).getMANHACUNGCAP()+"'");
+                MainActivity.database.QueryData("delete from NHACUNGCAP where MANHACUNGCAP='"+manhacungcap+"'");
             }
         });
 
@@ -78,10 +79,21 @@ public class NhaCungCapAdapter extends RecyclerView.Adapter<NhaCungCapAdapter.Vi
             @Override
             public void onClick(View v) {
                 Bundle bundle= new Bundle();
-                bundle.putString("guidulieu","chinhsua_nhacungcap_"+nhacungcapArrayList.get(position).getMANHACUNGCAP());
+                bundle.putString("guidulieu","chinhsua_nhacungcap_"+manhacungcap);
                 Fragment_NhaCungCap fragment_nhaCungCap= new Fragment_NhaCungCap();
                 fragment_nhaCungCap.setArguments(bundle);
                 ((FragmentActivity)context).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment_nhaCungCap).addToBackStack(context.getClass().getName()).commit();
+            }
+        });
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle= new Bundle();
+                bundle.putString("guidulieu","xem_nhacungcap_"+manhacungcap);
+                Fragment_NhaCungCap fragment_nhaCungCap= new Fragment_NhaCungCap();
+                fragment_nhaCungCap.setArguments(bundle);
+                ((FragmentActivity)context).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment_nhaCungCap).addToBackStack(context.getClass().getName()).commit();
+
             }
         });
 
@@ -98,7 +110,7 @@ public class NhaCungCapAdapter extends RecyclerView.Adapter<NhaCungCapAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv_tieude;
         TextView tv_mota;
-        ImageView img_hinh;
+        BootstrapCircleThumbnail img_hinh;
         CardView cardView;
         SwipeRevealLayout swipeRevealLayout;
         LinearLayout tv_item_delete;

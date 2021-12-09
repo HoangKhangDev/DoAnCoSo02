@@ -23,6 +23,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.beardedhen.androidbootstrap.BootstrapCircleThumbnail;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.rin1903.bookstoremanager.MainActivity;
@@ -97,6 +98,17 @@ public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.View
                 ((FragmentActivity)context).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment_khachHang).addToBackStack(context.getClass().getName()).commit();
             }
         });
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle= new Bundle();
+                bundle.putString("guidulieu","xem_khachhang_"+makh);
+                Fragment_KhachHang fragment_khachHang= new Fragment_KhachHang();
+                fragment_khachHang.setArguments(bundle);
+                ((FragmentActivity)context).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content,fragment_khachHang).addToBackStack(context.getClass().getName()).commit();
+
+            }
+        });
     }
 
     @Override
@@ -139,7 +151,7 @@ public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.View
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView tv_tieude;
         TextView tv_mota;
-        ImageView img_hinh;
+        BootstrapCircleThumbnail img_hinh;
 
         CardView cardView;
         SwipeRevealLayout swipeRevealLayout;

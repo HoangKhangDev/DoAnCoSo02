@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,7 +47,7 @@ public class PhieuNhapAdapter extends RecyclerView.Adapter<PhieuNhapAdapter.View
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater= LayoutInflater.from(parent.getContext());
-        View view= inflater.inflate(R.layout.item_hienthi_khongcohinh,parent,false);
+        View view= inflater.inflate(R.layout.item_hienthi_khongcohinh_hdpn,parent,false);
         return new ViewHolder(view);
 
     }
@@ -55,6 +56,7 @@ public class PhieuNhapAdapter extends RecyclerView.Adapter<PhieuNhapAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.tv_tieude.setText("Mã Phiếu:"+phieunhapArrayList.get(position).getMAPHIEUNHAP());
         holder.tv_mota1.setText("Thành Tiền: "+phieunhapArrayList.get(position).getTHANHTIEN_PN());
+        holder.tv_mota2.setText("Ngày Lập:"+phieunhapArrayList.get(position).getNGAY_PN());
         PHIEUNHAP phieunhap= phieunhapArrayList.get(position);
         String maphieunhap= phieunhapArrayList.get(position).getMAPHIEUNHAP();
         viewBinderHelper.bind(holder.swipeRevealLayout,phieunhapArrayList.get(position).getMAPHIEUNHAP());
@@ -80,6 +82,18 @@ public class PhieuNhapAdapter extends RecyclerView.Adapter<PhieuNhapAdapter.View
                         .commit();
             }
         });
+        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment_TaoPhieuNhap fragment= new Fragment_TaoPhieuNhap();
+                Bundle bundle= new Bundle();
+                bundle.putString("guidulieu","xem_phieunhap_"+maphieunhap);
+                fragment.setArguments(bundle);
+                ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_content, fragment).addToBackStack(context.getClass().getName())
+                        .commit();
+            }
+        });
 
 
     }
@@ -90,18 +104,19 @@ public class PhieuNhapAdapter extends RecyclerView.Adapter<PhieuNhapAdapter.View
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_tieude,tv_mota1;
+        TextView tv_tieude,tv_mota1,tv_mota2;
         SwipeRevealLayout swipeRevealLayout;
-        LinearLayout linearLayout;
+        CardView linearLayout;
         ImageView item_delete,item_edit;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tv_tieude= itemView.findViewById(R.id.tv_item_khongcohinh_hienthi);
-            tv_mota1=itemView.findViewById(R.id.tv_item_mota1_khongcohinh_hienthi);
-            swipeRevealLayout = itemView.findViewById(R.id.swipelayout_item_khongcohinh);
-            linearLayout= itemView.findViewById(R.id.linearlayout_item_khongcohinh);
-            item_delete= itemView.findViewById(R.id.tv_delete_item_khongcohinh);
-            item_edit= itemView.findViewById(R.id.tv_edit_item_khongcohinh);
+            tv_tieude= itemView.findViewById(R.id.tv_item_khongcohinh_hienthi_hdpn);
+            tv_mota1=itemView.findViewById(R.id.tv_item_mota1_khongcohinh_hienthi_hdpn);
+            swipeRevealLayout = itemView.findViewById(R.id.swipelayout_item_khongcohinh_hdpn);
+            linearLayout = itemView.findViewById(R.id.cardview_item_khongcohinh_hdpn);
+            item_delete= itemView.findViewById(R.id.tv_delete_item_khongcohinh_hdpn);
+            item_edit= itemView.findViewById(R.id.tv_edit_item_khongcohinh_hdpn);
+            tv_mota2= itemView.findViewById(R.id.tv_item_mota2_khongcohinh_hienthi_hdpn);
         }
     }
     @Override

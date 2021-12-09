@@ -84,6 +84,7 @@ public class Fragment_TaoPhieuNhap extends Fragment {
 
         refesh_spinner_sach();
         refesh_spinner_nhacungcap();
+        refesh_adapter();
 
 
         arrayList = new ArrayList<>();
@@ -93,6 +94,10 @@ public class Fragment_TaoPhieuNhap extends Fragment {
 
         arrayList=new ArrayList<>();
         linearLayout.setVisibility(View.GONE);
+        if(adapter!=null){
+            adapter = new ChiTietPhieuNhapAdapter( getActivity(), arrayList);
+            recyclerView_thongtinhoadon.setAdapter(adapter);
+        }
 
 
 
@@ -323,9 +328,19 @@ public class Fragment_TaoPhieuNhap extends Fragment {
         refesh_nhacungcap();
         ArrayList<String> arrayList_spinner_nhacungcap= new ArrayList<>();
         if(nhacungcapArrayList.size()>0){
-            for(i=0;i<nhacungcapArrayList.size();i++){
-                arrayList_spinner_nhacungcap.add(String.valueOf(nhacungcapArrayList.get(i).getMANHACUNGCAP()+"_"+nhacungcapArrayList.get(i).getTENNHACUNGCAP()));
+            if(spinner_manhacungcap.getCount()==0){
+                for(int i=0;i<nhacungcapArrayList.size();i++){
+                    arrayList_spinner_nhacungcap.add(String.valueOf(nhacungcapArrayList.get(i).getMANHACUNGCAP()+"_"+nhacungcapArrayList.get(i).getTENNHACUNGCAP()));
+                }
             }
+            else {
+                for(int i=0;i<spinner_manhacungcap.getCount();i++){
+                    if(spinner_manhacungcap.getAdapter().getItem(i).toString().contains("Vui Lòng Thêm Nhà Cung Cấp")){
+                        spinner_manhacungcap.setAdapter(null);
+                    }
+                }
+            }
+
         }  else {
             arrayList_spinner_nhacungcap.add("Vui Lòng Thêm Nhà Cung Cấp");
         }
@@ -335,13 +350,23 @@ public class Fragment_TaoPhieuNhap extends Fragment {
     }
     public void refesh_spinner_sach() {
         refesh_sach();
+
         ArrayList<String> arrayList_spinner_sach= new ArrayList<>();
         if(sachArrayList.size()>0){
-            for(i=0;i<sachArrayList.size();i++){
-                arrayList_spinner_sach.add(String.valueOf(sachArrayList.get(i).getMASACH())+" - "+sachArrayList.get(i).getTENSACH());
+            if(spinner_masach.getCount()==0){
+                for(int i=0;i<sachArrayList.size();i++){
+                    arrayList_spinner_sach.add(String.valueOf(sachArrayList.get(i).getMASACH())+" - "+sachArrayList.get(i).getTENSACH());
+                }
             }
-        }
-        else {
+            else {
+                for(int i=0;i<spinner_masach.getCount();i++){
+                    if(spinner_masach.getAdapter().getItem(i).toString().contains("Vui Lòng Thêm Sách")){
+                        spinner_masach.setAdapter(null);
+                    }
+                }
+            }
+
+        }  else {
             arrayList_spinner_sach.add("Vui Lòng Thêm Sách");
         }
         ArrayAdapter adapter_sach= new ArrayAdapter(getActivity(),R.layout.support_simple_spinner_dropdown_item,arrayList_spinner_sach);
@@ -379,7 +404,6 @@ public class Fragment_TaoPhieuNhap extends Fragment {
             maphieunhap="pn-"+String.valueOf(Integer.parseInt(mang[1])+1);
             if(arrayList.size()>0){
                 for(i=0;i<arrayList.size();i++){
-                    Toast.makeText(getActivity(), ""+maphieunhap, Toast.LENGTH_SHORT).show();
                     database.INSERT_CHITIETPHIEUNHAP(arrayList.get(i).getMaSach(),maphieunhap,arrayList.get(i).getsoluongtrongphieunhap());
                     database.QueryData("UPDATE SACH SET SOQUYEN="+(arrayList.get(i).getSoLuongconlai()+arrayList.get(i).getsoluongtrongphieunhap())+" WHERE MASACH ="+arrayList.get(i).getMaSach());
                 }
@@ -394,7 +418,6 @@ public class Fragment_TaoPhieuNhap extends Fragment {
             maphieunhap="pn-1";
             if(arrayList.size()>0){
                 for(i=0;i<arrayList.size();i++){
-                    Toast.makeText(getActivity(), ""+maphieunhap, Toast.LENGTH_SHORT).show();
                     database.INSERT_CHITIETPHIEUNHAP(arrayList.get(i).getMaSach(),maphieunhap,arrayList.get(i).getsoluongtrongphieunhap());
                     database.QueryData("UPDATE SACH SET SOQUYEN="+(arrayList.get(i).getSoLuongconlai()+arrayList.get(i).getsoluongtrongphieunhap())+" WHERE MASACH ="+arrayList.get(i).getMaSach());
                 }

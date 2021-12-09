@@ -10,261 +10,261 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
-            android:padding="20dp"
-            android:gravity="center"
-            android:layout_marginTop="5dp"
-            android:orientation="vertical"
-            android:backgroundTint="#19B1ADAD"
-            android:background="@drawable/radius_40"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <androidx.cardview.widget.CardView
-                android:layout_marginBottom="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="8dp">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
                 <ImageView
-                    android:layout_width="200dp"
+                    android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:layout_gravity="center"
                     android:src="@drawable/no_pictures"
                     android:scaleType="centerCrop"
                     android:id="@+id/img_hinh_sach"/>/
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:layout_marginBottom="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="8dp">
-                <TextView
-                    android:layout_marginLeft="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tên Sách"
-                    android:labelFor="@+id/edt_ten_sach"
-                    android:textStyle="italic"/>
-                <EditText
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/edt_ten_sach"
-                    android:textStyle="normal"
-                    android:backgroundTint="@color/white"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"/>
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:layout_marginBottom="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="8dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="italic"
-                    android:text="Tên Loại Sách"
-                    android:layout_marginBottom="10dp"/>
-                <LinearLayout
-                    android:layout_marginTop="15dp"
-                    android:weightSum="10"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp">
-                    <Spinner
-                        android:id="@+id/spinner_tenloaisach_sach"
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:layout_weight="9"
-                        tools:ignore="SpeakableTextPresentCheck" />
-                    <ImageView
-                        android:id="@+id/img_add_loaisach_sach"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/user_add"/>
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:layout_marginBottom="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="8dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="italic"
-                    android:text="Tên Tác Giả"
-                    android:layout_marginBottom="10dp"/>
-                <LinearLayout
-                    android:layout_marginTop="15dp"
-                    android:weightSum="10"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp">
-                    <Spinner
-                        android:id="@+id/spinner_tacgia_sach"
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:layout_weight="9"
-                        tools:ignore="SpeakableTextPresentCheck" />
-                    <ImageView
-                        android:id="@+id/img_add_tacsach_sach"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/user_add"/>
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-            <LinearLayout
-                android:weightSum="10"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <androidx.cardview.widget.CardView
-                    android:layout_marginRight="5dp"
-                    android:layout_weight="9"
-                    android:layout_marginBottom="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="8dp">
-                    <TextView
-                        android:layout_marginLeft="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Giá Bán"
-                        android:textStyle="italic"/>
-                    <EditText
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/edt_giaban_sach"
-                        android:textStyle="normal"
-                        android:inputType="number"
-                        android:backgroundTint="@color/white"
-                        android:textColor="@color/black"
-                        android:maxLength="10"
-                        android:textSize="20sp"/>
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"
-                    android:layout_marginBottom="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="8dp">
-                    <TextView
-                        android:layout_marginLeft="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Số Quyển"
-                        android:textStyle="italic"/>
-                    <EditText
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/edt_soquyen_sach"
-                        android:textStyle="normal"
-                        android:inputType="number"
-                        android:backgroundTint="@color/white"
-                        android:textColor="@color/black"
-                        android:maxLength="10"
-                        android:textSize="20sp"/>
-                </androidx.cardview.widget.CardView>
-
             </LinearLayout>
-
-            <androidx.cardview.widget.CardView
-                android:layout_marginBottom="10dp"
+            <LinearLayout
+                android:padding="20dp"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical"
+                android:background="#19B1ADAD"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="8dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="italic"
-                    android:text="Trạng thái sách"
-                    android:layout_marginBottom="10dp"/>
-                <LinearLayout
-                    android:layout_marginTop="15dp"
-                    android:orientation="horizontal"
+                android:layout_height="match_parent">
+                <androidx.cardview.widget.CardView
+                    android:layout_marginBottom="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp">
-                    <Spinner
-                        android:id="@+id/spinner_trangthai_sach"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="8dp">
+                    <TextView
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tên Sách"
+                        android:labelFor="@+id/edt_ten_sach"
+                        android:textStyle="italic"/>
+                    <EditText
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="20dp"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        tools:ignore="SpeakableTextPresentCheck" />
-                </LinearLayout>
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edt_ten_sach"
+                        android:textStyle="normal"
+                        android:backgroundTint="@color/white"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"/>
+                </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="8dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="italic"
+                        android:text="Tên Loại Sách"
+                        android:layout_marginBottom="10dp"/>
+                    <LinearLayout
+                        android:layout_marginTop="15dp"
+                        android:weightSum="10"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp">
+                        <Spinner
+                            android:id="@+id/spinner_tenloaisach_sach"
+                            android:layout_width="wrap_content"
+                            android:layout_height="50dp"
+                            android:layout_weight="9"
+                            tools:ignore="SpeakableTextPresentCheck" />
+                        <ImageView
+                            android:id="@+id/img_add_loaisach_sach"
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/user_add"/>
+                    </LinearLayout>
 
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:layout_weight="1"
-                android:layout_marginBottom="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="8dp">
+                </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="8dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="italic"
+                        android:text="Tên Tác Giả"
+                        android:layout_marginBottom="10dp"/>
+                    <LinearLayout
+                        android:layout_marginTop="15dp"
+                        android:weightSum="10"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp">
+                        <Spinner
+                            android:id="@+id/spinner_tacgia_sach"
+                            android:layout_width="wrap_content"
+                            android:layout_height="50dp"
+                            android:layout_weight="9"
+                            tools:ignore="SpeakableTextPresentCheck" />
+                        <ImageView
+                            android:id="@+id/img_add_tacsach_sach"
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/user_add"/>
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
                 <LinearLayout
                     android:weightSum="10"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-                    <ImageView
-                        android:padding="3dp"
+                    <androidx.cardview.widget.CardView
                         android:layout_marginRight="5dp"
                         android:layout_weight="9"
-                        android:layout_width="match_parent"
-                        android:scaleType="fitXY"
-                        android:layout_height="100dp"
-                        android:src="@drawable/save_image"
-                        android:id="@+id/img_barcode_sach"/>
-                    <ImageView
-                        android:id="@+id/img_save_barcode_sach"
-                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp">
+                        <TextView
+                            android:layout_marginLeft="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Giá Bán"
+                            android:textStyle="italic"/>
+                        <EditText
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/edt_giaban_sach"
+                            android:textStyle="normal"
+                            android:inputType="number"
+                            android:backgroundTint="@color/white"
+                            android:textColor="@color/black"
+                            android:maxLength="10"
+                            android:textSize="20sp"/>
+                    </androidx.cardview.widget.CardView>
+                    <androidx.cardview.widget.CardView
                         android:layout_marginLeft="5dp"
-                        android:padding="5dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_width="75dp"
-                        android:layout_height="75dp"
                         android:layout_weight="1"
-                        android:src="@drawable/save_image"/>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                        android:layout_marginBottom="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp">
+                        <TextView
+                            android:layout_marginLeft="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Số Quyển"
+                            android:textStyle="italic"/>
+                        <EditText
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/edt_soquyen_sach"
+                            android:textStyle="normal"
+                            android:inputType="number"
+                            android:backgroundTint="@color/white"
+                            android:textColor="@color/black"
+                            android:maxLength="10"
+                            android:textSize="20sp"/>
+                    </androidx.cardview.widget.CardView>
 
-            <Button
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginLeft="20dp"
-                android:background="@drawable/radius_30"
-                android:backgroundTint="#6BFD0404"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_update_sach"
-                android:text="Thêm"
-                android:textColor="@color/white"
-                android:layout_gravity="center"/>
-            <Button
-                android:layout_marginRight="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_gravity="right"
-                android:background="@drawable/radius_30"
-                android:backgroundTint="#6BFD0404"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_huy_sach"
-                android:text="Huỷ"
-                android:textColor="@color/white"/>
+                </LinearLayout>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="8dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="italic"
+                        android:text="Trạng thái sách"
+                        android:layout_marginBottom="10dp"/>
+                    <LinearLayout
+                        android:layout_marginTop="15dp"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp">
+                        <Spinner
+                            android:id="@+id/spinner_trangthai_sach"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            tools:ignore="SpeakableTextPresentCheck" />
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:layout_weight="1"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="8dp">
+                    <LinearLayout
+                        android:weightSum="10"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:padding="3dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="9"
+                            android:layout_width="match_parent"
+                            android:scaleType="fitXY"
+                            android:layout_height="100dp"
+                            android:src="@drawable/save_image"
+                            android:id="@+id/img_barcode_sach"/>
+                        <ImageView
+                            android:id="@+id/img_save_barcode_sach"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="5dp"
+                            android:padding="5dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_width="75dp"
+                            android:layout_height="75dp"
+                            android:layout_weight="1"
+                            android:src="@drawable/save_image"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <Button
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/radius_30"
+                    android:backgroundTint="#6BFD0404"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_update_sach"
+                    android:text="Thêm"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"/>
+                <Button
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_gravity="right"
+                    android:background="@drawable/radius_30"
+                    android:backgroundTint="#6BFD0404"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_huy_sach"
+                    android:text="Huỷ"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chauthai.swipereveallayout.SwipeRevealLayout;
+import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.rin1903.bookstoremanager.R;
 import com.rin1903.bookstoremanager.SQLite.SACH_TRONG_PHIEUNHAP;
 
@@ -19,10 +21,12 @@ import java.util.ArrayList;
 public class ChiTietPhieuNhapAdapter extends  RecyclerView.Adapter<ChiTietPhieuNhapAdapter.ViewHolder>{
     private Context context;
     private ArrayList<SACH_TRONG_PHIEUNHAP> arrayList = new ArrayList<>();
+    ViewBinderHelper viewBinderHelper= new ViewBinderHelper();
 
     public ChiTietPhieuNhapAdapter(Context context, ArrayList<SACH_TRONG_PHIEUNHAP> arrayList) {
         this.context = context;
         this.arrayList = arrayList;
+        viewBinderHelper.setOpenOnlyOne(true);
     }
 
     @NonNull
@@ -40,6 +44,7 @@ public class ChiTietPhieuNhapAdapter extends  RecyclerView.Adapter<ChiTietPhieuN
         holder.tv_gia.setText(String.valueOf(arrayList.get(position).getGiaban()));
         SACH_TRONG_PHIEUNHAP sach_trong_phieunhap= arrayList.get(position);
         sach_trong_phieunhap.setsoluongtrongphieunhap(soluong);
+        viewBinderHelper.bind(holder.swipeRevealLayout,String.valueOf(arrayList.get(position).getMaSach()));
 
         holder.imgdow.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -71,6 +76,13 @@ public class ChiTietPhieuNhapAdapter extends  RecyclerView.Adapter<ChiTietPhieuN
                     }
                 }
             });
+        holder.imgdelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                arrayList.remove(holder.getAdapterPosition());
+                notifyItemRemoved(holder.getAdapterPosition());
+            }
+        });
 
 
 
@@ -101,7 +113,8 @@ public class ChiTietPhieuNhapAdapter extends  RecyclerView.Adapter<ChiTietPhieuN
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv_ten,tv_gia,tv_soluong;
-        ImageView img_up,imgdow;
+        ImageView img_up,imgdow,imgdelete;
+        SwipeRevealLayout swipeRevealLayout;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_ten= itemView.findViewById(R.id.tv_tensach_item_taohoadon);
@@ -109,6 +122,8 @@ public class ChiTietPhieuNhapAdapter extends  RecyclerView.Adapter<ChiTietPhieuN
             tv_soluong= itemView.findViewById(R.id.tv_soluong_item_taohoadon);
             img_up= itemView.findViewById(R.id.img_up_item_taohoadon);
             imgdow= itemView.findViewById(R.id.img_dow_item_taohoadon);
+            imgdelete= itemView.findViewById(R.id.img_delete_item_thongtinhhoadon);
+            swipeRevealLayout= itemView.findViewById(R.id.swipelayout_item_thongtin_hoadon);
 
         }
     }

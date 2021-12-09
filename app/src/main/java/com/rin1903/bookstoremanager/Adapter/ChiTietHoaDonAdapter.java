@@ -11,6 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chauthai.swipereveallayout.SwipeRevealLayout;
+import com.chauthai.swipereveallayout.ViewBinderHelper;
+import com.rin1903.bookstoremanager.MainActivity;
 import com.rin1903.bookstoremanager.R;
 import com.rin1903.bookstoremanager.SQLite.SACH;
 import com.rin1903.bookstoremanager.SQLite.SACH_TRONG_HOADON;
@@ -20,10 +23,11 @@ import java.util.ArrayList;
 public class ChiTietHoaDonAdapter extends  RecyclerView.Adapter<ChiTietHoaDonAdapter.ViewHolder>{
     private Context context;
     private ArrayList<SACH_TRONG_HOADON> arrayList = new ArrayList<>();
-
+    ViewBinderHelper viewBinderHelper= new ViewBinderHelper();
     public ChiTietHoaDonAdapter(Context context, ArrayList<SACH_TRONG_HOADON> arrayList) {
         this.context = context;
         this.arrayList = arrayList;
+        viewBinderHelper.setOpenOnlyOne(true);
     }
 
     @NonNull
@@ -41,6 +45,7 @@ public class ChiTietHoaDonAdapter extends  RecyclerView.Adapter<ChiTietHoaDonAda
         holder.tv_gia.setText(String.valueOf(arrayList.get(position).getGiaban()));
         SACH_TRONG_HOADON sach_trong_hoadon= arrayList.get(position);
 
+        viewBinderHelper.bind(holder.swipeRevealLayout,String.valueOf(arrayList.get(position).getMaSach()));
             holder.imgdow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -63,6 +68,13 @@ public class ChiTietHoaDonAdapter extends  RecyclerView.Adapter<ChiTietHoaDonAda
                         sach_trong_hoadon.setSoluongtronghoadon(soluong);
                         arrayList.set(position, sach_trong_hoadon);
                     }
+                }
+            });
+            holder.imgdelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    arrayList.remove(holder.getAdapterPosition());
+                    notifyItemRemoved(holder.getAdapterPosition());
                 }
             });
 
@@ -95,7 +107,8 @@ public class ChiTietHoaDonAdapter extends  RecyclerView.Adapter<ChiTietHoaDonAda
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv_ten,tv_gia,tv_soluong;
-        ImageView img_up,imgdow;
+        ImageView img_up,imgdow,imgdelete;
+        SwipeRevealLayout swipeRevealLayout;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_ten= itemView.findViewById(R.id.tv_tensach_item_taohoadon);
@@ -103,7 +116,8 @@ public class ChiTietHoaDonAdapter extends  RecyclerView.Adapter<ChiTietHoaDonAda
             tv_soluong= itemView.findViewById(R.id.tv_soluong_item_taohoadon);
             img_up= itemView.findViewById(R.id.img_up_item_taohoadon);
             imgdow= itemView.findViewById(R.id.img_dow_item_taohoadon);
-
+            imgdelete= itemView.findViewById(R.id.img_delete_item_thongtinhhoadon);
+            swipeRevealLayout= itemView.findViewById(R.id.swipelayout_item_thongtin_hoadon);
         }
     }
 }

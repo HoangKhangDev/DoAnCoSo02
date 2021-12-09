@@ -9,14 +9,17 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.celites.androidexternalfilewriter.AppExternalFileWriter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -38,8 +41,14 @@ import com.rin1903.bookstoremanager.fragment.Fragment_Main_Menu;
 import com.rin1903.bookstoremanager.fragment.Fragment_thongke;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static ArrayList<String> trang;
     public static final int SELECT_PICTURE=19;
+    public static String filename="thongke.doc";
+    public static String context="Quan Ly Cua Hang Sach";
 
 
     @Override
@@ -73,10 +84,42 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
 
-
         requestPermissions();
 
+//        savefile("oke");
+//        String state = Environment.getExternalStorageState();
+//        if (Environment.MEDIA_MOUNTED.equals(state)) {
+//            // External storage is available for read and write
+//            // TODO:
+//            String info = "File chứa nội dung";
+//            File folder = getExternalFilesDir("Rin");// Folder Name
+//            File myFile = new File(folder, "myData.txt");// Filename
+//            FileOutputStream fileOutputStream = null;
+//            try {
+//                fileOutputStream = new FileOutputStream(myFile);
+//                fileOutputStream.write(("AAAAAAAAAAAAAAAAAAAa").getBytes());
+//                Toast.makeText(this, "Done" + myFile.getAbsolutePath(), Toast.).show();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            } finally {
+//                if (fileOutputStream != null) {
+//                    try {
+//                        fileOutputStream.close();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+        AppExternalFileWriter appExternalFileWriter= new AppExternalFileWriter(getApplicationContext());
+        try {
+            appExternalFileWriter.writeDataToFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"tessst.doc","Nhập vào dữ liệu");
+        } catch (AppExternalFileWriter.ExternalFileWriterException e) {
+            e.printStackTrace();
+        }
 
+//        new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/data_rin1903").mkdir();
+            Toast.makeText(getApplicationContext(), ""+getExternalFilesDir("tessst.doc"), Toast.LENGTH_SHORT).show();
+//        }
 
 
         trang= new ArrayList<>();
@@ -226,14 +269,33 @@ public class MainActivity extends AppCompatActivity {
         Cursor cursor= database.Getdata("select * from SACH order by MASACH asc");
         if(cursor.getCount()!=0){
             while (cursor.moveToNext()){
-                sachArrayList.add(new SACH(cursor.getInt(0)
-                        ,cursor.getString(1)
-                        ,cursor.getString(2)
-                        ,cursor.getString(3)
-                        ,cursor.getInt(4)
-                        ,cursor.getString(5)
-                        ,cursor.getInt(6)
-                        ,cursor.getBlob(7)));
+                if(cursor.getString(5).toString().toLowerCase().contains("còn hàng")){
+                    sachArrayList.add(new SACH(cursor.getInt(0)
+                            ,cursor.getString(1)
+                            ,cursor.getString(2)
+                            ,cursor.getString(3)
+                            ,cursor.getInt(4)
+                            ,cursor.getString(5)
+                            ,cursor.getInt(6)
+                            ,cursor.getBlob(7)));
+                }
+
+            }
+        }
+    }  public static void refesh_sach_all(){
+        sachArrayList = new ArrayList<>();
+        Cursor cursor= database.Getdata("select * from SACH order by MASACH asc");
+        if(cursor.getCount()!=0){
+            while (cursor.moveToNext()){
+                    sachArrayList.add(new SACH(cursor.getInt(0)
+                            ,cursor.getString(1)
+                            ,cursor.getString(2)
+                            ,cursor.getString(3)
+                            ,cursor.getInt(4)
+                            ,cursor.getString(5)
+                            ,cursor.getInt(6)
+                            ,cursor.getBlob(7)));
+
             }
         }
     }
@@ -281,9 +343,6 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
-
-
-
 
 
 }

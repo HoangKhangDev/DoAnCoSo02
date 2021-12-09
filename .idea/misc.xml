@@ -7,7 +7,10 @@
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/activity_main.xml" value="0.21145833333333333" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/activity_tao_hoa_don.xml" value="0.25" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/dialog_hoadon.xml" value="0.3625" />
+        <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/dialog_phieunhap.xml" value="0.19583333333333333" />
+        <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/dialog_theloai.xml" value="0.19583333333333333" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/dialog_xacnhan.xml" value="0.3625" />
+        <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/dialog_xacnhanxoa.xml" value="0.19583333333333333" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/fragment_hienthi.xml" value="0.3625" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/fragment_hoadon.xml" value="0.3625" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/fragment_khachhang.xml" value="0.21145833333333333" />
@@ -19,9 +22,11 @@
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/fragment_tacgia.xml" value="0.3625" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/fragment_taohoadon.xml" value="0.3074074074074074" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/fragment_taophieunhap..xml" value="0.3625" />
-        <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/fragment_thongke.xml" value="0.20364583333333333" />
+        <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/fragment_thongke.xml" value="0.33" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/item_hienthi_khongcohinh.xml" value="0.33" />
+        <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/item_hienthi_khongcohinh_hdpn.xml" value="0.2765625" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/item_list_hienthi_cohinh.xml" value="0.33" />
+        <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/item_list_hienthi_cohinh_phieunhap_hoadon.xml" value="0.25" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/item_sach_thongtin_hoadon.xml" value="0.33" />
       </map>
     </option>

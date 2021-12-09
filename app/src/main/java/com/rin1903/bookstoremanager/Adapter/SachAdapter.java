@@ -20,6 +20,8 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.beardedhen.androidbootstrap.BootstrapCircleThumbnail;
+import com.beardedhen.androidbootstrap.BootstrapThumbnail;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.rin1903.bookstoremanager.MainActivity;
@@ -62,6 +64,7 @@ public class SachAdapter extends RecyclerView.Adapter<SachAdapter.ViewHolder> im
         byte[] hinh = sachArrayList.get(position).getHINH_SACH();
         Bitmap bitmap = BitmapFactory.decodeByteArray(hinh,0,hinh.length);
         holder.img_hinh.setImageBitmap(bitmap);
+        int masach=sachArrayList.get(position).getMASACH();
 
         viewBinderHelper.bind(holder.swipeRevealLayout, String.valueOf(sachArrayList.get(position).getMASACH()));
 
@@ -70,7 +73,7 @@ public class SachAdapter extends RecyclerView.Adapter<SachAdapter.ViewHolder> im
             public void onClick(View v) {
                 sachArrayList.remove(holder.getAdapterPosition());
                 notifyItemRemoved(holder.getAdapterPosition());
-                MainActivity.database.QueryData("update SACH set TRANGTHAI='Ngừng kinh doanh' where MASACH="+sachArrayList.get(position).getMASACH());
+                MainActivity.database.QueryData("update SACH set TRANGTHAI='Ngừng kinh doanh' where MASACH="+masach);
             }
         });
 
@@ -80,6 +83,18 @@ public class SachAdapter extends RecyclerView.Adapter<SachAdapter.ViewHolder> im
                 Fragment_Sach fragment= new Fragment_Sach();
                 Bundle bundle= new Bundle();
                 bundle.putString("guidulieu","chinhsua_sach_"+sachArrayList.get(position).getMASACH());
+                fragment.setArguments(bundle);
+                ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_content, fragment).addToBackStack(context.getClass().getName())
+                        .commit();
+            }
+        });
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment_Sach fragment= new Fragment_Sach();
+                Bundle bundle= new Bundle();
+                bundle.putString("guidulieu","xem_sach_"+sachArrayList.get(position).getMASACH());
                 fragment.setArguments(bundle);
                 ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_content, fragment).addToBackStack(context.getClass().getName())
@@ -103,7 +118,7 @@ public class SachAdapter extends RecyclerView.Adapter<SachAdapter.ViewHolder> im
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView tv_tieude;
         TextView tv_mota;
-        ImageView img_hinh;
+        BootstrapCircleThumbnail img_hinh;
 
         CardView cardView;
         SwipeRevealLayout swipeRevealLayout;

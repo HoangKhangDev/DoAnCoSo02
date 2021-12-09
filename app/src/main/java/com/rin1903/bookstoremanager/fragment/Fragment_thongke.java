@@ -8,8 +8,10 @@ import static com.rin1903.bookstoremanager.MainActivity.refesh_hoadon;
 import static com.rin1903.bookstoremanager.MainActivity.refesh_phieunhap;
 import static com.rin1903.bookstoremanager.MainActivity.sachArrayList;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -24,10 +26,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.rin1903.bookstoremanager.Adapter.HoaDonAdapter;
 import com.rin1903.bookstoremanager.Adapter.PhieuNhapAdapter;
+import com.rin1903.bookstoremanager.MainActivity;
 import com.rin1903.bookstoremanager.R;
 import com.rin1903.bookstoremanager.SQLite.HOADON;
 import com.rin1903.bookstoremanager.SQLite.PHIEUNHAP;
@@ -55,10 +60,22 @@ public class Fragment_thongke extends Fragment {
     @BindView(R.id.img_calendar_end_thongke) ImageView img_end;
     @BindView(R.id.tv_calendar_star_thongke) TextView tv_star;
     @BindView(R.id.tv_calendar_end_thongke) TextView tv_end;
-    @BindView(R.id.tv_thongke_hienthi_fragment_thongke) TextView thongke;
+    @BindView(R.id.btn_hienthi_bootstrap_thongke) BootstrapButton thongke;
+    @BindView(R.id.btn_bootstrap_luufile_thongke) BootstrapButton luufile;
+    @BindView(R.id.img_back_thongke) ImageView img_back;
+
     private Long star;
     private Long end;
     private int check=0;
+
+
+    private static final String LOG_TAG = "ExternalStorageDemo";
+
+
+    private static final int REQUEST_ID_READ_PERMISSION = 100;
+    private static final int REQUEST_ID_WRITE_PERMISSION = 200;
+
+    private final String fileName = "note.txt";
 
     @Nullable
     @Override
@@ -66,6 +83,23 @@ public class Fragment_thongke extends Fragment {
         View view= inflater.inflate(R.layout.fragment_thongke,container,false);
         unbinder= ButterKnife.bind(this,view);
 
+        img_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
+
+        luufile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
+        recyclerView.setLayoutManager(linearLayoutManager);
         refesh_phieunhap();
         refesh_hoadon();
         arrayList_HD= new ArrayList<>();
@@ -167,35 +201,58 @@ public class Fragment_thongke extends Fragment {
                     mangend=tv_end.getText().toString().split("/");
                     if(end>star) {
                         if (dulieu[1].toString().toLowerCase().contains("phiếu nhập")) {
-                            if (Integer.parseInt(mangstar[2].toString()) < Integer.parseInt(mangend[2].toString())) {
                                 Cursor cursor = database.Getdata("SELECT * from PHIEUNHAP WHERE Date(NGAY_PN)>='"
                                         + mangstar[2].toString() + "-" + mangstar[1].toString() + "-" + mangstar[0].toString() +
                                         "' AND Date(NGAY_PN)<='"
                                         + mangend[2].toString() + "-" + mangend[1].toString() + "-" + mangend[0].toString() + "'");
-                                while (cursor.moveToNext()) {
-                                    arrayList_PN.add(new PHIEUNHAP(cursor.getString(0)
-                                            , cursor.getString(1)
-                                            , cursor.getString(2)
-                                            , cursor.getInt(3)));
-                                }
+                                if(cursor.getCount()>0){
+                                    Toast.makeText(getActivity(), ""+cursor.getCount(), Toast.LENGTH_SHORT).show();
 
+                                    while (cursor.moveToNext()) {
+                                        arrayList_PN.add(new PHIEUNHAP(cursor.getString(0)
+                                                , cursor.getString(1)
+                                                , cursor.getString(2)
+                                                , cursor.getInt(3)));
+                                    }
+                                    phieuNhapAdapter = new PhieuNhapAdapter(arrayList_PN, getActivity());
+                                    recyclerView.setAdapter(phieuNhapAdapter);
+                                    phieuNhapAdapter.notifyDataSetChanged();
+                                }
+                                else {
+                                    Toast.makeText(getActivity(), ""+cursor.getCount(), Toast.LENGTH_SHORT).show();
+
+                                                               }
                             }
-                        }else if(dulieu[1].toString().toLowerCase().contains("hoá đơn")) {
-                            Cursor cursor = database.Getdata("SELECT * from HOADON WHERE Date(ngay_hd)>='"
+                        }
+                    else if(dulieu[1].toString().toLowerCase().contains("hoá đơn")) {
+                         Cursor cursor = database.Getdata("SELECT * from HOADON WHERE Date(ngay_hd)>='"
                                     + mangstar[2].toString() + "-" + mangstar[1].toString() + "-" + mangstar[0].toString() +
                                     "' AND Date(ngay_hd)<='"
                                     + mangend[2].toString() + "-" + mangend[1].toString() + "-" + mangend[0].toString() + "'");
-                            while (cursor.moveToNext()) {
-                                arrayList_HD.add(new HOADON(cursor.getString(0)
-                                        , cursor.getString(1)
-                                        , cursor.getInt(2)
-                                        , cursor.getString(3)));
-                            }
-                            hoaDonAdapter = new HoaDonAdapter(arrayList_HD, getActivity());
-                            recyclerView.setAdapter(hoaDonAdapter);
-                            hoaDonAdapter.notifyDataSetChanged();
-
-                        }
+                                    if(cursor.getCount()>0){
+                                        while (cursor.moveToNext()) {
+                                            arrayList_HD.add(new HOADON(cursor.getString(0)
+                                                    , cursor.getString(1)
+                                                    , cursor.getInt(2)
+                                                    , cursor.getString(3)));
+                                        }
+                                        hoaDonAdapter = new HoaDonAdapter(arrayList_HD, getActivity());
+                                        recyclerView.setAdapter(hoaDonAdapter);
+                                        hoaDonAdapter.notifyDataSetChanged();
+                                    }
+                                    else {
+                                        AlertDialog.Builder alerdialog= new AlertDialog.Builder(getActivity());
+                                        alerdialog.setTitle("ERROR");
+                                        alerdialog.setMessage("Dữ liệu bạn yêu cầu hiện không có!!! Dữ liệu sẽ trả về ban đầu");
+                                        alerdialog.setPositiveButton("OKE", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.cancel();
+                                                refesh_lv_phieunhap();
+                                            }
+                                        });
+                                        alerdialog.show();
+                                    }
                     }
                     else {
                         Toast.makeText(getActivity(), "Ngày bắt đầu lớn hơn ngày kết thúc", Toast.LENGTH_SHORT).show();
@@ -214,14 +271,46 @@ public class Fragment_thongke extends Fragment {
     }
     public void refesh_lv_phieunhap(){
         refesh_phieunhap();
-        phieuNhapAdapter= new PhieuNhapAdapter(phieunhapArrayList,getActivity());
-        recyclerView.setAdapter(phieuNhapAdapter);
-        phieuNhapAdapter.notifyDataSetChanged();
+        if(phieunhapArrayList.size()>0){
+            phieuNhapAdapter= new PhieuNhapAdapter(phieunhapArrayList,getActivity());
+            recyclerView.setAdapter(phieuNhapAdapter);
+            phieuNhapAdapter.notifyDataSetChanged();
+        }
+        else {
+            Dialog dialog = new Dialog(getActivity());
+            dialog.setContentView(R.layout.dialog_list_null);
+
+            Button btn= dialog.findViewById(R.id.btn_ok_dialog_list_null);
+
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.cancel();
+                }
+            });
+            dialog.show();
+        }
     }
     public void refesh_lv_hoadon(){
         refesh_hoadon();
-        hoaDonAdapter= new HoaDonAdapter(hoadonArrayList,getActivity());
-        recyclerView.setAdapter(hoaDonAdapter);
-        hoaDonAdapter.notifyDataSetChanged();
+        if(hoadonArrayList.size()>0){
+            hoaDonAdapter= new HoaDonAdapter(hoadonArrayList,getActivity());
+            recyclerView.setAdapter(hoaDonAdapter);
+            hoaDonAdapter.notifyDataSetChanged();
+        }
+        else{
+            Dialog dialog = new Dialog(getActivity());
+            dialog.setContentView(R.layout.dialog_list_null);
+
+            Button btn= dialog.findViewById(R.id.btn_ok_dialog_list_null);
+
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.cancel();
+                }
+            });
+            dialog.show();
+        }
     }
 }

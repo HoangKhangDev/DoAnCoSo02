@@ -82,7 +82,6 @@ public class Fragment_TacGia extends Fragment {
 
         Bundle bundle= getArguments();
         if(bundle!=null){
-            Toast.makeText(getActivity(), ""+bundle.getString("guidulieu"), Toast.LENGTH_SHORT).show();
             dulieu = bundle.getString("guidulieu").split("_");
             if(dulieu[0].toLowerCase().contains("tao")){
                 Cursor cursor=database.Getdata("select MATACGIA from TACGIA order by MATACGIA desc limit 1");
@@ -124,7 +123,37 @@ public class Fragment_TacGia extends Fragment {
 
 
             }
+            else if(dulieu[0].toString().toLowerCase().contains("xem")) {
+                btn_them.setVisibility(View.GONE);
+                Cursor cursor= database.Getdata("select * from TACGIA where MATACGIA='"+dulieu[2].toString()+"'");
+                while (cursor.moveToNext()){
+                    tacgia= new TACGIA(cursor.getString(0)
+                            ,cursor.getString(1)
+                            ,cursor.getString(2)
+                            ,cursor.getString(3)
+                            ,cursor.getString(4)
+                            ,cursor.getBlob(5));
+                    byte[] hinh= tacgia.getHINH_TACGIA();
+                    Bitmap bitmap= BitmapFactory.decodeByteArray(hinh,0,hinh.length);
+                    imghinhtacgia.setImageBitmap(bitmap);
+                    edt_tentacgia.setText(tacgia.getTENTACGIA());
+                    edt_diachi.setText(tacgia.getDIACHI_TG());
+                    tv_ngaysinh.setText(tacgia.getNGAYSINH_TG());
+                    if(tacgia.getGIOITINH_TG().toLowerCase().contains("nam")){
+                        spinner_gioitinh.setSelection(0);
+                    }
+                    else if(tacgia.getGIOITINH_TG().toLowerCase().contains("nữ")) {
+                        spinner_gioitinh.setSelection(1);
+                    }
+                    edt_diachi.setEnabled(false);
+                    img_calendar.setEnabled(false);
+                    spinner_gioitinh.setEnabled(false);
+                    edt_tentacgia.setEnabled(false);
+                    imghinhtacgia.setEnabled(false);
+                }
+            }
         }
+
 
         imghinhtacgia.setOnClickListener(new View.OnClickListener() {
             @Override

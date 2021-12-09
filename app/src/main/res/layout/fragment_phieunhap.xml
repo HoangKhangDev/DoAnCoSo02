@@ -174,12 +174,12 @@
         <LinearLayout
             android:gravity="center"
             android:padding="10dp"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <Button
-                android:layout_marginRight="30dp"
                 android:padding="10dp"
-                android:layout_width="wrap_content"
+                android:layout_width="300dp"
                 android:layout_height="45dp"
                 android:background="@drawable/shape_50dp"
                 android:backgroundTint="#4CAF50"
@@ -187,9 +187,9 @@
                 android:id="@+id/btn_thanhtoan_fragment_taophieunhap"
                 android:textColor="@color/white"/>
             <Button
-                android:layout_marginLeft="30dp"
+                android:layout_marginTop="5dp"
                 android:padding="10dp"
-                android:layout_width="wrap_content"
+                android:layout_width="300dp"
                 android:layout_height="45dp"
                 android:background="@drawable/shape_50dp"
                 android:backgroundTint="#9C27B0"

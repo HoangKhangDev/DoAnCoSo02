@@ -3,67 +3,71 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
+    android:background="#19B1ADAD"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
+    <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
+
             <ImageView
+                android:id="@+id/img_hinh_tacgia_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="175dp"
                 android:layout_gravity="center"
-                android:src="@drawable/no_pictures"
                 android:scaleType="centerCrop"
-                android:id="@+id/img_hinh_tacgia_fragment"/>
+                android:src="@drawable/no_pictures" />
+
             <LinearLayout
-                android:padding="20dp"
-                android:gravity="center"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical"
-                android:backgroundTint="#19B1ADAD"
-                android:background="@drawable/radius_40"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:background="#19B1ADAD"
+                android:gravity="center|top"
+                android:orientation="vertical"
+                android:padding="20dp">
+
                 <androidx.cardview.widget.CardView
-                    android:layout_marginBottom="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     app:cardCornerRadius="8dp">
+
                     <TextView
-                        android:layout_marginLeft="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:labelFor="@+id/edt_tentacgia_tacgia"
                         android:text="Tên Tác Giả"
                         android:textSize="16sp"
-                        android:labelFor="@+id/edt_tentacgia_tacgia"
-                        android:textStyle="italic"/>
+                        android:textStyle="italic" />
+
                     <EditText
-                        android:gravity="center"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="20dp"
+                        android:id="@+id/edt_tentacgia_tacgia"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/edt_tentacgia_tacgia"
-                        android:textStyle="normal"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="10dp"
                         android:backgroundTint="@color/white"
+                        android:gravity="center"
                         android:textColor="@color/black"
-                        android:textSize="20sp"/>
+                        android:textSize="20sp"
+                        android:textStyle="normal" />
                 </androidx.cardview.widget.CardView>
+
                 <androidx.cardview.widget.CardView
-                    android:layout_marginBottom="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     app:cardCornerRadius="8dp">
+
                     <LinearLayout
-                        android:weightSum="10"
-                        android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp">
+                        android:layout_height="50dp"
+                        android:orientation="horizontal"
+                        android:weightSum="10">
 
                         <Spinner
                             android:id="@+id/spinner_gioitinh_tacgia"
@@ -71,79 +75,81 @@
                             android:layout_height="match_parent"
                             android:layout_weight="5"
                             tools:ignore="SpeakableTextPresentCheck" />
+
                         <TextView
-                            android:layout_weight="4"
+                            android:id="@+id/tv_calendar_tacgia"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:text="Ngày Sinh"
-                            android:gravity="right"
                             android:layout_gravity="center"
-                            android:id="@+id/tv_calendar_tacgia"/>
+                            android:layout_weight="4"
+                            android:gravity="right"
+                            android:text="Ngày Sinh"
+                            android:textSize="16sp" />
+
                         <ImageView
                             android:id="@+id/img_calendar_tacgia"
-                            android:layout_weight="1"
-                            android:layout_gravity="center"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:src="@drawable/calendaricon"/>
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:src="@drawable/calendaricon" />
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:layout_marginBottom="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     app:cardCornerRadius="8dp">
+
                     <TextView
-                        android:layout_marginLeft="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:labelFor="@+id/edt_diachi_tacgia"
                         android:text="Địa chỉ"
                         android:textSize="16sp"
-                        android:labelFor="@+id/edt_diachi_tacgia"
-                        android:textStyle="italic"/>
+                        android:textStyle="italic" />
+
                     <EditText
-                        android:inputType="textMultiLine"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="20dp"
+                        android:id="@+id/edt_diachi_tacgia"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/edt_diachi_tacgia"
-                        android:textStyle="normal"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="10dp"
                         android:backgroundTint="@color/white"
+                        android:inputType="textMultiLine"
                         android:textColor="@color/black"
-                        android:textSize="20sp"/>
+                        android:textSize="20sp"
+                        android:textStyle="normal" />
                 </androidx.cardview.widget.CardView>
 
                 <Button
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:background="@drawable/radius_30"
-                    android:backgroundTint="#6BFD0404"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:id="@+id/btn_them_theloai_tacgia"
-                    android:text="Thêm"
-                    android:textColor="@color/white"
-                    android:layout_gravity="center"/>
-                <Button
-                    android:layout_marginRight="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_gravity="right"
-                    android:background="@drawable/radius_30"
-                    android:backgroundTint="#6BFD0404"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/radius_30"
+                    android:backgroundTint="#6BFD0404"
+                    android:text="Thêm"
+                    android:textColor="@color/white" />
+
+                <Button
                     android:id="@+id/btn_huy_tacgia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/radius_30"
+                    android:backgroundTint="#6BFD0404"
                     android:text="Huỷ"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white" />
             </LinearLayout>
         </LinearLayout>
-
-    </ScrollView>
-
 </LinearLayout>

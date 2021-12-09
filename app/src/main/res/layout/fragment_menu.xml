@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="@drawable/radius_40"
-    android:layout_marginTop="5dp"
     android:padding="10dp"
+    android:background="@color/backgroundColorItem1"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
+            android:background="@color/backgroundColorItem1"
             android:layout_marginBottom="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <LinearLayout
+                android:padding="10dp"
                 android:weightSum="10"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -26,8 +28,8 @@
                     android:layout_weight="5"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="8dp">
+                    card_view:cardCornerRadius="8dp"
+                    card_view:cardElevation="8dp">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

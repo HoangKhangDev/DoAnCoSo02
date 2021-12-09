@@ -55,4 +55,8 @@ dependencies {
 
     implementation 'gun0912.ted:tedbottompicker:2.0.1'
     implementation 'com.github.florent37:materialtextfield:1.0.7'
+
+    implementation 'com.beardedhen:androidbootstrap:2.3.2'
+
+    implementation 'com.creativeelites:androidexternalfilewriter:1.4'
 }

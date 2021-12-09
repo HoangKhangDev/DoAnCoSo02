@@ -117,7 +117,7 @@ public class Database extends SQLiteOpenHelper {
     public void UPDATE_KHACHHANG(KHACHHANG khachhang)
     {
         SQLiteDatabase database= getWritableDatabase();
-        String sql= "update KHACHHANG set TENKHACHHANG=?,GIOITINH_KH=?,NGAYSINH_KH=?,SDT_KH=?,DIACHI_KH=?,HINH_KH=? where MAKHACHHANH=?";
+        String sql= "update KHACHHANG set TENKHACHHANG=?,GIOITINH_KH=?,NGAYSINH_KH=?,SDT_KH=?,DIACHI_KH=?,HINH_KHACHHANG=? where MAKHACHHANG=?";
         SQLiteStatement sqLiteStatement= database.compileStatement(sql);
         sqLiteStatement.clearBindings();
         sqLiteStatement.bindString(7,khachhang.getMAKHACHHANG());
