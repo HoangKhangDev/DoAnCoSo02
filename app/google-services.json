@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "497098071061",
+    "firebase_url": "https://app-one-48fa4-default-rtdb.firebaseio.com",
+    "project_id": "app-one-48fa4",
+    "storage_bucket": "app-one-48fa4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:497098071061:android:be9c37efeb81a55e8f821c",
+        "android_client_info": {
+          "package_name": "com.devbysv.app_one"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "497098071061-dv7evgkddalfq2rb8pv913q0gslnpr3o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9apriR_QMXTBXgZKR-RRTfViBZCdje40"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "497098071061-dv7evgkddalfq2rb8pv913q0gslnpr3o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:497098071061:android:7c0233dc1471aea38f821c",
+        "android_client_info": {
+          "package_name": "com.rin1903.bookstoremanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "497098071061-dv7evgkddalfq2rb8pv913q0gslnpr3o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9apriR_QMXTBXgZKR-RRTfViBZCdje40"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "497098071061-dv7evgkddalfq2rb8pv913q0gslnpr3o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
