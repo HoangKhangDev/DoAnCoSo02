@@ -528,8 +528,8 @@ public class Fragment_TaoHoaDon extends Fragment {
 
 
     public void updatehoadon() {
-        refesh_adapter();
         refesh_hoadon();
+        refesh_adapter();
         String[] mang = new String[0];
         if (makh.contains("null")|makh.isEmpty()) {
             makh = "null";
