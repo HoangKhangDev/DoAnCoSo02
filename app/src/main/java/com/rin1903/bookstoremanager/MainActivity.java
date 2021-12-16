@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.storage.StorageManager;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -86,41 +88,19 @@ public class MainActivity extends AppCompatActivity {
 
         requestPermissions();
 
-//        savefile("oke");
-//        String state = Environment.getExternalStorageState();
-//        if (Environment.MEDIA_MOUNTED.equals(state)) {
-//            // External storage is available for read and write
-//            // TODO:
-//            String info = "File chứa nội dung";
-//            File folder = getExternalFilesDir("Rin");// Folder Name
-//            File myFile = new File(folder, "myData.txt");// Filename
-//            FileOutputStream fileOutputStream = null;
-//            try {
-//                fileOutputStream = new FileOutputStream(myFile);
-//                fileOutputStream.write(("AAAAAAAAAAAAAAAAAAAa").getBytes());
-//                Toast.makeText(this, "Done" + myFile.getAbsolutePath(), Toast.).show();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            } finally {
-//                if (fileOutputStream != null) {
-//                    try {
-//                        fileOutputStream.close();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-        AppExternalFileWriter appExternalFileWriter= new AppExternalFileWriter(getApplicationContext());
-        try {
-            appExternalFileWriter.writeDataToFile(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"tessst.doc","Nhập vào dữ liệu");
-        } catch (AppExternalFileWriter.ExternalFileWriterException e) {
-            e.printStackTrace();
+
+        if (android.os.Build.VERSION.SDK_INT < 29) {
+            // ==>  /storage/emulated/0    (Emulator)
+            File dir = Environment.getExternalStorageDirectory();
+            File folder= new File(dir,"QLTV");
+            folder.mkdirs();
+
         }
-
-//        new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+"/data_rin1903").mkdir();
-            Toast.makeText(getApplicationContext(), ""+getExternalFilesDir("tessst.doc"), Toast.LENGTH_SHORT).show();
-//        }
-
+        else {
+            File dir = this.getExternalFilesDir(null);
+            File folder= new File(dir,"QLTV");
+            folder.mkdirs();
+        }
 
         trang= new ArrayList<>();
 
@@ -166,7 +146,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
 
 
 
@@ -269,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
         Cursor cursor= database.Getdata("select * from SACH order by MASACH asc");
         if(cursor.getCount()!=0){
             while (cursor.moveToNext()){
-                if(cursor.getString(5).toString().toLowerCase().contains("còn hàng")){
+                if(cursor.getString(5).toLowerCase().equals("còn hàng")){
                     sachArrayList.add(new SACH(cursor.getInt(0)
                             ,cursor.getString(1)
                             ,cursor.getString(2)

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.beardedhen.androidbootstrap.BootstrapLabel;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.rin1903.bookstoremanager.R;
@@ -36,21 +37,19 @@ public class ChiTietPhieuNhapAdapter extends  RecyclerView.Adapter<ChiTietPhieuN
         View view= inflater.inflate(R.layout.item_sach_thongtin_hoadon,parent,false);
         return new ViewHolder(view);
     }
-    private int soluong=1;
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.tv_ten.setText(arrayList.get(position).getTenSach());
-        holder.tv_soluong.setText("1");
         holder.tv_gia.setText(String.valueOf(arrayList.get(position).getGiaban()));
         SACH_TRONG_PHIEUNHAP sach_trong_phieunhap= arrayList.get(position);
-        sach_trong_phieunhap.setsoluongtrongphieunhap(soluong);
         viewBinderHelper.bind(holder.swipeRevealLayout,String.valueOf(arrayList.get(position).getMaSach()));
 
+        holder.tv_soluong.setText(String.valueOf(sach_trong_phieunhap.getsoluongtrongphieunhap()));
         holder.imgdow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    soluong = sach_trong_phieunhap.getsoluongtrongphieunhap();
-                    if (soluong > 1) {
+                    if (sach_trong_phieunhap.getsoluongtrongphieunhap() > 1) {
+                        int soluong=sach_trong_phieunhap.getsoluongtrongphieunhap();
                         soluong -= 1;
                         holder.tv_soluong.setText(String.valueOf(soluong));
                         sach_trong_phieunhap.setsoluongtrongphieunhap(soluong);
@@ -61,19 +60,11 @@ public class ChiTietPhieuNhapAdapter extends  RecyclerView.Adapter<ChiTietPhieuN
             holder.img_up.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    soluong = sach_trong_phieunhap.getsoluongtrongphieunhap();
-                    if (soluong>0) {
-                        soluong += 1;
-                        holder.tv_soluong.setText(String.valueOf(soluong));
-                        sach_trong_phieunhap.setsoluongtrongphieunhap(soluong);
-                        arrayList.set(position, sach_trong_phieunhap);
-                    }
-                    else {
-                        soluong = 1;
-                        holder.tv_soluong.setText(String.valueOf(soluong));
-                        sach_trong_phieunhap.setsoluongtrongphieunhap(soluong);
-                        arrayList.set(position, sach_trong_phieunhap);
-                    }
+                    int soluong=sach_trong_phieunhap.getsoluongtrongphieunhap();
+                    soluong += 1;
+                    holder.tv_soluong.setText(String.valueOf(soluong));
+                    sach_trong_phieunhap.setsoluongtrongphieunhap(soluong);
+                    arrayList.set(position, sach_trong_phieunhap);
                 }
             });
         holder.imgdelete.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +103,7 @@ public class ChiTietPhieuNhapAdapter extends  RecyclerView.Adapter<ChiTietPhieuN
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_ten,tv_gia,tv_soluong;
+        BootstrapLabel tv_ten,tv_gia,tv_soluong;
         ImageView img_up,imgdow,imgdelete;
         SwipeRevealLayout swipeRevealLayout;
         public ViewHolder(@NonNull View itemView) {

@@ -45,7 +45,11 @@ public class Database extends SQLiteOpenHelper {
         sqLiteStatement.bindLong(2,chi_tiet_hoa_don.getSOLUONG_HD());
         sqLiteStatement.executeUpdateDelete();
     }
-    public void DELETE_CHITIETHOADON(String MAHOADON){
+    public void DELETE_CHITIETHOADON(String MAHOADON,int MASACH){
+        SQLiteDatabase database= getWritableDatabase();
+        database.execSQL("delete from CHI_TIET_HOA_DON where MAHOADON='"+MAHOADON+"' and MASACH="+MASACH);
+    }
+    public void DELETE_CHITIETHOADON_ALL(String MAHOADON){
         SQLiteDatabase database= getWritableDatabase();
         database.execSQL("delete from CHI_TIET_HOA_DON where MAHOADON='"+MAHOADON+"'");
     }
@@ -69,20 +73,37 @@ public class Database extends SQLiteOpenHelper {
         sqLiteStatement.bindLong(2,chi_tiet_phieu_nhap.getSOLUONG_PN());
         sqLiteStatement.executeUpdateDelete();
     }
-    public void DELETE_CHITIETPHIEUNHAP(String MAPHIEUNHAP)
+    public void DELETE_CHITIETPHIEUNHAP(String MAPHIEUNHAP,int MASACH)
+    {
+        SQLiteDatabase database= getWritableDatabase();
+        database.execSQL("delete from CHI_TIET_PHIEU_NHAP where MAPHIEUNHAP='"+MAPHIEUNHAP+"' and MAPHIEUNHAP="+MASACH);
+    }
+    public void DELETE_CHITIETPHIEUNHAP_ALL(String MAPHIEUNHAP)
     {
         SQLiteDatabase database= getWritableDatabase();
         database.execSQL("delete from CHI_TIET_PHIEU_NHAP where MAPHIEUNHAP='"+MAPHIEUNHAP+"'");
     }
-    public void INSERT_HOADON(String MAHOADON, String MAKHACHHANG, int THANHTIEN_CTHD){
-        SQLiteDatabase database= getWritableDatabase();
-        String sql= "INSERT INTO HOADON VALUES(?,?,?,(select datetime('now','localtime')))";
-        SQLiteStatement sqLiteStatement= database.compileStatement(sql);
-        sqLiteStatement.clearBindings();
-        sqLiteStatement.bindString(1,MAHOADON);
-        sqLiteStatement.bindString(2,MAKHACHHANG);
-        sqLiteStatement.bindLong(3,THANHTIEN_CTHD);
-        sqLiteStatement.executeInsert();
+    public void INSERT_HOADON(String MAHOADON, String MAKHACHHANG, int THANHTIEN_CTHD,String ngay){
+        if(ngay.contains("null")){
+            SQLiteDatabase database= getWritableDatabase();
+            String sql= "INSERT INTO HOADON VALUES(?,?,?,(select datetime('now','localtime')))";
+            SQLiteStatement sqLiteStatement= database.compileStatement(sql);
+            sqLiteStatement.clearBindings();
+            sqLiteStatement.bindString(1,MAHOADON);
+            sqLiteStatement.bindString(2,MAKHACHHANG);
+            sqLiteStatement.bindLong(3,THANHTIEN_CTHD);
+            sqLiteStatement.executeInsert();
+        }else {
+            SQLiteDatabase database= getWritableDatabase();
+            String sql= "INSERT INTO HOADON VALUES(?,?,?,?)";
+            SQLiteStatement sqLiteStatement= database.compileStatement(sql);
+            sqLiteStatement.clearBindings();
+            sqLiteStatement.bindString(1,MAHOADON);
+            sqLiteStatement.bindString(2,MAKHACHHANG);
+            sqLiteStatement.bindLong(3,THANHTIEN_CTHD);
+            sqLiteStatement.bindString(4,ngay);
+            sqLiteStatement.executeInsert();
+        }
     }
     public void UPDATE_HOADON(HOADON hoadon){
         SQLiteDatabase database= getWritableDatabase();
@@ -163,15 +184,27 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase database= getWritableDatabase();
         database.execSQL("delete from NHACUNGCAP where MANHACUNGCAP='"+MANHACUNGCAP+"'");
     }
-    public void INSERT_PHIEUNHAP(String MAPHIEUNHAP, String MANHACUNGCAP, int THANHTIEN_PN){
+    public void INSERT_PHIEUNHAP(String MAPHIEUNHAP, String MANHACUNGCAP, int THANHTIEN_PN,String NGAY){
         SQLiteDatabase database= getWritableDatabase();
-        String sql= "INSERT INTO PHIEUNHAP VALUES(?,?,(select datetime('now','localtime')),?)";
-        SQLiteStatement sqLiteStatement= database.compileStatement(sql);
-        sqLiteStatement.clearBindings();
-        sqLiteStatement.bindString(1,MAPHIEUNHAP);
-        sqLiteStatement.bindString(2,MANHACUNGCAP);
-        sqLiteStatement.bindLong(3,THANHTIEN_PN);
-        sqLiteStatement.executeInsert();
+        if(NGAY.contains("null")){
+            String sql= "INSERT INTO PHIEUNHAP VALUES(?,?,(select datetime('now','localtime')),?)";
+            SQLiteStatement sqLiteStatement= database.compileStatement(sql);
+            sqLiteStatement.clearBindings();
+            sqLiteStatement.bindString(1,MAPHIEUNHAP);
+            sqLiteStatement.bindString(2,MANHACUNGCAP);
+            sqLiteStatement.bindLong(3,THANHTIEN_PN);
+            sqLiteStatement.executeInsert();
+        }
+        else {
+            String sql= "INSERT INTO PHIEUNHAP VALUES(?,?,?,?)";
+            SQLiteStatement sqLiteStatement= database.compileStatement(sql);
+            sqLiteStatement.clearBindings();
+            sqLiteStatement.bindString(1,MAPHIEUNHAP);
+            sqLiteStatement.bindString(2,MANHACUNGCAP);
+            sqLiteStatement.bindLong(4,THANHTIEN_PN);
+            sqLiteStatement.bindString(3,NGAY);
+            sqLiteStatement.executeInsert();
+        }
     }
     public void UPDATE_PHIEUNHAP(PHIEUNHAP phieunhap){
         SQLiteDatabase database= getWritableDatabase();

@@ -26,7 +26,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
-                        <TextView
+                        <com.beardedhen.androidbootstrap.BootstrapLabel
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Mã Khách Hàng"
@@ -72,7 +72,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
-                        <TextView
+                        <com.beardedhen.androidbootstrap.BootstrapLabel
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Mã Sách"
@@ -163,13 +163,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <TextView
+            <com.beardedhen.androidbootstrap.BootstrapLabel
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Thông tin hoá đơn"
                 android:layout_gravity="left"
+                app:bootstrapBrand="success"
                 android:textStyle="bold|italic"/>
             <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/recycleview_fragment_taohoadon"/>

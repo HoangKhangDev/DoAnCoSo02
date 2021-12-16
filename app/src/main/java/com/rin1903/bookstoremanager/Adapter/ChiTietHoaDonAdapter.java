@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.beardedhen.androidbootstrap.BootstrapLabel;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.rin1903.bookstoremanager.MainActivity;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 public class ChiTietHoaDonAdapter extends  RecyclerView.Adapter<ChiTietHoaDonAdapter.ViewHolder>{
     private Context context;
     private ArrayList<SACH_TRONG_HOADON> arrayList = new ArrayList<>();
+    private ArrayList<SACH_TRONG_HOADON> sachArrayList = new ArrayList<>();
     ViewBinderHelper viewBinderHelper= new ViewBinderHelper();
     public ChiTietHoaDonAdapter(Context context, ArrayList<SACH_TRONG_HOADON> arrayList) {
         this.context = context;
@@ -37,21 +39,21 @@ public class ChiTietHoaDonAdapter extends  RecyclerView.Adapter<ChiTietHoaDonAda
         View view= inflater.inflate(R.layout.item_sach_thongtin_hoadon,parent,false);
         return new ViewHolder(view);
     }
-    private int soluong=1;
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.tv_ten.setText(arrayList.get(position).getTenSach());
-        holder.tv_soluong.setText("1");
         holder.tv_gia.setText(String.valueOf(arrayList.get(position).getGiaban()));
         SACH_TRONG_HOADON sach_trong_hoadon= arrayList.get(position);
+        holder.tv_soluong.setText(String.valueOf(sach_trong_hoadon.getSoluongtronghoadon()));
 
         viewBinderHelper.bind(holder.swipeRevealLayout,String.valueOf(arrayList.get(position).getMaSach()));
             holder.imgdow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    soluong = sach_trong_hoadon.getSoluongtronghoadon();
-                    if (soluong > 1) {
-                        soluong -= 1;
+
+                    if (sach_trong_hoadon.getSoluongtronghoadon() > 1) {
+                        int soluong=sach_trong_hoadon.getSoluongtronghoadon();
+                        soluong-=1;
                         holder.tv_soluong.setText(String.valueOf(soluong));
                         sach_trong_hoadon.setSoluongtronghoadon(soluong);
                         arrayList.set(position, sach_trong_hoadon);
@@ -61,8 +63,8 @@ public class ChiTietHoaDonAdapter extends  RecyclerView.Adapter<ChiTietHoaDonAda
             holder.img_up.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    soluong = sach_trong_hoadon.getSoluongtronghoadon();
-                    if (soluong < sach_trong_hoadon.getSoLuongconlai()) {
+                    if (sach_trong_hoadon.getSoluongtronghoadon() < sach_trong_hoadon.getSoLuongconlai()) {
+                        int soluong=sach_trong_hoadon.getSoluongtronghoadon();
                         soluong += 1;
                         holder.tv_soluong.setText(String.valueOf(soluong));
                         sach_trong_hoadon.setSoluongtronghoadon(soluong);
@@ -95,7 +97,6 @@ public class ChiTietHoaDonAdapter extends  RecyclerView.Adapter<ChiTietHoaDonAda
         }
 
     }
-
     public ArrayList<SACH_TRONG_HOADON> getArrayList(){
         return arrayList;
     }
@@ -106,7 +107,7 @@ public class ChiTietHoaDonAdapter extends  RecyclerView.Adapter<ChiTietHoaDonAda
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_ten,tv_gia,tv_soluong;
+        BootstrapLabel tv_ten,tv_gia,tv_soluong;
         ImageView img_up,imgdow,imgdelete;
         SwipeRevealLayout swipeRevealLayout;
         public ViewHolder(@NonNull View itemView) {

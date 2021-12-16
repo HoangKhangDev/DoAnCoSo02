@@ -12,11 +12,16 @@ import static com.rin1903.bookstoremanager.MainActivity.refesh_sach;
 import static com.rin1903.bookstoremanager.MainActivity.sachArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +36,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,7 +52,19 @@ import com.rin1903.bookstoremanager.SQLite.HOADON;
 import com.rin1903.bookstoremanager.SQLite.SACH;
 import com.rin1903.bookstoremanager.SQLite.SACH_TRONG_HOADON;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,9 +75,14 @@ public class Fragment_TaoHoaDon extends Fragment {
     private Unbinder unbinder;
     private String kiemtra_cothaydoikhong;
     private String mahoadon;
+    private String makh;
+    private HOADON hoadon;
     private ArrayList<SACH_TRONG_HOADON> arrayList;
+    private ArrayList<SACH_TRONG_HOADON> arrayList_tam;
+    private String ngay;
+
     private ChiTietHoaDonAdapter adapter;
-    private ArrayList<SACH> arrayList_sach_tam;
+    private ArrayList<SACH> saches;
     @BindView(R.id.btn_huy_fragment_taohoadon)
     Button btn_huy;
     @BindView(R.id.btn_thanhtoan_fragment_taohoadon)
@@ -87,9 +110,7 @@ public class Fragment_TaoHoaDon extends Fragment {
     private CodeScanner mCodeScanner;
     private int i, j;
     private String[] dulieu;
-    private HOADON hoadon;
     private int dem=0;
-    private ArrayList<CHI_TIET_HOA_DON>  arrayList_chitiethoadon_update;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -98,9 +119,12 @@ public class Fragment_TaoHoaDon extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         Tag = Fragment_TaoHoaDon.class.getName();
 
-        arrayList_sach_tam= new ArrayList<>();
+        arrayList_tam= new ArrayList<>();
+        arrayList = new ArrayList<>();
         refesh_spinner_sach();
         refesh_spinner_khachhang();
+        saches=new ArrayList<>();
+
 
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -113,47 +137,54 @@ public class Fragment_TaoHoaDon extends Fragment {
                         tach = cursor.getString(0).split("-");
                     }
                     mahoadon = String.format("%s-%s", tach[0], String.valueOf(Integer.parseInt(tach[1]) + 1));
-                    Toast.makeText(getActivity(), ""+mahoadon, Toast.LENGTH_SHORT).show();
                 }
                 else {
                     mahoadon="hd-1";
                 }
             }
             else if(dulieu[0].toString().toLowerCase().contains("chinhsua")){
+                refesh_spinner_khachhang();
+                mahoadon= dulieu[2];
                 Cursor cursor= database.Getdata("select * from HOADON where MAHOADON='"+dulieu[2].toString()+"'");
                 while (cursor.moveToNext()){
                   hoadon=  new HOADON(cursor.getString(0)
                             ,cursor.getString(1)
                             ,cursor.getInt(2)
                             ,cursor.getString(3));
+                  makh=hoadon.getMAKHACHHANG();
+                    for(int i=0;i<spinner_makhachhang.getCount();i++){
+                        if(spinner_makhachhang.getItemAtPosition(i).toString().contains(cursor.getString(1))){
+                            spinner_makhachhang.setSelection(i);
+                        }
+                    }
+
                 }
-                refesh_sach();
-                if(dem==0){
+
                     cursor= database.Getdata("select * from CHI_TIET_HOA_DON where MAHOADON='"+dulieu[2].toString()+"'");
                     while (cursor.moveToNext()){
-                        chi_tiet_hoa_donArrayList.add(new CHI_TIET_HOA_DON(cursor.getInt(0),cursor.getString(1),cursor.getInt(2)));
-                        for (int i=0;i<sachArrayList.size();i++){
-                            if(sachArrayList.get(i).getMASACH()==cursor.getInt(0)){
-                                arrayList_sach_tam.add(sachArrayList.get(i));
-                                int soquyen=sachArrayList.get(i).getSOQUYEN();
-                                soquyen+=cursor.getInt(2);
-                                sachArrayList.get(i).setSOQUYEN(soquyen);
-                                database.UPDATE_SACH(sachArrayList.get(i));
-                            }
+                        Cursor cursor1= database.Getdata("select * from SACH where MASACH="+cursor.getInt(0));
+                        while (cursor1.moveToNext()){
+                            arrayList.add(new SACH_TRONG_HOADON(cursor1.getString(3),cursor1.getInt(0),
+                                    (cursor1.getInt(4)+cursor.getInt(2)),cursor.getInt(2),cursor1.getInt(6)));
+                            arrayList_tam.add(new SACH_TRONG_HOADON(cursor1.getString(3),cursor1.getInt(0),
+                                    (cursor1.getInt(4)+cursor.getInt(2)),cursor.getInt(2),cursor1.getInt(6)));
                         }
-                        kiemtra_cothaydoikhong="no";
                     }
+                if(arrayList!=null){
+                    adapter = new ChiTietHoaDonAdapter(getActivity(), arrayList);
+                    recyclerView_thongtinhoadon.setAdapter(adapter);
                 }
+
+
 
             }
         }
 
 
-        arrayList = new ArrayList<>();
         recyclerView_thongtinhoadon.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView_thongtinhoadon.setLayoutManager(linearLayoutManager);
-        if(adapter!=null){
+        if(arrayList!=null){
             adapter = new ChiTietHoaDonAdapter(getActivity(), arrayList);
             recyclerView_thongtinhoadon.setAdapter(adapter);
         }
@@ -280,14 +311,10 @@ public class Fragment_TaoHoaDon extends Fragment {
         btn_huy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if(kiemtra_cothaydoikhong.contains("no")){
-//                    for (int i=0;i<arrayList_sach_tam.size();i++){
-//                        database.UPDATE_SACH(arrayList_sach_tam.get(i));break;
-//                    }
-//                }
-                if (getActivity().getSupportFragmentManager() != null) {
-                    getActivity().getSupportFragmentManager().popBackStack();
-                }
+
+                getActivity().getSupportFragmentManager().popBackStack();
+
+
             }
         });
 
@@ -295,38 +322,46 @@ public class Fragment_TaoHoaDon extends Fragment {
             @Override
             public void onClick(View view) {
                 refesh_adapter();
-                StringBuilder chuoi = new StringBuilder("Thông Tin Hoá Đơn \n Tên Sách \t Giá Bán \t Số Lượng \t Thành Tiền ");
-                if (arrayList.size() > 0) {
-                    for (i = 0; i < arrayList.size(); i++) {
-                        chuoi.append("\n Tên Sách: ").append(arrayList.get(i).getTenSach()).append("\t").append(String.valueOf(arrayList.get(i).getGiaban())).append("\t").append(String.valueOf(arrayList.get(i).getSoluongtronghoadon())).append("\t").append(String.valueOf(arrayList.get(i).getThanhtien()));
+                StringBuilder chuoi = new StringBuilder("Thông Tin Hoá Đơn ");
+                if(dulieu[0].equals("tao")){
+                    if (arrayList.size() > 0) {
+                        for (i = 0; i < arrayList.size(); i++) {
+                            chuoi.append("\n Tên Sách: ").append(arrayList.get(i).getTenSach()).append("\t").append(String.valueOf(arrayList.get(i).getGiaban())).append("\t").append(String.valueOf(arrayList.get(i).getSoluongtronghoadon())).append("\t").append(String.valueOf(arrayList.get(i).getThanhtien()));
+                        }
+                        chuoi.append("\n Tổng thành tiền:").append(adapter.getthanhtientong());
+                        Dialog dialog = new Dialog(getActivity());
+                        dialog.setContentView(R.layout.dialog_hoadon);
+                        TextView tv_noidung, tv_xacnhan, tv_huy;
+                        tv_noidung = dialog.findViewById(R.id.tv_thongtinhoadon_dialog_hoadon);
+                        tv_xacnhan = dialog.findViewById(R.id.tv_xacnhan_dialog_hoadon);
+                        tv_huy = dialog.findViewById(R.id.tv_huy_dialog_hoadon);
+                        tv_noidung.setText(chuoi);
+                        tv_xacnhan.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                themhoadon();
+                                dialog.cancel();
+                                getActivity().getSupportFragmentManager().popBackStack();
+
+                            }
+                        });
+                        tv_huy.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                dialog.cancel();
+                                getActivity().getSupportFragmentManager().popBackStack();
+
+                            }
+                        });
+                        dialog.show();
                     }
-                    chuoi.append("\n Tổng thành tiền:").append(adapter.getthanhtientong());
-                    Dialog dialog = new Dialog(getActivity());
-                    dialog.setContentView(R.layout.dialog_hoadon);
-                    TextView tv_noidung, tv_xacnhan, tv_huy;
-                    tv_noidung = dialog.findViewById(R.id.tv_thongtinhoadon_dialog_hoadon);
-                    tv_xacnhan = dialog.findViewById(R.id.tv_xacnhan_dialog_hoadon);
-                    tv_huy = dialog.findViewById(R.id.tv_huy_dialog_hoadon);
-                    tv_noidung.setText(chuoi);
-                    tv_xacnhan.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            themhoadon();
-                            dialog.cancel();
-                            getActivity().getSupportFragmentManager().popBackStack();
 
-                        }
-                    });
-                    tv_huy.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            dialog.cancel();
-                            getActivity().getSupportFragmentManager().popBackStack();
-
-                        }
-                    });
-                    dialog.show();
                 }
+                else {
+                    updatehoadon();
+                    }
+
+
             }
         });
 
@@ -467,8 +502,9 @@ public class Fragment_TaoHoaDon extends Fragment {
                         database.INSERT_CHITIETHOADON(arrayList.get(i).getMaSach(), mahoadon, arrayList.get(i).getSoluongtronghoadon());
                         database.QueryData("UPDATE SACH SET SOQUYEN=" + (arrayList.get(i).getSoLuongconlai() - arrayList.get(i).getSoluongtronghoadon()) + " WHERE MASACH =" + arrayList.get(i).getMaSach());
                     }
-                    database.INSERT_HOADON(mahoadon,makh, adapter.getthanhtientong());
+                    database.INSERT_HOADON(mahoadon,makh, adapter.getthanhtientong(),"null");
                     Toast.makeText(getActivity(), "Thêm hoá đơn thành công", Toast.LENGTH_SHORT).show();
+                    createXlFile();
                 } else {
                     Toast.makeText(getActivity(), "Chưa có sách trong hoá đơn vui lòng thêm", Toast.LENGTH_SHORT).show();
                 }
@@ -479,8 +515,9 @@ public class Fragment_TaoHoaDon extends Fragment {
                     database.INSERT_CHITIETHOADON(arrayList.get(i).getMaSach(),mahoadon,arrayList.get(i).getSoluongtronghoadon());
                     database.QueryData("UPDATE SACH SET SOQUYEN="+(arrayList.get(i).getSoLuongconlai()-arrayList.get(i).getSoluongtronghoadon())+" WHERE MASACH ="+arrayList.get(i).getMaSach());
                 }
-                database.INSERT_HOADON(mahoadon,makh,adapter.getthanhtientong());
+                database.INSERT_HOADON(mahoadon,makh,adapter.getthanhtientong(),"null");
                 Toast.makeText(getActivity(), "Thêm hoá đơn thành công", Toast.LENGTH_SHORT).show();
+                createXlFile();
             }
             else {
                 Toast.makeText(getActivity(), "Chưa có sách trong hoá đơn vui lòng thêm", Toast.LENGTH_SHORT).show();
@@ -488,5 +525,176 @@ public class Fragment_TaoHoaDon extends Fragment {
         }
 
     }
+
+
+    public void updatehoadon() {
+        refesh_adapter();
+        refesh_hoadon();
+        String[] mang = new String[0];
+        if (makh.contains("null")|makh.isEmpty()) {
+            makh = "null";
+        }
+        if (arrayList.size() > 0) {
+            if(arrayList.size()==arrayList_tam.size()){
+                for (i = 0; i < arrayList.size(); i++) {
+                    database.UPDATE_CHITIETHOADON(new CHI_TIET_HOA_DON(arrayList.get(i).getMaSach(), mahoadon, arrayList.get(i).getSoluongtronghoadon()));
+                    database.QueryData("UPDATE SACH SET SOQUYEN=" + (arrayList.get(i).getSoLuongconlai() - arrayList.get(i).getSoluongtronghoadon()) + " WHERE MASACH =" + arrayList.get(i).getMaSach());
+                }
+                database.UPDATE_HOADON(new HOADON(mahoadon,makh, adapter.getthanhtientong(),"null"));
+                Toast.makeText(getActivity(), "Chỉnh sửa hoá đơn thành công", Toast.LENGTH_SHORT).show();
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+            else {
+                for (i = 0; i < arrayList_tam.size(); i++) {
+                    int dem=0;
+                    for (int j=0;j<arrayList.size();j++){
+                        if(arrayList.get(j)==arrayList_tam.get(i)){
+                            dem+=1;
+                        }
+                    }
+                    if(dem>0){
+                        database.UPDATE_CHITIETHOADON(new CHI_TIET_HOA_DON(arrayList.get(i).getMaSach(), mahoadon, arrayList.get(i).getSoluongtronghoadon()));
+                        database.QueryData("UPDATE SACH SET SOQUYEN=" + (arrayList.get(i).getSoLuongconlai() - arrayList.get(i).getSoluongtronghoadon()) + " WHERE MASACH =" + arrayList.get(i).getMaSach());
+                    }
+                    else {
+                        database.DELETE_CHITIETHOADON(mahoadon,arrayList_tam.get(i).getMaSach());
+                        database.QueryData("UPDATE SACH SET SOQUYEN=" + arrayList_tam.get(i).getSoLuongconlai() + " WHERE MASACH =" + arrayList_tam.get(i).getMaSach());
+                    }
+                    database.UPDATE_HOADON(new HOADON(mahoadon,makh, adapter.getthanhtientong(),"null"));
+                    Toast.makeText(getActivity(), "Chỉnh sửa hoá đơn thành công", Toast.LENGTH_SHORT).show();
+                    getActivity().getSupportFragmentManager().popBackStack();
+
+                }
+            }
+
+        } else {
+            new AlertDialog.Builder(getActivity()).setTitle("Update Hoá Đơn").setMessage("Tất cả sách trong hoá đơn đã bị xoá\n" +
+                    "bạn có muốn xoá Hoá Đơn này không???").setNeutralButton("Xoá", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    database.DELETE_CHITIETHOADON_ALL(mahoadon);
+                    for (int i=0;i<arrayList_tam.size();i++){
+                        database.QueryData("UPDATE SACH SET SOQUYEN=" + arrayList_tam.get(i).getSoLuongconlai() + " WHERE MASACH =" + arrayList_tam.get(i).getMaSach());
+                    }
+                    database.DELETE_HOADON(mahoadon);
+                    Toast.makeText(getActivity(), "bạn đã xoá hoá đơn thành công", Toast.LENGTH_SHORT).show();
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
+            }).setPositiveButton("Không",null).show();
+        }
+    }
+
+
+
+
+
+    private void createXlFile() {
+
+
+        // File filePath = new File(Environment.getExternalStorageDirectory() + "/Demo.xls");
+        Workbook wb = new HSSFWorkbook();
+
+
+        Cell cell = null;
+
+        Sheet sheet = null;
+        sheet = wb.createSheet("Demo Excel Sheet");
+        //Now column and row
+        Row row = sheet.createRow(0);
+
+        cell = row.createCell(0);
+        cell.setCellValue("Mã Sách");
+
+
+        cell = row.createCell(1);
+        cell.setCellValue("Tên Sách");
+
+
+        cell = row.createCell(2);
+        cell.setCellValue("Số Lượng");
+
+        cell = row.createCell(3);
+        cell.setCellValue("Giá bán");
+
+        cell = row.createCell(4);
+        cell.setCellValue("Thành Tiền");
+
+
+        //column width
+        sheet.setColumnWidth(0, (20 * 200));
+        sheet.setColumnWidth(1, (30 * 200));
+        sheet.setColumnWidth(2, (30 * 200));
+        sheet.setColumnWidth(3, (30 * 200));
+        sheet.setColumnWidth(4, (30 * 200));
+
+
+
+
+        for (int i = 0; i < arrayList.size(); i++) {
+            Row row1 = sheet.createRow(i + 1);
+
+            cell = row1.createCell(0);
+            cell.setCellValue(arrayList.get(i).getMaSach());
+
+            cell = row1.createCell(1);
+            cell.setCellValue((arrayList.get(i).getTenSach()));
+            //  cell.setCellStyle(cellStyle);
+
+            cell = row1.createCell(2);
+            cell.setCellValue(arrayList.get(i).getSoluongtronghoadon());
+
+            cell = row1.createCell(3);
+            cell.setCellValue(arrayList.get(i).getGiaban());
+
+            cell = row1.createCell(4);
+            cell.setCellValue(arrayList.get(i).getThanhtien());
+
+
+            sheet.setColumnWidth(0, (20 * 200));
+            sheet.setColumnWidth(1, (30 * 200));
+            sheet.setColumnWidth(2, (30 * 200));
+            sheet.setColumnWidth(3, (30 * 200));
+            sheet.setColumnWidth(4, (30 * 200));
+
+
+        }
+        SimpleDateFormat simpleDateFormat= new SimpleDateFormat("dd-MM-yyyy");
+        ngay=simpleDateFormat.format(Calendar.getInstance().getTime()) ;
+        String folderName = "Export Excel";
+        File fi= new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),File.separator+"QuanLyCuaHangSach"+File.separator+folderName);
+        fi.mkdirs();
+        String fileName = folderName + ngay + ".xls";
+        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+File.separator+"QuanLyCuaHangSach" + File.separator + folderName + File.separator + fileName;
+        File file = new File(Environment.getExternalStorageDirectory() + File.separator + folderName);
+
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+
+        FileOutputStream outputStream = null;
+
+        try {
+            outputStream = new FileOutputStream(path);
+            wb.write(outputStream);
+            Toast.makeText(getActivity(), "Excel Created in " + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.setType("text/plain");
+            share.putExtra(Intent.EXTRA_STREAM, Uri.parse(file.getAbsolutePath()));
+            startActivity(Intent.createChooser(share, "Share Report file"));
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            Toast.makeText(getActivity(), "Not OK", Toast.LENGTH_LONG).show();
+            try {
+                outputStream.close();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+
+            }
+        }
+
+
+    }
+
 
 }

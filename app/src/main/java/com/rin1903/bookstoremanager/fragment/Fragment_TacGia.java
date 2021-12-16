@@ -1,40 +1,29 @@
 package com.rin1903.bookstoremanager.fragment;
 
-import static android.app.Activity.RESULT_OK;
-import static com.rin1903.bookstoremanager.MainActivity.SELECT_PICTURE;
 import static com.rin1903.bookstoremanager.MainActivity.database;
-import static com.rin1903.bookstoremanager.MainActivity.dulieu;
-import static com.rin1903.bookstoremanager.MainActivity.refesh_theloai;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.rin1903.bookstoremanager.MainActivity;
+import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.rin1903.bookstoremanager.R;
 import com.rin1903.bookstoremanager.SQLite.TACGIA;
 import com.squareup.picasso.Picasso;
@@ -56,8 +45,9 @@ public class Fragment_TacGia extends Fragment {
     private String Matacgia;
     private String check_change_image="";
     @BindView(R.id.img_hinh_tacgia_fragment)  ImageView imghinhtacgia;
-    @BindView(R.id.edt_tentacgia_tacgia)  EditText edt_tentacgia;
-    @BindView(R.id.edt_diachi_tacgia) EditText edt_diachi;
+    @BindView(R.id.edt_tentacgia_tacgia)
+    BootstrapEditText edt_tentacgia;
+    @BindView(R.id.edt_diachi_tacgia) BootstrapEditText edt_diachi;
     @BindView(R.id.spinner_gioitinh_tacgia)  Spinner spinner_gioitinh;
     @BindView(R.id.tv_calendar_tacgia)  TextView tv_ngaysinh;
     @BindView(R.id.img_calendar_tacgia) ImageView img_calendar;

@@ -15,13 +15,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.rin1903.bookstoremanager.R;
 import com.rin1903.bookstoremanager.SQLite.NHACUNGCAP;
 import com.squareup.picasso.Picasso;
@@ -41,9 +41,10 @@ public class Fragment_NhaCungCap extends Fragment {
     private String check_image_change;
     private NHACUNGCAP nhacungcap;
     private String dulieu[];
-    @BindView(R.id.edt_tennhacungcap_nhacungcap) EditText edt_tennhacungcap;
-    @BindView(R.id.edt_diachi_nhacungcap) EditText edt_diachi;
-    @BindView(R.id.edt_sdt_nhacungcap) EditText edt_sdt;
+    @BindView(R.id.edt_tennhacungcap_nhacungcap)
+    BootstrapEditText edt_tennhacungcap;
+    @BindView(R.id.edt_diachi_nhacungcap) BootstrapEditText edt_diachi;
+    @BindView(R.id.edt_sdt_nhacungcap) BootstrapEditText edt_sdt;
     @BindView(R.id.img_hinh_nhacungcap_fragment) ImageView image;
     @BindView(R.id.btn_them_theloai_nhacungcap) Button btn_them;
     @BindView(R.id.btn_huy_theloai_nhacungcap) Button btn_huy;

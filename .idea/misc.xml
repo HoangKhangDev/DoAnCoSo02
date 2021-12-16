@@ -4,21 +4,23 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/drawable/shape_30.xml" value="0.37864583333333335" />
+        <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/activity_animation.xml" value="0.28940217391304346" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/activity_main.xml" value="0.21145833333333333" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/activity_tao_hoa_don.xml" value="0.25" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/dialog_hoadon.xml" value="0.3625" />
+        <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/dialog_list_null.xml" value="0.36666666666666664" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/dialog_phieunhap.xml" value="0.19583333333333333" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/dialog_theloai.xml" value="0.19583333333333333" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/dialog_xacnhan.xml" value="0.3625" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/dialog_xacnhanxoa.xml" value="0.19583333333333333" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/fragment_hienthi.xml" value="0.3625" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/fragment_hoadon.xml" value="0.3625" />
-        <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/fragment_khachhang.xml" value="0.21145833333333333" />
+        <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/fragment_khachhang.xml" value="0.33" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/fragment_list.xml" value="0.20364583333333333" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/fragment_menu.xml" value="0.346875" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/fragment_nhacungcap.xml" value="0.3625" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/fragment_phieunhap.xml" value="0.3625" />
-        <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/fragment_sach.xml" value="0.20364583333333333" />
+        <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/fragment_sach.xml" value="0.25" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/fragment_tacgia.xml" value="0.3625" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/fragment_taohoadon.xml" value="0.3074074074074074" />
         <entry key="..\:/BookStoreManager/BookStoreManager/app/src/main/res/layout/fragment_taophieunhap..xml" value="0.3625" />

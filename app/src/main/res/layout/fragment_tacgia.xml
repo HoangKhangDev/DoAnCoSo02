@@ -6,7 +6,10 @@
     android:background="#19B1ADAD"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -14,50 +17,36 @@
             <ImageView
                 android:id="@+id/img_hinh_tacgia_fragment"
                 android:layout_width="match_parent"
-                android:layout_height="175dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:scaleType="centerCrop"
+                android:scaleType="centerInside"
                 android:src="@drawable/no_pictures" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:background="#19B1ADAD"
-                android:gravity="center|top"
                 android:orientation="vertical"
                 android:padding="20dp">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    app:cardCornerRadius="8dp">
-
-                    <TextView
+                    <com.beardedhen.androidbootstrap.BootstrapLabel
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:labelFor="@+id/edt_tentacgia_tacgia"
-                        android:text="Tên Tác Giả"
+                        app:bootstrapText="Tên Tác Giả"
                         android:textSize="16sp"
                         android:textStyle="italic" />
 
-                    <EditText
+                    <com.beardedhen.androidbootstrap.BootstrapEditText
                         android:id="@+id/edt_tentacgia_tacgia"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginRight="10dp"
-                        android:backgroundTint="@color/white"
-                        android:gravity="center"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        android:textStyle="normal" />
-                </androidx.cardview.widget.CardView>
+                        app:bootstrapBrand="success"
+                        app:bootstrapSize="lg"
+                        app:roundedCorners="true" />
 
                 <androidx.cardview.widget.CardView
+                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
@@ -65,7 +54,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:weightSum="10">
 
@@ -97,36 +86,22 @@
 
                 </androidx.cardview.widget.CardView>
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    app:cardCornerRadius="8dp">
-
-                    <TextView
+                    <com.beardedhen.androidbootstrap.BootstrapLabel
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
                         android:labelFor="@+id/edt_diachi_tacgia"
-                        android:text="Địa chỉ"
-                        android:textSize="16sp"
-                        android:textStyle="italic" />
+                        app:bootstrapText="Địa Chỉ" />
 
-                    <EditText
+                    <com.beardedhen.androidbootstrap.BootstrapEditText
                         android:id="@+id/edt_diachi_tacgia"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginRight="10dp"
-                        android:backgroundTint="@color/white"
-                        android:inputType="textMultiLine"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        android:textStyle="normal" />
-                </androidx.cardview.widget.CardView>
+                        app:roundedCorners="true"
+                        app:bootstrapSize="lg"
+                        app:bootstrapBrand="success" />
 
                 <Button
+                    android:layout_marginTop="10dp"
                     android:id="@+id/btn_them_theloai_tacgia"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -137,7 +112,8 @@
                     android:background="@drawable/radius_30"
                     android:backgroundTint="#6BFD0404"
                     android:text="Thêm"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    tools:ignore="HardcodedText" />
 
                 <Button
                     android:id="@+id/btn_huy_tacgia"
@@ -152,4 +128,5 @@
                     android:textColor="@color/white" />
             </LinearLayout>
         </LinearLayout>
+    </ScrollView>
 </LinearLayout>

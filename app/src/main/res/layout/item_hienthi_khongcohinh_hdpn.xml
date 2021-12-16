@@ -33,54 +33,55 @@
         android:layout_marginBottom="3dp"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp"
-        android:background="#2ecc71"
         card_view:cardCornerRadius="8dp"
         card_view:cardElevation="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
+            android:background="@color/bootstrap_dropdown_divider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:src="@drawable/receipt"
                 android:padding="10dp"/>
             <LinearLayout
                 android:background="@color/white"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="60dp">
+                android:layout_height="wrap_content">
                 <LinearLayout
-                    android:padding="5dp"
+                    android:background="@color/bootstrap_dropdown_divider"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-                    <TextView
+                    <com.beardedhen.androidbootstrap.BootstrapLabel
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
-                        android:text="Không có gì quý hơn độc lập tự do"
-                        android:textColor="@color/TextColor"
-                        android:textStyle="bold"
-                        android:gravity="left"
+                        app:bootstrapText="Không có gì quý hơn độc lập tự do"
+                        android:maxLines="1"
+                        app:roundedCorners="false"
+                        app:bootstrapBrand="warning"
                         android:id="@+id/tv_item_khongcohinh_hienthi_hdpn"/>
-                    <TextView
-                        android:gravity="left"
-                        android:layout_width="match_parent"
+                    <com.beardedhen.androidbootstrap.BootstrapLabel
+                        android:maxLines="1"
+                        android:layout_marginTop="2dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="aaaaaaaaa"
-                        android:textStyle="italic"
-                        android:textColor="#757DA8"
+                        app:bootstrapBrand="regular"
+                        app:bootstrapText="thành tiền"
                         android:id="@+id/tv_item_mota1_khongcohinh_hienthi_hdpn"/>
-                    <TextView
-                        android:gravity="left"
-                        android:layout_width="match_parent"
+                    <com.beardedhen.androidbootstrap.BootstrapLabel
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="aaaaaaaaa"
-                        android:textStyle="italic"
-                        android:textColor="#757DA8"
+                        android:layout_marginTop="2dp"
+                        app:bootstrapText="Ngày"
+                        android:maxLines="1"
+                        app:roundedCorners="false"
+                        app:bootstrapBrand="secondary"
                         android:id="@+id/tv_item_mota2_khongcohinh_hienthi_hdpn"/>
                 </LinearLayout>
             </LinearLayout>

@@ -18,57 +18,40 @@
                 android:layout_height="wrap_content">
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/no_pictures"
-                    android:scaleType="centerCrop"
-                    android:id="@+id/img_hinh_sach"/>/
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/img_error"
+                    android:scaleType="fitCenter"
+                    android:id="@+id/img_hinh_sach"/>
             </LinearLayout>
             <LinearLayout
-                android:padding="20dp"
-                android:gravity="center"
+                android:padding="10dp"
                 android:layout_marginTop="5dp"
                 android:orientation="vertical"
                 android:background="#19B1ADAD"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <androidx.cardview.widget.CardView
-                    android:layout_marginBottom="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="8dp">
-                    <TextView
-                        android:layout_marginLeft="10dp"
+                android:layout_height="wrap_content">
+                    <com.beardedhen.androidbootstrap.BootstrapLabel
+                        app:roundedCorners="false"
+                        app:bootstrapText="Tên Sách"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tên Sách"
-                        android:labelFor="@+id/edt_ten_sach"
-                        android:textStyle="italic"/>
-                    <EditText
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="20dp"
+                        />
+                    <com.beardedhen.androidbootstrap.BootstrapEditText
+                        app:roundedCorners="false"
+                        app:bootstrapBrand="danger"
+                        app:bootstrapSize="lg"
+                        android:layout_marginBottom="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/edt_ten_sach"
-                        android:textStyle="normal"
-                        android:backgroundTint="@color/white"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"/>
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:layout_marginBottom="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="8dp">
-                    <TextView
+                        />
+
+                    <com.beardedhen.androidbootstrap.BootstrapLabel
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textStyle="italic"
-                        android:text="Tên Loại Sách"
-                        android:layout_marginBottom="10dp"/>
+                        app:bootstrapText="Tên Loại Sách"/>
                     <LinearLayout
-                        android:layout_marginTop="15dp"
                         android:weightSum="10"
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
@@ -88,20 +71,13 @@
                             android:src="@drawable/user_add"/>
                     </LinearLayout>
 
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:layout_marginBottom="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="8dp">
-                    <TextView
+
+                    <com.beardedhen.androidbootstrap.BootstrapLabel
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textStyle="italic"
-                        android:text="Tên Tác Giả"
-                        android:layout_marginBottom="10dp"/>
+                        app:bootstrapText="Tên Tác Giả"/>
                     <LinearLayout
-                        android:layout_marginTop="15dp"
                         android:weightSum="10"
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
@@ -121,82 +97,60 @@
                             android:src="@drawable/user_add"/>
                     </LinearLayout>
 
-                </androidx.cardview.widget.CardView>
                 <LinearLayout
                     android:weightSum="10"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-                    <androidx.cardview.widget.CardView
-                        android:layout_marginRight="5dp"
+                    <LinearLayout
+                        android:orientation="vertical"
                         android:layout_weight="9"
                         android:layout_marginBottom="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:cardCornerRadius="8dp">
-                        <TextView
-                            android:layout_marginLeft="10dp"
+                        android:layout_marginEnd="5dp">
+                        <com.beardedhen.androidbootstrap.BootstrapLabel
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Giá Bán"
+                            app:bootstrapText="Giá Bán"
                             android:textStyle="italic"/>
-                        <EditText
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
-                            android:layout_marginTop="20dp"
+                        <com.beardedhen.androidbootstrap.BootstrapEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/edt_giaban_sach"
-                            android:textStyle="normal"
-                            android:inputType="number"
-                            android:backgroundTint="@color/white"
-                            android:textColor="@color/black"
-                            android:maxLength="10"
-                            android:textSize="20sp"/>
-                    </androidx.cardview.widget.CardView>
-                    <androidx.cardview.widget.CardView
-                        android:layout_marginLeft="5dp"
+                            app:roundedCorners="false"
+                            app:bootstrapBrand="danger"
+                            app:bootstrapSize="lg"
+                            android:layout_marginBottom="10dp"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="vertical"
                         android:layout_weight="1"
                         android:layout_marginBottom="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:cardCornerRadius="8dp">
-                        <TextView
-                            android:layout_marginLeft="10dp"
+                        <com.beardedhen.androidbootstrap.BootstrapLabel
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Số Quyển"
-                            android:textStyle="italic"/>
-                        <EditText
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
-                            android:layout_marginTop="20dp"
+                            app:bootstrapText="Số quyển"/>
+                        <com.beardedhen.androidbootstrap.BootstrapEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/edt_soquyen_sach"
-                            android:textStyle="normal"
-                            android:inputType="number"
-                            android:backgroundTint="@color/white"
-                            android:textColor="@color/black"
-                            android:maxLength="10"
-                            android:textSize="20sp"/>
-                    </androidx.cardview.widget.CardView>
+                            app:roundedCorners="false"
+                            app:bootstrapBrand="danger"
+                            app:bootstrapSize="lg" />
+                    </LinearLayout>
 
                 </LinearLayout>
 
-                <androidx.cardview.widget.CardView
-                    android:layout_marginBottom="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="8dp">
-                    <TextView
+
+                    <com.beardedhen.androidbootstrap.BootstrapLabel
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="italic"
-                        android:text="Trạng thái sách"
-                        android:layout_marginBottom="10dp"/>
+                        app:bootstrapText="Trạng Thái sách"/>
                     <LinearLayout
-                        android:layout_marginTop="15dp"
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="50dp">
@@ -207,8 +161,8 @@
                             tools:ignore="SpeakableTextPresentCheck" />
                     </LinearLayout>
 
-                </androidx.cardview.widget.CardView>
                 <androidx.cardview.widget.CardView
+                    android:layout_marginTop="10dp"
                     android:layout_weight="1"
                     android:layout_marginBottom="10dp"
                     android:layout_width="match_parent"

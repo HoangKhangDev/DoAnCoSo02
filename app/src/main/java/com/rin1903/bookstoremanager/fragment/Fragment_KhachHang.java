@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -28,9 +27,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 
-import com.rin1903.bookstoremanager.MainActivity;
+import com.beardedhen.androidbootstrap.BootstrapEditText;
 import com.rin1903.bookstoremanager.R;
 import com.rin1903.bookstoremanager.SQLite.KHACHHANG;
 import com.squareup.picasso.Picasso;
@@ -57,11 +55,12 @@ public class Fragment_KhachHang extends Fragment {
     private String makhachhang="";
     private String check_change_image="false";
     @BindView(R.id.img_hinh_khachhang_dialog) ImageView img_hinhkhachhang;
-    @BindView(R.id.edt_diachi_khachhang) EditText edt_diachi;
-    @BindView(R.id.edt_sdt_khachhang) EditText edt_sdtkhachhang;
+    @BindView(R.id.edt_diachi_khachhang)
+    BootstrapEditText edt_diachi;
+    @BindView(R.id.edt_sdt_khachhang) BootstrapEditText edt_sdtkhachhang;
     @BindView(R.id.tv_calendar_khachhang) TextView tv_calendar_khachhang;
     @BindView(R.id.img_calendar_khachhang) ImageView img_calendar_khachhang;
-    @BindView(R.id.edt_tenkhachhang_khachhang) EditText edt_tenkhachhang;
+    @BindView(R.id.edt_tenkhachhang_khachhang) BootstrapEditText edt_tenkhachhang;
     @BindView(R.id.btn_them_khachhang) Button btn_them_khachhang;
     @BindView(R.id.btn_huy_khachhang) Button btn_huy_khachhang;
     @BindView(R.id.spinner_gioitinh_khachhang)

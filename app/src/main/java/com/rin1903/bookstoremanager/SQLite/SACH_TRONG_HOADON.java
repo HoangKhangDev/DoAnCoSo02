@@ -6,6 +6,14 @@ public class SACH_TRONG_HOADON implements Serializable {
     private String TenSach;
     private int MaSach, SoLuongconlai,soluongtronghoadon,giaban,thanhtien;
 
+    public SACH_TRONG_HOADON(String tenSach, int maSach, int soLuongconlai, int soluongtronghoadon, int giaban) {
+        TenSach = tenSach;
+        MaSach = maSach;
+        SoLuongconlai = soLuongconlai;
+        this.soluongtronghoadon = soluongtronghoadon;
+        this.giaban = giaban;
+    }
+
     public SACH_TRONG_HOADON(String tenSach, int maSach, int soLuongconlai, int giaban) {
         TenSach = tenSach;
         MaSach = maSach;

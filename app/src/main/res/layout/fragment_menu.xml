@@ -4,14 +4,14 @@
     xmlns:card_view="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:padding="10dp"
-    android:background="@color/backgroundColorItem1"
+    android:background="@color/bootstrap_edittext_disabled"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
-            android:background="@color/backgroundColorItem1"
+            android:background="@color/bootstrap_edittext_disabled"
             android:layout_marginBottom="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,15 +40,14 @@
                             android:layout_height="135dp"
                             android:padding="10dp"
                             android:src="@drawable/open_book"/>
-                        <TextView
+                        <com.beardedhen.androidbootstrap.BootstrapLabel
                             android:layout_marginTop="10dp"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Sách"
+                            android:layout_height="match_parent"
+                            app:bootstrapBrand="primary"
+                            app:bootstrapText="Sách"
                             android:textSize="18sp"
-                            android:gravity="center"
-                            android:textStyle="bold"
-                            android:textColor="#2196F3"/>
+                            android:gravity="center"/>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -69,15 +68,14 @@
                             android:layout_width="135dp"
                             android:layout_height="135dp"
                             android:src="@drawable/user"/>
-                        <TextView
+                        <com.beardedhen.androidbootstrap.BootstrapLabel
                             android:layout_marginTop="10dp"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Khách Hàng"
+                            android:layout_height="match_parent"
+                            app:bootstrapBrand="primary"
+                            app:bootstrapText="Khách Hàng"
                             android:textSize="18sp"
-                            android:gravity="center"
-                            android:textStyle="bold"
-                            android:textColor="#2196F3"/>
+                            android:gravity="center"/>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
@@ -107,15 +105,14 @@
                             android:padding="15dp"
                             android:scaleType="fitXY"
                             android:src="@drawable/invoice"/>
-                        <TextView
+                        <com.beardedhen.androidbootstrap.BootstrapLabel
                             android:layout_marginTop="10dp"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Hoá Đơn"
+                            android:layout_height="match_parent"
+                            app:bootstrapBrand="primary"
+                            app:bootstrapText="Hoá Đơn"
                             android:textSize="18sp"
-                            android:gravity="center"
-                            android:textStyle="bold"
-                            android:textColor="#2196F3"/>
+                            android:gravity="center"/>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -136,15 +133,14 @@
                             android:layout_width="135dp"
                             android:layout_height="135dp"
                             android:src="@drawable/author"/>
-                        <TextView
+                        <com.beardedhen.androidbootstrap.BootstrapLabel
                             android:layout_marginTop="10dp"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Tác Giả"
+                            android:layout_height="match_parent"
+                            app:bootstrapBrand="primary"
+                            app:bootstrapText="Tác Giả"
                             android:textSize="18sp"
-                            android:gravity="center"
-                            android:textStyle="bold"
-                            android:textColor="#2196F3"/>
+                            android:gravity="center"/>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
@@ -174,15 +170,14 @@
                             android:padding="15dp"
                             android:scaleType="fitXY"
                             android:src="@drawable/bill"/>
-                        <TextView
+                        <com.beardedhen.androidbootstrap.BootstrapLabel
                             android:layout_marginTop="10dp"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Phiếu Nhập"
+                            android:layout_height="match_parent"
+                            app:bootstrapBrand="primary"
+                            app:bootstrapText="Phiếu Nhập"
                             android:textSize="18sp"
-                            android:gravity="center"
-                            android:textStyle="bold"
-                            android:textColor="#2196F3"/>
+                            android:gravity="center"/>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -204,15 +199,14 @@
                             android:layout_height="135dp"
                             android:padding="10dp"
                             android:src="@drawable/supplier"/>
-                        <TextView
+                        <com.beardedhen.androidbootstrap.BootstrapLabel
                             android:layout_marginTop="10dp"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Nhà Cung Cấp"
+                            android:layout_height="match_parent"
+                            app:bootstrapBrand="primary"
+                            app:bootstrapText="Nhà Cung Cấp"
                             android:textSize="18sp"
-                            android:gravity="center"
-                            android:textStyle="bold"
-                            android:textColor="#2196F3"/>
+                            android:gravity="center"/>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
@@ -242,15 +236,15 @@
                             android:padding="15dp"
                             android:scaleType="fitXY"
                             android:src="@drawable/report"/>
-                        <TextView
-                            android:layout_marginTop="10dp"
+
+                        <com.beardedhen.androidbootstrap.BootstrapLabel
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Thống Kê Theo hoá đơn"
-                            android:textSize="18sp"
+                            android:layout_height="36dp"
+                            android:layout_marginTop="10dp"
                             android:gravity="center"
-                            android:textStyle="bold"
-                            android:textColor="#2196F3"/>
+                            android:textSize="18sp"
+                            app:bootstrapBrand="primary"
+                            app:bootstrapText="Thống kê theo Hoá Đơn" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -272,15 +266,14 @@
                             android:layout_height="135dp"
                             android:padding="10dp"
                             android:src="@drawable/report_1"/>
-                        <TextView
-                            android:layout_marginTop="10dp"
+                        <com.beardedhen.androidbootstrap.BootstrapLabel
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Thống Kê theo phiếu nhập"
-                            android:textSize="18sp"
+                            android:layout_height="36dp"
+                            android:layout_marginTop="10dp"
                             android:gravity="center"
-                            android:textStyle="bold"
-                            android:textColor="#2196F3"/>
+                            android:textSize="18sp"
+                            app:bootstrapBrand="primary"
+                            app:bootstrapText="Thống kê theo phiếu nhập" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
             </LinearLayout>

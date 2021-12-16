@@ -6,11 +6,14 @@ import static com.rin1903.bookstoremanager.MainActivity.hoadonArrayList;
 import static com.rin1903.bookstoremanager.MainActivity.nhacungcapArrayList;
 import static com.rin1903.bookstoremanager.MainActivity.refesh_hoadon;
 import static com.rin1903.bookstoremanager.MainActivity.refesh_nhacungcap;
+import static com.rin1903.bookstoremanager.MainActivity.refesh_phieunhap;
 import static com.rin1903.bookstoremanager.MainActivity.refesh_sach;
 import static com.rin1903.bookstoremanager.MainActivity.sachArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,6 +43,10 @@ import com.rin1903.bookstoremanager.Adapter.ChiTietPhieuNhapAdapter;
 import com.rin1903.bookstoremanager.Adapter.ChiTietPhieuNhapAdapter;
 import com.rin1903.bookstoremanager.MainActivity;
 import com.rin1903.bookstoremanager.R;
+import com.rin1903.bookstoremanager.SQLite.CHI_TIET_HOA_DON;
+import com.rin1903.bookstoremanager.SQLite.CHI_TIET_PHIEU_NHAP;
+import com.rin1903.bookstoremanager.SQLite.HOADON;
+import com.rin1903.bookstoremanager.SQLite.PHIEUNHAP;
 import com.rin1903.bookstoremanager.SQLite.SACH_TRONG_HOADON;
 import com.rin1903.bookstoremanager.SQLite.SACH_TRONG_PHIEUNHAP;
 import com.rin1903.bookstoremanager.SQLite.SACH_TRONG_PHIEUNHAP;
@@ -55,22 +62,22 @@ public class Fragment_TaoPhieuNhap extends Fragment {
     private Unbinder unbinder;
     private ArrayList<SACH_TRONG_PHIEUNHAP> arrayList;
     private ChiTietPhieuNhapAdapter adapter;
-    @BindView(R.id.btn_huy_fragment_taophieunhap)
-    Button btn_huy;
+    private String[] dulieu;
+    private PHIEUNHAP phieunhap;
+    private String mancc;
+    private  ArrayList<SACH_TRONG_PHIEUNHAP> arrayList_old;
+    private String mapn;
+    @BindView(R.id.btn_huy_fragment_taophieunhap) Button btn_huy;
     @BindView(R.id.btn_thanhtoan_fragment_taophieunhap) Button btn_thanhtoan;
-    @BindView(R.id.image_themsach_taophieunhap)
-    ImageView img_themsachtheospinner;
+    @BindView(R.id.image_themsach_taophieunhap) ImageView img_themsachtheospinner;
     @BindView(R.id.tv_themsachvaohoadon_taophieunhap) TextView tv_themsachvaophieunhap;
     @BindView(R.id.image_themnhacungcap_taophieunhap) ImageView img_themnhacungcapmoi;
     @BindView(R.id.layout_sach_taophieunhap) LinearLayout layout_sach;
-    @BindView(R.id.recycleview_fragment_taophieunhap)
-    RecyclerView recyclerView_thongtinhoadon;
-    @BindView(R.id.spinner_manhacungcap_taophieunhap)
-    Spinner spinner_manhacungcap;
+    @BindView(R.id.recycleview_fragment_taophieunhap) RecyclerView recyclerView_thongtinhoadon;
+    @BindView(R.id.spinner_manhacungcap_taophieunhap) Spinner spinner_manhacungcap;
     @BindView(R.id.spinner_masach_taophieunhap) Spinner spinner_masach;
     @BindView(R.id.linear_phieunhap_taophieunhap) LinearLayout linearLayout;
-    @BindView(R.id.scanner_view)
-    CodeScannerView scannerview;
+    @BindView(R.id.scanner_view) CodeScannerView scannerview;
     @BindView(R.id.btn_quetma_taophieunhap) Button btn_quetmabarcode;
     private CodeScanner mCodeScanner;
     private int i,j;
@@ -86,18 +93,74 @@ public class Fragment_TaoPhieuNhap extends Fragment {
         refesh_spinner_nhacungcap();
         refesh_adapter();
 
-
+        arrayList_old = new ArrayList<>();
         arrayList = new ArrayList<>();
         recyclerView_thongtinhoadon.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
         recyclerView_thongtinhoadon.setLayoutManager(linearLayoutManager);
-
-        arrayList=new ArrayList<>();
         linearLayout.setVisibility(View.GONE);
-        if(adapter!=null){
+        if(arrayList!=null){
             adapter = new ChiTietPhieuNhapAdapter( getActivity(), arrayList);
             recyclerView_thongtinhoadon.setAdapter(adapter);
+            linearLayout.setVisibility(View.VISIBLE);
+
         }
+
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            dulieu = bundle.getString("guidulieu").split("_");
+            if (dulieu[0].toLowerCase().contains("tao")) {
+                Cursor cursor = database.Getdata("select MAHOADON from HOADON order by MAHOADON desc limit 1");
+                if (cursor.getCount() > 0) {
+                    String[] tach = new String[0];
+                    while (cursor.moveToNext()) {
+                        tach = cursor.getString(0).split("-");
+                    }
+                    mapn = String.format("%s-%s", tach[0], String.valueOf(Integer.parseInt(tach[1]) + 1));
+                }
+                else {
+                    mapn="pn-1";
+                }
+            }
+            else if(dulieu[0].toString().toLowerCase().contains("chinhsua")){
+                refesh_spinner_nhacungcap();
+                mapn= dulieu[2];
+                Cursor cursor= database.Getdata("select * from PHIEUNHAP where MAPHIEUNHAP='"+dulieu[2].toString()+"'");
+                while (cursor.moveToNext()){
+                    phieunhap=  new PHIEUNHAP(cursor.getString(0)
+                            ,cursor.getString(1)
+                            ,cursor.getString(2)
+                            ,cursor.getInt(3));
+                    mancc=phieunhap.getMANHACUNGCAP();
+                    for(int i=0;i<spinner_manhacungcap.getCount();i++){
+                        if(spinner_manhacungcap.getItemAtPosition(i).toString().contains(cursor.getString(1))){
+                            spinner_manhacungcap.setSelection(i);
+                        }
+                    }
+
+                }
+
+                cursor= database.Getdata("select * from CHI_TIET_PHIEU_NHAP where MAPHIEUNHAP='"+dulieu[2].toString()+"'");
+                while (cursor.moveToNext()){
+                    Cursor cursor1= database.Getdata("select * from SACH where MASACH="+cursor.getInt(0));
+                    while (cursor1.moveToNext()){
+                        arrayList.add(new SACH_TRONG_PHIEUNHAP(cursor1.getString(3),cursor1.getInt(0),
+                                (cursor1.getInt(4)-cursor.getInt(2)),cursor.getInt(2),cursor1.getInt(6)));
+                        arrayList_old.add(new SACH_TRONG_PHIEUNHAP(cursor1.getString(3),cursor1.getInt(0),
+                                (cursor1.getInt(4)-cursor.getInt(2)),cursor.getInt(2),cursor1.getInt(6)));
+                    }
+                }
+                Toast.makeText(getActivity(), ""+arrayList.size(), Toast.LENGTH_SHORT).show();
+                adapter = new ChiTietPhieuNhapAdapter(getActivity(), arrayList_old);
+                recyclerView_thongtinhoadon.setAdapter(adapter);
+                linearLayout.setVisibility(View.VISIBLE);
+
+            }
+        }
+
+
+
+
 
 
 
@@ -236,42 +299,47 @@ public class Fragment_TaoPhieuNhap extends Fragment {
             public void onClick(View view) {
                 refesh_adapter();
                 StringBuilder chuoi= new StringBuilder("Thông Tin Phiếu Nhập ");
-                if(arrayList.size()>0){
-                    for (i=0;i<arrayList.size();i++){
-                        chuoi.append("\n Tên Sách: ").append(arrayList.get(i).getTenSach()).append("\t Giá Bán: ").append(String.valueOf(arrayList.get(i).getGiaban())).append("\t Số lượng: ").append(String.valueOf(arrayList.get(i).getsoluongtrongphieunhap())).append("\t Thành Tiền: ").append(String.valueOf(arrayList.get(i).getThanhtien()));
+                if(dulieu[0].equals("tao")){
+                    if(arrayList.size()>0){
+                        for (i=0;i<arrayList.size();i++){
+                            chuoi.append("\n Tên Sách: ").append(arrayList.get(i).getTenSach()).append("\t Giá Bán: ").append(String.valueOf(arrayList.get(i).getGiaban())).append("\t Số lượng: ").append(String.valueOf(arrayList.get(i).getsoluongtrongphieunhap())).append("\t Thành Tiền: ").append(String.valueOf(arrayList.get(i).getThanhtien()));
+                        }
+                        chuoi.append("\n Tổng thành tiền:").append(adapter.getthanhtientong());
+                        Dialog dialog = new Dialog(getActivity());
+                        dialog.setContentView(R.layout.dialog_hoadon);
+                        TextView tv_noidung,tv_xacnhan,tv_huy;
+                        tv_noidung= dialog.findViewById(R.id.tv_thongtinhoadon_dialog_hoadon);
+                        tv_xacnhan=dialog.findViewById(R.id.tv_xacnhan_dialog_hoadon);
+                        tv_huy = dialog.findViewById(R.id.tv_huy_dialog_hoadon);
+                        tv_noidung.setText(chuoi);
+                        tv_xacnhan.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if(!spinner_manhacungcap.getSelectedItem().toString().toLowerCase().contains("vui lòng thêm nhà cung cấp")){
+                                    themphieunhap(spinner_manhacungcap.getSelectedItem().toString());
+                                    dialog.cancel();
+                                    getActivity().getSupportFragmentManager().popBackStack();
+                                }
+                                else {
+                                    Toast.makeText(getActivity(), "Vui lòng thêm nhà cung cấp", Toast.LENGTH_SHORT).show();
+                                    dialog.cancel();
+                                }
+
+
+                            }
+                        });
+                        tv_huy.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                dialog.cancel();
+
+                            }
+                        });
+                        dialog.show();
                     }
-                    chuoi.append("\n Tổng thành tiền:").append(adapter.getthanhtientong());
-                    Dialog dialog = new Dialog(getActivity());
-                    dialog.setContentView(R.layout.dialog_hoadon);
-                    TextView tv_noidung,tv_xacnhan,tv_huy;
-                    tv_noidung= dialog.findViewById(R.id.tv_thongtinhoadon_dialog_hoadon);
-                    tv_xacnhan=dialog.findViewById(R.id.tv_xacnhan_dialog_hoadon);
-                    tv_huy = dialog.findViewById(R.id.tv_huy_dialog_hoadon);
-                    tv_noidung.setText(chuoi);
-                    tv_xacnhan.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if(!spinner_manhacungcap.getSelectedItem().toString().toLowerCase().contains("vui lòng thêm nhà cung cấp")){
-                                themphieunhap(spinner_manhacungcap.getSelectedItem().toString());
-                                dialog.cancel();
-                                getActivity().getSupportFragmentManager().popBackStack();
-                            }
-                            else {
-                                Toast.makeText(getActivity(), "Vui lòng thêm nhà cung cấp", Toast.LENGTH_SHORT).show();
-                                dialog.cancel();
-                            }
-
-
-                        }
-                    });
-                    tv_huy.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            dialog.cancel();
-
-                        }
-                    });
-                    dialog.show();
+                }
+                else {
+                    updatephieunhap();
                 }
             }
         });
@@ -279,6 +347,9 @@ public class Fragment_TaoPhieuNhap extends Fragment {
 
         return view;
     }
+
+
+
     @Override
     public void onResume() {
         super.onResume();
@@ -407,7 +478,7 @@ public class Fragment_TaoPhieuNhap extends Fragment {
                     database.INSERT_CHITIETPHIEUNHAP(arrayList.get(i).getMaSach(),maphieunhap,arrayList.get(i).getsoluongtrongphieunhap());
                     database.QueryData("UPDATE SACH SET SOQUYEN="+(arrayList.get(i).getSoLuongconlai()+arrayList.get(i).getsoluongtrongphieunhap())+" WHERE MASACH ="+arrayList.get(i).getMaSach());
                 }
-                database.INSERT_PHIEUNHAP(maphieunhap,manhacungcap,adapter.getthanhtientong());
+                database.INSERT_PHIEUNHAP(maphieunhap,manhacungcap,adapter.getthanhtientong(),"null");
                 Toast.makeText(getActivity(), "Thêm phiếu nhập đơn thành công", Toast.LENGTH_SHORT).show();
             }
             else {
@@ -421,12 +492,69 @@ public class Fragment_TaoPhieuNhap extends Fragment {
                     database.INSERT_CHITIETPHIEUNHAP(arrayList.get(i).getMaSach(),maphieunhap,arrayList.get(i).getsoluongtrongphieunhap());
                     database.QueryData("UPDATE SACH SET SOQUYEN="+(arrayList.get(i).getSoLuongconlai()+arrayList.get(i).getsoluongtrongphieunhap())+" WHERE MASACH ="+arrayList.get(i).getMaSach());
                 }
-                database.INSERT_PHIEUNHAP(maphieunhap,manhacungcap,adapter.getthanhtientong());
+                database.INSERT_PHIEUNHAP(maphieunhap,manhacungcap,adapter.getthanhtientong(),"null");
                 Toast.makeText(getActivity(), "Thêm phiếu nhập đơn thành công", Toast.LENGTH_SHORT).show();
             }
             else {
                 Toast.makeText(getActivity(), "Chưa có sách trong phiếu nhập vui lòng thêm", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+
+    private void updatephieunhap() {
+        refesh_adapter();
+        refesh_phieunhap();
+        if (mancc.contains("null")|mancc.isEmpty()) {
+            mancc = "null";
+        }
+        if (arrayList.size() > 0) {
+            if(arrayList.size()==arrayList_old.size()){
+                for (i = 0; i < arrayList.size(); i++) {
+                    database.UPDATE_CHITIETPHIEUNHAP(new CHI_TIET_PHIEU_NHAP(arrayList.get(i).getMaSach(), mapn, arrayList.get(i).getsoluongtrongphieunhap()));
+                    database.QueryData("UPDATE SACH SET SOQUYEN=" + (arrayList.get(i).getSoLuongconlai() + arrayList.get(i).getsoluongtrongphieunhap()) + " WHERE MASACH =" + arrayList.get(i).getMaSach());
+                }
+                database.UPDATE_PHIEUNHAP(new PHIEUNHAP(mapn,mancc,"null", adapter.getthanhtientong()));
+                Toast.makeText(getActivity(), "Chỉnh sửa hoá đơn thành công", Toast.LENGTH_SHORT).show();
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+            else {
+                for (i = 0; i < arrayList_old.size(); i++) {
+                    int dem=0;
+                    for (int j=0;j<arrayList.size();j++){
+                        if(arrayList.get(j)==arrayList_old.get(i)){
+                            dem+=1;
+                        }
+                    }
+                    if(dem>0){
+                        database.UPDATE_CHITIETPHIEUNHAP(new CHI_TIET_PHIEU_NHAP(arrayList.get(i).getMaSach(), mapn, arrayList.get(i).getsoluongtrongphieunhap()));
+                        database.QueryData("UPDATE SACH SET SOQUYEN=" + (arrayList.get(i).getSoLuongconlai() + arrayList.get(i).getsoluongtrongphieunhap()) + " WHERE MASACH =" + arrayList.get(i).getMaSach());
+                    }
+                    else {
+                        database.DELETE_CHITIETPHIEUNHAP(mapn,arrayList_old.get(i).getMaSach());
+                        database.QueryData("UPDATE SACH SET SOQUYEN=" + arrayList_old.get(i).getSoLuongconlai() + " WHERE MASACH =" + arrayList_old.get(i).getMaSach());
+                    }
+                    database.UPDATE_PHIEUNHAP(new PHIEUNHAP(mapn,mancc,"null", adapter.getthanhtientong()));
+                    Toast.makeText(getActivity(), "Chỉnh sửa hoá đơn thành công", Toast.LENGTH_SHORT).show();
+                    getActivity().getSupportFragmentManager().popBackStack();
+
+                }
+            }
+
+        } else {
+            new AlertDialog.Builder(getActivity()).setTitle("Update Phiếu nhập").setMessage("Tất cả sách trong hoá đơn đã bị xoá\n" +
+                    "bạn có muốn xoá Hoá Đơn này không???").setNeutralButton("Xoá", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    database.DELETE_CHITIETPHIEUNHAP_ALL(mapn);
+                    for (int i=0;i<arrayList_old.size();i++){
+                        database.QueryData("UPDATE SACH SET SOQUYEN=" + arrayList_old.get(i).getSoLuongconlai() + " WHERE MASACH =" + arrayList_old.get(i).getMaSach());
+                    }
+                    database.DELETE_PHIEUNHAP(mapn);
+                    Toast.makeText(getActivity(), "bạn đã xoá hoá đơn thành công", Toast.LENGTH_SHORT).show();
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
+            }).setPositiveButton("Không",null).show();
         }
     }
 

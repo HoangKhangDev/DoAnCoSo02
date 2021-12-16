@@ -1,8 +1,10 @@
 package com.rin1903.bookstoremanager.Adapter;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -13,7 +15,6 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -21,6 +22,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.beardedhen.androidbootstrap.BootstrapCircleThumbnail;
+import com.beardedhen.androidbootstrap.BootstrapLabel;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.rin1903.bookstoremanager.BuildConfig;
@@ -67,9 +69,16 @@ public class TacGiaAdapter  extends  RecyclerView.Adapter<TacGiaAdapter.ViewHold
         holder.tv_item_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tacgiaArrayList.remove(holder.getAdapterPosition());
-                notifyItemRemoved(holder.getAdapterPosition());
-                MainActivity.database.QueryData("delete from TACGIA where MATACGiA='"+tacgia.getMATACGIA()+"'");
+
+                new AlertDialog.Builder(context).setTitle("Delete")
+                        .setMessage("Bạn có muốn xoá tác giả này không???").setNeutralButton("Có", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        tacgiaArrayList.remove(holder.getAdapterPosition());
+                        notifyItemRemoved(holder.getAdapterPosition());
+                        MainActivity.database.QueryData("delete from TACGIA where MATACGiA='"+tacgia.getMATACGIA()+"'");
+                    }
+                }).setPositiveButton("Không",null).show();
             }
         });
         holder.tv_item_edit.setOnClickListener(new View.OnClickListener() {
@@ -110,8 +119,8 @@ public class TacGiaAdapter  extends  RecyclerView.Adapter<TacGiaAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView tv_tieude,tv_mota;
-        BootstrapCircleThumbnail img;
+        private BootstrapLabel tv_tieude,tv_mota;
+        ImageView img;
         LinearLayout tv_item_delete;
         LinearLayout tv_item_edit;
         SwipeRevealLayout swipeRevealLayout;

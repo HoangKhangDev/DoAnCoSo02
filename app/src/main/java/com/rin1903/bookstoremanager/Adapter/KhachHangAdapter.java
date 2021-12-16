@@ -24,6 +24,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.beardedhen.androidbootstrap.BootstrapCircleThumbnail;
+import com.beardedhen.androidbootstrap.BootstrapLabel;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.rin1903.bookstoremanager.MainActivity;
@@ -75,10 +76,16 @@ public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.View
         holder.tv_item_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                khachhangArrayList.remove(holder.getAdapterPosition());
-                notifyItemRemoved(holder.getAdapterPosition());
-                MainActivity.database.QueryData("delete from KHACHHANG where MAKHACHHANG='"+makh+"'");
 
+                new AlertDialog.Builder(context).setTitle("Delete")
+                        .setMessage("Bạn có muốn xoá khách hàng này không???").setNeutralButton("Có", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        khachhangArrayList.remove(holder.getAdapterPosition());
+                        notifyItemRemoved(holder.getAdapterPosition());
+                        MainActivity.database.QueryData("delete from KHACHHANG where MAKHACHHANG='"+makh+"'");
+                    }
+                }).setPositiveButton("Không",null).show();
             }
         });
         KHACHHANG kh= khachhangArrayList.get(position);
@@ -149,9 +156,9 @@ public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.View
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView tv_tieude;
-        TextView tv_mota;
-        BootstrapCircleThumbnail img_hinh;
+        BootstrapLabel tv_tieude;
+        BootstrapLabel tv_mota;
+        ImageView img_hinh;
 
         CardView cardView;
         SwipeRevealLayout swipeRevealLayout;

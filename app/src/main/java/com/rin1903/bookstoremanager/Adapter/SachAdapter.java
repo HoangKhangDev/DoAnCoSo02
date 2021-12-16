@@ -1,8 +1,10 @@
 package com.rin1903.bookstoremanager.Adapter;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -13,7 +15,6 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -21,6 +22,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.beardedhen.androidbootstrap.BootstrapCircleThumbnail;
+import com.beardedhen.androidbootstrap.BootstrapLabel;
 import com.beardedhen.androidbootstrap.BootstrapThumbnail;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
@@ -32,6 +34,8 @@ import com.rin1903.bookstoremanager.fragment.Fragment_Sach;
 import com.rin1903.bookstoremanager.fragment.Fragment_TacGia;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SachAdapter extends RecyclerView.Adapter<SachAdapter.ViewHolder> implements Filterable {
     private ArrayList<SACH> sachArrayList;
@@ -60,7 +64,7 @@ public class SachAdapter extends RecyclerView.Adapter<SachAdapter.ViewHolder> im
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.tv_tieude.setText("Tên Sách:"+sachArrayList.get(position).getTENSACH());
-        holder.tv_mota.setText("Số Quyển:"+String.valueOf(sachArrayList.get(position).getSOQUYEN()));
+        holder.tv_mota.setText("Số Quyển:"+String.valueOf(sachArrayList.get(position).getSOQUYEN())+"\n Trạng thái:"+sachArrayList.get(position).getTRANGTHAI());
         byte[] hinh = sachArrayList.get(position).getHINH_SACH();
         Bitmap bitmap = BitmapFactory.decodeByteArray(hinh,0,hinh.length);
         holder.img_hinh.setImageBitmap(bitmap);
@@ -71,9 +75,23 @@ public class SachAdapter extends RecyclerView.Adapter<SachAdapter.ViewHolder> im
         holder.tv_item_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sachArrayList.remove(holder.getAdapterPosition());
-                notifyItemRemoved(holder.getAdapterPosition());
-                MainActivity.database.QueryData("update SACH set TRANGTHAI='Ngừng kinh doanh' where MASACH="+masach);
+
+              if(!String.valueOf(masach).isEmpty()){
+                  new AlertDialog.Builder(context).setTitle("Delete")
+                          .setMessage("Bạn có muốn xoá sách này không???").setNeutralButton("Có", new DialogInterface.OnClickListener() {
+                      @Override
+                      public void onClick(DialogInterface dialog, int which) {
+                          sachArrayList.remove(holder.getAdapterPosition());
+                          notifyItemRemoved(holder.getAdapterPosition());
+                          MainActivity.database.QueryData("update SACH set TRANGTHAI='Ngừng kinh doanh' where MASACH="+masach);
+                      }
+                  }).setPositiveButton("Không", new DialogInterface.OnClickListener() {
+                      @Override
+                      public void onClick(DialogInterface dialog, int which) {
+                          dialog.cancel();
+                      }
+                  }).show();
+              }
             }
         });
 
@@ -116,9 +134,10 @@ public class SachAdapter extends RecyclerView.Adapter<SachAdapter.ViewHolder> im
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView tv_tieude;
-        TextView tv_mota;
-        BootstrapCircleThumbnail img_hinh;
+        BootstrapLabel tv_tieude;
+        
+        BootstrapLabel tv_mota;
+        ImageView img_hinh;
 
         CardView cardView;
         SwipeRevealLayout swipeRevealLayout;

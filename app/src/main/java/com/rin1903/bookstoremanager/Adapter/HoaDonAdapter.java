@@ -1,8 +1,10 @@
 package com.rin1903.bookstoremanager.Adapter;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.beardedhen.androidbootstrap.BootstrapLabel;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.rin1903.bookstoremanager.MainActivity;
@@ -63,10 +66,16 @@ public class HoaDonAdapter extends RecyclerView.Adapter<HoaDonAdapter.ViewHolder
         holder.item_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hoadonArrayList.remove(holder.getAdapterPosition());
-                notifyItemRemoved(holder.getAdapterPosition());
-                MainActivity.database.DELETE_CHITIETHOADON(mahoadon);
-                MainActivity.database.DELETE_HOADON(mahoadon);
+                new AlertDialog.Builder(context.getApplicationContext()).setTitle("Delete")
+                        .setMessage("Bạn có muốn xoá Hoá Đơn này không???").setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        hoadonArrayList.remove(holder.getAdapterPosition());
+                        notifyItemRemoved(holder.getAdapterPosition());
+                        MainActivity.database.DELETE_CHITIETHOADON_ALL(mahoadon);
+                        MainActivity.database.DELETE_HOADON(mahoadon);
+                    }
+                }).setNeutralButton("Không",null).show();
             }
         });
         holder.item_edit.setOnClickListener(new View.OnClickListener() {
@@ -99,7 +108,7 @@ public class HoaDonAdapter extends RecyclerView.Adapter<HoaDonAdapter.ViewHolder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_ten,tv_mota1,tv_mota2;
+        BootstrapLabel tv_ten,tv_mota1,tv_mota2;
         SwipeRevealLayout swipeRevealLayout;
         CardView linearLayout;
         ImageView item_delete,item_edit;

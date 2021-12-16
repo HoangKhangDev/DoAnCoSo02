@@ -1,8 +1,10 @@
 package com.rin1903.bookstoremanager.Adapter;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -21,6 +23,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.beardedhen.androidbootstrap.BootstrapCircleThumbnail;
+import com.beardedhen.androidbootstrap.BootstrapLabel;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.rin1903.bookstoremanager.BuildConfig;
@@ -67,9 +70,16 @@ public class NhaCungCapAdapter extends RecyclerView.Adapter<NhaCungCapAdapter.Vi
         holder.tv_item_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nhacungcapArrayList.remove(holder.getAdapterPosition());
-                notifyItemRemoved(holder.getAdapterPosition());
-                MainActivity.database.QueryData("delete from NHACUNGCAP where MANHACUNGCAP='"+manhacungcap+"'");
+
+                new AlertDialog.Builder(context).setTitle("Delete")
+                        .setMessage("Bạn có muốn xoá nhà cung cấp này không???").setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        nhacungcapArrayList.remove(holder.getAdapterPosition());
+                        notifyItemRemoved(holder.getAdapterPosition());
+                        MainActivity.database.QueryData("delete from NHACUNGCAP where MANHACUNGCAP='"+manhacungcap+"'");
+                    }
+                }).setNeutralButton("Không",null).show();
             }
         });
 
@@ -108,9 +118,9 @@ public class NhaCungCapAdapter extends RecyclerView.Adapter<NhaCungCapAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_tieude;
-        TextView tv_mota;
-        BootstrapCircleThumbnail img_hinh;
+        BootstrapLabel tv_tieude;
+        BootstrapLabel tv_mota;
+        ImageView img_hinh;
         CardView cardView;
         SwipeRevealLayout swipeRevealLayout;
         LinearLayout tv_item_delete;

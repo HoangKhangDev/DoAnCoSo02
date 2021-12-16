@@ -13,6 +13,14 @@ public class SACH_TRONG_PHIEUNHAP implements Serializable {
         this.giaban = giaban;
     }
 
+    public SACH_TRONG_PHIEUNHAP(String tenSach, int maSach, int soLuongconlai, int soluongtrongphieunhap, int giaban) {
+        TenSach = tenSach;
+        MaSach = maSach;
+        SoLuongconlai = soLuongconlai;
+        this.soluongtrongphieunhap = soluongtrongphieunhap;
+        this.giaban = giaban;
+    }
+
     public String getTenSach() {
         return TenSach;
     }
