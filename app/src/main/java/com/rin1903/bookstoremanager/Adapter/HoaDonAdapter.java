@@ -63,21 +63,7 @@ public class HoaDonAdapter extends RecyclerView.Adapter<HoaDonAdapter.ViewHolder
         String mahoadon= hoadonArrayList.get(position).getMAHOADON();
 
             viewBinderHelper.bind(holder.swipeRevealLayout,hoadonArrayList.get(position).getMAHOADON());
-        holder.item_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AlertDialog.Builder(context.getApplicationContext()).setTitle("Delete")
-                        .setMessage("Bạn có muốn xoá Hoá Đơn này không???").setPositiveButton("Có", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        hoadonArrayList.remove(holder.getAdapterPosition());
-                        notifyItemRemoved(holder.getAdapterPosition());
-                        MainActivity.database.DELETE_CHITIETHOADON_ALL(mahoadon);
-                        MainActivity.database.DELETE_HOADON(mahoadon);
-                    }
-                }).setNeutralButton("Không",null).show();
-            }
-        });
+
         holder.item_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,14 +97,13 @@ public class HoaDonAdapter extends RecyclerView.Adapter<HoaDonAdapter.ViewHolder
         BootstrapLabel tv_ten,tv_mota1,tv_mota2;
         SwipeRevealLayout swipeRevealLayout;
         CardView linearLayout;
-        ImageView item_delete,item_edit;
+        ImageView item_edit;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_ten= itemView.findViewById(R.id.tv_item_khongcohinh_hienthi_hdpn);
             tv_mota1=itemView.findViewById(R.id.tv_item_mota1_khongcohinh_hienthi_hdpn);
             swipeRevealLayout = itemView.findViewById(R.id.swipelayout_item_khongcohinh_hdpn);
             linearLayout = itemView.findViewById(R.id.cardview_item_khongcohinh_hdpn);
-            item_delete= itemView.findViewById(R.id.tv_delete_item_khongcohinh_hdpn);
             item_edit= itemView.findViewById(R.id.tv_edit_item_khongcohinh_hdpn);
             tv_mota2= itemView.findViewById(R.id.tv_item_mota2_khongcohinh_hienthi_hdpn);
         }

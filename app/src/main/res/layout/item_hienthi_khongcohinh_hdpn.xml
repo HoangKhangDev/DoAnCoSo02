@@ -13,18 +13,14 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="80dp"
             android:gravity="center">
             <ImageView
                 android:id="@+id/tv_edit_item_khongcohinh_hdpn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
                 android:src="@drawable/edit"/>
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:id="@+id/tv_delete_item_khongcohinh_hdpn"
-                android:src="@drawable/delete"/>
+
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

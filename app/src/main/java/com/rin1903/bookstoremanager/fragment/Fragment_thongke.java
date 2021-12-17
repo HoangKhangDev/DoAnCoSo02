@@ -17,6 +17,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -60,8 +62,8 @@ public class Fragment_thongke extends Fragment {
     @BindView(R.id.img_calendar_end_thongke) ImageView img_end;
     @BindView(R.id.tv_calendar_star_thongke) TextView tv_star;
     @BindView(R.id.tv_calendar_end_thongke) TextView tv_end;
-    @BindView(R.id.btn_hienthi_bootstrap_thongke) BootstrapButton thongke;
-    @BindView(R.id.btn_bootstrap_luufile_thongke) BootstrapButton luufile;
+    @BindView(R.id.btn_hienthi_bootstrap_thongke) Button thongke;
+    @BindView(R.id.btn_bootstrap_luufile_thongke) Button luufile;
     @BindView(R.id.img_back_thongke) ImageView img_back;
 
     private Long star;
@@ -100,6 +102,8 @@ public class Fragment_thongke extends Fragment {
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(linearLayoutManager);
+        LayoutAnimationController layoutAnimationController= AnimationUtils.loadLayoutAnimation(getActivity(),R.anim.layout_animation_r_to_l);
+        recyclerView.setLayoutAnimation(layoutAnimationController);
         refesh_phieunhap();
         refesh_hoadon();
         arrayList_HD= new ArrayList<>();
@@ -160,7 +164,7 @@ public class Fragment_thongke extends Fragment {
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         calendar.set(year,month,dayOfMonth);
                         star=calendar.getTimeInMillis();
-                        SimpleDateFormat simpleDateFormat= new SimpleDateFormat("dd/MM/yyyy");
+                        SimpleDateFormat simpleDateFormat= new SimpleDateFormat("yyyy-MM-dd");
                         tv_star.setText(simpleDateFormat.format(calendar.getTime()));
                         check+=1;
                     }
@@ -182,7 +186,7 @@ public class Fragment_thongke extends Fragment {
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         calendar.set(year,month,dayOfMonth);
                         end=calendar.getTimeInMillis();
-                        SimpleDateFormat simpleDateFormat= new SimpleDateFormat("dd/MM/yyyy");
+                        SimpleDateFormat simpleDateFormat= new SimpleDateFormat("yyyy-MM-dd");
                         tv_end.setText(simpleDateFormat.format(calendar.getTime()));
                         check+=1;
                     }
@@ -192,68 +196,71 @@ public class Fragment_thongke extends Fragment {
 
             }
         });
+
+        Toast.makeText(getActivity(), ""+dulieu[1], Toast.LENGTH_SHORT).show();
         thongke.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(check>=2){
-                    String[] mangstar,mangend;
-                    mangstar=tv_star.getText().toString().split("/");
-                    mangend=tv_end.getText().toString().split("/");
                     if(end>star) {
                         if (dulieu[1].toString().toLowerCase().contains("phiếu nhập")) {
-                                Cursor cursor = database.Getdata("SELECT * from PHIEUNHAP WHERE Date(NGAY_PN)>='"
-                                        + mangstar[2].toString() + "-" + mangstar[1].toString() + "-" + mangstar[0].toString() +
-                                        "' AND Date(NGAY_PN)<='"
-                                        + mangend[2].toString() + "-" + mangend[1].toString() + "-" + mangend[0].toString() + "'");
-                                if(cursor.getCount()>0){
-                                    Toast.makeText(getActivity(), ""+cursor.getCount(), Toast.LENGTH_SHORT).show();
-
-                                    while (cursor.moveToNext()) {
-                                        arrayList_PN.add(new PHIEUNHAP(cursor.getString(0)
-                                                , cursor.getString(1)
-                                                , cursor.getString(2)
-                                                , cursor.getInt(3)));
-                                    }
-                                    phieuNhapAdapter = new PhieuNhapAdapter(arrayList_PN, getActivity());
-                                    recyclerView.setAdapter(phieuNhapAdapter);
-                                    phieuNhapAdapter.notifyDataSetChanged();
+                                Cursor cursor = database.Getdata("SELECT * from PHIEUNHAP WHERE Date(NGAY_PN)>='"+tv_star.getText()+"'"
+                                        +" and Date(NGAY_PN)<='"+tv_end.getText()+"'");
+                            if(cursor.getCount()>0){
+                                while (cursor.moveToNext()) {
+                                    arrayList_PN.add(new PHIEUNHAP(cursor.getString(0)
+                                            , cursor.getString(1)
+                                            , cursor.getString(2)
+                                            , cursor.getInt(3)));
                                 }
-                                else {
-                                    Toast.makeText(getActivity(), ""+cursor.getCount(), Toast.LENGTH_SHORT).show();
-
-                                                               }
+                                phieuNhapAdapter = new PhieuNhapAdapter(arrayList_PN, getActivity());
+                                recyclerView.setAdapter(phieuNhapAdapter);
+                                phieuNhapAdapter.notifyDataSetChanged();
+                            }
+                            else {
+                                AlertDialog.Builder alerdialog= new AlertDialog.Builder(getActivity());
+                                alerdialog.setTitle("ERROR");
+                                alerdialog.setMessage("Dữ liệu bạn yêu cầu hiện không có!!! Dữ liệu sẽ trả về ban đầu");
+                                alerdialog.setPositiveButton("OKE", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                        refesh_lv_phieunhap();
+                                    }
+                                });
+                                alerdialog.show();
+                            }
+                            }else if(dulieu[1].toLowerCase().contains("hoá đơn")) {
+                            arrayList_HD= new ArrayList<>();
+                            Cursor cursor = database.Getdata("SELECT * from HOADON WHERE Date(ngay_hd)>='"+tv_star.getText()+"' and Date(ngay_hd)<='"+tv_end.getText()+"'");
+                            Toast.makeText(getActivity(), ""+cursor.getCount(), Toast.LENGTH_SHORT).show();
+                            if(cursor.getCount()>0){
+                                while (cursor.moveToNext()) {
+                                    arrayList_HD.add(new HOADON(cursor.getString(0)
+                                            , cursor.getString(1)
+                                            , cursor.getInt(2)
+                                            , cursor.getString(3)));
+                                }
+                                hoaDonAdapter = new HoaDonAdapter(arrayList_HD, getActivity());
+                                recyclerView.setAdapter(hoaDonAdapter);
+                                hoaDonAdapter.notifyDataSetChanged();
+                            }
+                            else {
+                                AlertDialog.Builder alerdialog= new AlertDialog.Builder(getActivity());
+                                alerdialog.setTitle("ERROR");
+                                alerdialog.setMessage("Dữ liệu bạn yêu cầu hiện không có!!! Dữ liệu sẽ trả về ban đầu");
+                                alerdialog.setPositiveButton("OKE", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                        refesh_lv_hoadon();
+                                    }
+                                });
+                                alerdialog.show();
                             }
                         }
-                    else if(dulieu[1].toString().toLowerCase().contains("hoá đơn")) {
-                         Cursor cursor = database.Getdata("SELECT * from HOADON WHERE Date(ngay_hd)>='"
-                                    + mangstar[2].toString() + "-" + mangstar[1].toString() + "-" + mangstar[0].toString() +
-                                    "' AND Date(ngay_hd)<='"
-                                    + mangend[2].toString() + "-" + mangend[1].toString() + "-" + mangend[0].toString() + "'");
-                                    if(cursor.getCount()>0){
-                                        while (cursor.moveToNext()) {
-                                            arrayList_HD.add(new HOADON(cursor.getString(0)
-                                                    , cursor.getString(1)
-                                                    , cursor.getInt(2)
-                                                    , cursor.getString(3)));
-                                        }
-                                        hoaDonAdapter = new HoaDonAdapter(arrayList_HD, getActivity());
-                                        recyclerView.setAdapter(hoaDonAdapter);
-                                        hoaDonAdapter.notifyDataSetChanged();
-                                    }
-                                    else {
-                                        AlertDialog.Builder alerdialog= new AlertDialog.Builder(getActivity());
-                                        alerdialog.setTitle("ERROR");
-                                        alerdialog.setMessage("Dữ liệu bạn yêu cầu hiện không có!!! Dữ liệu sẽ trả về ban đầu");
-                                        alerdialog.setPositiveButton("OKE", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.cancel();
-                                                refesh_lv_phieunhap();
-                                            }
-                                        });
-                                        alerdialog.show();
-                                    }
-                    }
+                        }
+
                     else {
                         Toast.makeText(getActivity(), "Ngày bắt đầu lớn hơn ngày kết thúc", Toast.LENGTH_SHORT).show();
                     }

@@ -37,12 +37,12 @@ public class Database extends SQLiteOpenHelper {
     }
     public void UPDATE_CHITIETHOADON(CHI_TIET_HOA_DON chi_tiet_hoa_don){
         SQLiteDatabase database= getWritableDatabase();
-        String sql="UPDATE CHI_TIET_HOA_DON SET MASACH=?,SOLUONG_HD=? where MAHOADON=?";
+        String sql="UPDATE CHI_TIET_HOA_DON SET SOLUONG_HD=? where MAHOADON=? and  MASACH=?";
         SQLiteStatement sqLiteStatement= database.compileStatement(sql);
         sqLiteStatement.clearBindings();
-        sqLiteStatement.bindLong(1,chi_tiet_hoa_don.getMASACH());
-        sqLiteStatement.bindString(3,chi_tiet_hoa_don.getMAHOADON());
-        sqLiteStatement.bindLong(2,chi_tiet_hoa_don.getSOLUONG_HD());
+        sqLiteStatement.bindLong(3,chi_tiet_hoa_don.getMASACH());
+        sqLiteStatement.bindString(2,chi_tiet_hoa_don.getMAHOADON());
+        sqLiteStatement.bindLong(1,chi_tiet_hoa_don.getSOLUONG_HD());
         sqLiteStatement.executeUpdateDelete();
     }
     public void DELETE_CHITIETHOADON(String MAHOADON,int MASACH){
@@ -65,18 +65,18 @@ public class Database extends SQLiteOpenHelper {
     }
     public void UPDATE_CHITIETPHIEUNHAP(CHI_TIET_PHIEU_NHAP chi_tiet_phieu_nhap){
         SQLiteDatabase database= getWritableDatabase();
-        String sql="UPDATE CHI_TIET_PHIEU_NHAP SET MASACH=?,SOLUONG_PN=? where MAPHIEUNHAP=?";
+        String sql="UPDATE CHI_TIET_PHIEU_NHAP SET SOLUONG_PN=? where MAPHIEUNHAP=? and  MASACH=?";
         SQLiteStatement sqLiteStatement= database.compileStatement(sql);
         sqLiteStatement.clearBindings();
-        sqLiteStatement.bindLong(1,chi_tiet_phieu_nhap.getMASACH());
-        sqLiteStatement.bindString(3,chi_tiet_phieu_nhap.getMAPHIEUNHAP());
-        sqLiteStatement.bindLong(2,chi_tiet_phieu_nhap.getSOLUONG_PN());
+        sqLiteStatement.bindLong(3,chi_tiet_phieu_nhap.getMASACH());
+        sqLiteStatement.bindString(2,chi_tiet_phieu_nhap.getMAPHIEUNHAP());
+        sqLiteStatement.bindLong(1,chi_tiet_phieu_nhap.getSOLUONG_PN());
         sqLiteStatement.executeUpdateDelete();
     }
     public void DELETE_CHITIETPHIEUNHAP(String MAPHIEUNHAP,int MASACH)
     {
         SQLiteDatabase database= getWritableDatabase();
-        database.execSQL("delete from CHI_TIET_PHIEU_NHAP where MAPHIEUNHAP='"+MAPHIEUNHAP+"' and MAPHIEUNHAP="+MASACH);
+        database.execSQL("delete from CHI_TIET_PHIEU_NHAP where MAPHIEUNHAP='"+MAPHIEUNHAP+"' and MASACH="+MASACH);
     }
     public void DELETE_CHITIETPHIEUNHAP_ALL(String MAPHIEUNHAP)
     {
@@ -107,10 +107,11 @@ public class Database extends SQLiteOpenHelper {
     }
     public void UPDATE_HOADON(HOADON hoadon){
         SQLiteDatabase database= getWritableDatabase();
-        String sql= "UPDATE HOADON set MAKHACHHANG=?,THANHTIEN_CTHD=? where MAHOADON=?";
+        String sql= "UPDATE HOADON set MAKHACHHANG=?,THANHTIEN_CTHD=?,NGAY_HD=? where MAHOADON=?";
         SQLiteStatement sqLiteStatement= database.compileStatement(sql);
         sqLiteStatement.clearBindings();
-        sqLiteStatement.bindString(3,hoadon.getMAHOADON());
+        sqLiteStatement.bindString(3, hoadon.getNGAY_HD());
+        sqLiteStatement.bindString(4,hoadon.getMAHOADON());
         sqLiteStatement.bindString(1,hoadon.getMAKHACHHANG());
         sqLiteStatement.bindLong(2,hoadon.getTHANHTIEN_CTHD());
         sqLiteStatement.executeUpdateDelete();
@@ -208,10 +209,11 @@ public class Database extends SQLiteOpenHelper {
     }
     public void UPDATE_PHIEUNHAP(PHIEUNHAP phieunhap){
         SQLiteDatabase database= getWritableDatabase();
-        String sql= "UPDATE PHIEUNHAP SET MANHACUNGCAP=?,THANHTIEN_PN=? WHERE MAPHIEUNHAP=?";
+        String sql= "UPDATE PHIEUNHAP SET MANHACUNGCAP=?,THANHTIEN_PN=?,NGAY_PN=? WHERE MAPHIEUNHAP=?";
         SQLiteStatement sqLiteStatement= database.compileStatement(sql);
         sqLiteStatement.clearBindings();
-        sqLiteStatement.bindString(3,phieunhap.getMAPHIEUNHAP());
+        sqLiteStatement.bindString(3,phieunhap.getNGAY_PN());
+        sqLiteStatement.bindString(4,phieunhap.getMAPHIEUNHAP());
         sqLiteStatement.bindString(1,phieunhap.getMANHACUNGCAP());
         sqLiteStatement.bindLong(2,phieunhap.getTHANHTIEN_PN());
         sqLiteStatement.executeUpdateDelete();

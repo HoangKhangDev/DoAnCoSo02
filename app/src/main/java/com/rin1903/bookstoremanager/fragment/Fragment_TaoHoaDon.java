@@ -13,7 +13,9 @@ import static com.rin1903.bookstoremanager.MainActivity.sachArrayList;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -25,12 +27,15 @@ import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -40,6 +45,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.beardedhen.androidbootstrap.BootstrapLabel;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
@@ -49,6 +55,7 @@ import com.rin1903.bookstoremanager.MainActivity;
 import com.rin1903.bookstoremanager.R;
 import com.rin1903.bookstoremanager.SQLite.CHI_TIET_HOA_DON;
 import com.rin1903.bookstoremanager.SQLite.HOADON;
+import com.rin1903.bookstoremanager.SQLite.KHACHHANG;
 import com.rin1903.bookstoremanager.SQLite.SACH;
 import com.rin1903.bookstoremanager.SQLite.SACH_TRONG_HOADON;
 
@@ -73,7 +80,6 @@ import butterknife.Unbinder;
 public class Fragment_TaoHoaDon extends Fragment {
 
     private Unbinder unbinder;
-    private String kiemtra_cothaydoikhong;
     private String mahoadon;
     private String makh;
     private HOADON hoadon;
@@ -83,30 +89,23 @@ public class Fragment_TaoHoaDon extends Fragment {
 
     private ChiTietHoaDonAdapter adapter;
     private ArrayList<SACH> saches;
-    @BindView(R.id.btn_huy_fragment_taohoadon)
-    Button btn_huy;
-    @BindView(R.id.btn_thanhtoan_fragment_taohoadon)
-    Button btn_thanhtoan;
-    @BindView(R.id.image_themsach_taohoadon)
-    ImageView img_themsachtheospinner;
-    @BindView(R.id.tv_themsachvaohoadon_taohoadon)
-    TextView tv_themsachvaohoadon;
-    @BindView(R.id.image_themkhachhangmoi_taohoadon)
-    ImageView img_themkhachhangmoi;
-    @BindView(R.id.layout_sach_taohoadon)
-    LinearLayout layout_sach;
-    @BindView(R.id.recycleview_fragment_taohoadon)
-    RecyclerView recyclerView_thongtinhoadon;
-    @BindView(R.id.spinner_makhachhang_taohoadon)
-    Spinner spinner_makhachhang;
-    @BindView(R.id.spinner_masach_taohoadon)
-    Spinner spinner_masach;
-    @BindView(R.id.linear_hoadon_taohoadon)
-    LinearLayout linearLayout;
-    @BindView(R.id.scanner_view)
-    CodeScannerView scannerview;
-    @BindView(R.id.btn_quetma_taohoadon)
-    Button btn_quetmabarcode;
+    @BindView(R.id.btn_huy_fragment_taohoadon) Button btn_huy;
+    @BindView(R.id.btn_thanhtoan_fragment_taohoadon) Button btn_thanhtoan;
+    @BindView(R.id.image_themsach_taohoadon) ImageView img_themsachtheospinner;
+    @BindView(R.id.tv_themsachvaohoadon_taohoadon) TextView tv_themsachvaohoadon;
+    @BindView(R.id.image_themkhachhangmoi_taohoadon) ImageView img_themkhachhangmoi;
+    @BindView(R.id.layout_sach_taohoadon) LinearLayout layout_sach;
+    @BindView(R.id.recycleview_fragment_taohoadon) RecyclerView recyclerView_thongtinhoadon;
+    @BindView(R.id.spinner_makhachhang_taohoadon) Spinner spinner_makhachhang;
+    @BindView(R.id.spinner_masach_taohoadon) Spinner spinner_masach;
+    @BindView(R.id.linear_hoadon_taohoadon) LinearLayout linearLayout;
+    @BindView(R.id.scanner_view) CodeScannerView scannerview;
+    @BindView(R.id.btn_quetma_taohoadon) Button btn_quetmabarcode;
+    @BindView(R.id.label_tenkh_fragment_hoadon) BootstrapLabel label_tenkh;
+    @BindView(R.id.label_tensach_fragment_hoadon) BootstrapLabel label_sach;
+    @BindView(R.id.img_calendar_hoadon) ImageView img_calendar;
+    @BindView(R.id.label_calendar_hoadon) BootstrapLabel label_calendar;
+
     private CodeScanner mCodeScanner;
     private int i, j;
     private String[] dulieu;
@@ -124,6 +123,52 @@ public class Fragment_TaoHoaDon extends Fragment {
         refesh_spinner_sach();
         refesh_spinner_khachhang();
         saches=new ArrayList<>();
+
+        if(khachhangArrayList.size()>0){
+            spinner_makhachhang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    refesh_khachhang();
+                    for(KHACHHANG kh:khachhangArrayList)
+                        if(kh.getMAKHACHHANG().equals(parent.getAdapter().getItem(position).toString()))
+                        {
+                            label_tenkh.setText(kh.getTENKHACHHANG());
+                        }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    label_tenkh.setText("Không có khách hàng này");
+
+                }
+            });
+        }
+        if(sachArrayList.size()>0){
+            spinner_masach.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    refesh_sach();
+                    for (SACH s: sachArrayList){
+                        if(s.getMASACH()==Integer.parseInt(parent.getAdapter().getItem(position).toString())){
+                            label_sach.setText(s.getTENSACH());
+                        }
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    label_sach.setText("Không có sách này");
+
+                }
+            });
+        }
+
+        img_calendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDateTimeDialog(label_calendar);
+            }
+        });
 
 
         Bundle bundle = getArguments();
@@ -143,6 +188,10 @@ public class Fragment_TaoHoaDon extends Fragment {
                 }
             }
             else if(dulieu[0].toString().toLowerCase().contains("chinhsua")){
+                btn_thanhtoan.setText("Update");
+                img_themkhachhangmoi.setVisibility(View.GONE);
+                layout_sach.setVisibility(View.GONE);
+                btn_quetmabarcode.setVisibility(View.GONE);
                 refesh_spinner_khachhang();
                 mahoadon= dulieu[2];
                 Cursor cursor= database.Getdata("select * from HOADON where MAHOADON='"+dulieu[2].toString()+"'");
@@ -151,7 +200,8 @@ public class Fragment_TaoHoaDon extends Fragment {
                             ,cursor.getString(1)
                             ,cursor.getInt(2)
                             ,cursor.getString(3));
-                  makh=hoadon.getMAKHACHHANG();
+                  makh=hoadon.getMAKHACHHANG().toString();
+
                     for(int i=0;i<spinner_makhachhang.getCount();i++){
                         if(spinner_makhachhang.getItemAtPosition(i).toString().contains(cursor.getString(1))){
                             spinner_makhachhang.setSelection(i);
@@ -170,6 +220,15 @@ public class Fragment_TaoHoaDon extends Fragment {
                                     (cursor1.getInt(4)+cursor.getInt(2)),cursor.getInt(2),cursor1.getInt(6)));
                         }
                     }
+                    refesh_spinner_khachhang();
+                    for(int i=0;i<spinner_makhachhang.getCount();i++){
+                        if(spinner_makhachhang.getItemAtPosition(i).toString().equals(makh)){
+                            spinner_makhachhang.setSelection(i);
+                            break;
+                        }
+                    }
+
+
                 if(arrayList!=null){
                     adapter = new ChiTietHoaDonAdapter(getActivity(), arrayList);
                     recyclerView_thongtinhoadon.setAdapter(adapter);
@@ -257,9 +316,7 @@ public class Fragment_TaoHoaDon extends Fragment {
                 refesh_adapter();
                 if(spinner_masach.getCount()>0){
                     if(!spinner_masach.getSelectedItem().toString().toLowerCase().contains("vui lòng thêm sách")){
-                        Toast.makeText(getActivity(), ""+spinner_masach.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
-                        String[] mang = spinner_masach.getSelectedItem().toString().split(" - ");
-                        int so = Integer.parseInt(mang[0].toString().trim());
+                        int so = Integer.parseInt(spinner_masach.getSelectedItem().toString().trim());
                         Cursor cursor = database.Getdata("select * from Sach where MaSach=" + so + " and SoQuyen>0");
                         if (cursor.getCount() > 0) {
                             if (kiemtra_sachtronghoadon(so) == 0) {
@@ -267,15 +324,15 @@ public class Fragment_TaoHoaDon extends Fragment {
                                     arrayList.add(new SACH_TRONG_HOADON(cursor.getString(3), cursor.getInt(0), cursor.getInt(4), cursor.getInt(6)));
                                     adapter = new ChiTietHoaDonAdapter(getActivity(), arrayList);
                                     recyclerView_thongtinhoadon.setAdapter(adapter);
-                                    dialog("Sách này đã thêm vào thành công!!! Bạn có muốn thêm sách khác?", "Thêm sách khác", "Rời khỏi");
+                                    Toast.makeText(getActivity(), "Sách đã được thêm thành công", Toast.LENGTH_SHORT).show();
                                     linearLayout.setVisibility(View.VISIBLE);
 
                                 }
                             } else {
-                                dialog("Sách này đã có trong hoá đơn!!! Vui lòng thêm sách khác!!!", "Thêm sách khác", "Rời khỏi");
+                                Toast.makeText(getActivity(), "Sách này đã có trong hoá đơn!!! Vui lòng thêm sách khác!!!", Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            dialog("Vui lòng kiểm tra lại sách này trong hệ thống!!!\n Bạn có muốn thêm sách khác vào hoá đơn không???", "Thêm sách khác", "Rời khỏi");
+                            Toast.makeText(getActivity(),"Vui lòng kiểm tra lại sách này trong hệ thống!!!\n Bạn có muốn thêm sách khác vào hoá đơn không???",Toast.LENGTH_SHORT).show();
                         }
                     }
                     else {
@@ -423,7 +480,7 @@ public class Fragment_TaoHoaDon extends Fragment {
         if(khachhangArrayList.size()>0){
             if(spinner_makhachhang.getCount()==0){
                 for(int i=0;i<khachhangArrayList.size();i++){
-                    arrayList_spinner_khachhang.add(String.valueOf(khachhangArrayList.get(i).getMAKHACHHANG() + " - " + khachhangArrayList.get(i).getTENKHACHHANG()));
+                    arrayList_spinner_khachhang.add(String.valueOf(khachhangArrayList.get(i).getMAKHACHHANG()));
                 }
             }
             else {
@@ -450,8 +507,9 @@ public class Fragment_TaoHoaDon extends Fragment {
             if(spinner_masach.getCount()==0){
                 spinner_masach.setAdapter(null);
                 for(int i=0;i<sachArrayList.size();i++){
-                    arrayList_spinner_sach.add(String.valueOf(sachArrayList.get(i).getMASACH())+" - "+sachArrayList.get(i).getTENSACH());
-                }adapter_sach = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, arrayList_spinner_sach);
+                    arrayList_spinner_sach.add(String.valueOf(sachArrayList.get(i).getMASACH()));
+                }
+                adapter_sach = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, arrayList_spinner_sach);
                 spinner_masach.setAdapter(adapter_sach);
             }
         }
@@ -464,8 +522,6 @@ public class Fragment_TaoHoaDon extends Fragment {
         if (adapter != null) {
             if (adapter.getItemCount() != 0) {
                 arrayList = adapter.getArrayList();
-                ArrayAdapter adapter_khachhang = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, arrayList);
-                spinner_makhachhang.setAdapter(adapter_khachhang);
             }
 
         }
@@ -492,8 +548,7 @@ public class Fragment_TaoHoaDon extends Fragment {
         if (spinner_makhachhang.getSelectedItem().toString().toLowerCase().contains("vui lòng thêm khách hàng")) {
             makh = "null";
         } else {
-            mang = spinner_makhachhang.getSelectedItem().toString().split(" - ");
-            makh = mang[0].toString();
+            makh = spinner_makhachhang.getSelectedItem().toString();
         }
         if(hoadonArrayList.size()>0){
                 if (arrayList.size() > 0) {
@@ -502,9 +557,17 @@ public class Fragment_TaoHoaDon extends Fragment {
                         database.INSERT_CHITIETHOADON(arrayList.get(i).getMaSach(), mahoadon, arrayList.get(i).getSoluongtronghoadon());
                         database.QueryData("UPDATE SACH SET SOQUYEN=" + (arrayList.get(i).getSoLuongconlai() - arrayList.get(i).getSoluongtronghoadon()) + " WHERE MASACH =" + arrayList.get(i).getMaSach());
                     }
-                    database.INSERT_HOADON(mahoadon,makh, adapter.getthanhtientong(),"null");
-                    Toast.makeText(getActivity(), "Thêm hoá đơn thành công", Toast.LENGTH_SHORT).show();
-                    createXlFile();
+                    if(!label_calendar.getText().equals("Ngày Lập hoá đơn")){
+                        database.INSERT_HOADON(mahoadon,makh,adapter.getthanhtientong(),label_calendar.getText().toString());
+                        Toast.makeText(getActivity(), "Thêm hoá đơn thành công", Toast.LENGTH_SHORT).show();
+                        createXlFile();
+                    }
+                    else {
+                        SimpleDateFormat simpleDateFormat= new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                        database.INSERT_HOADON(mahoadon,makh,adapter.getthanhtientong(),simpleDateFormat.format(Calendar.getInstance().getTime()));
+                        Toast.makeText(getActivity(), "Thêm hoá đơn thành công", Toast.LENGTH_SHORT).show();
+                        createXlFile();
+                    }
                 } else {
                     Toast.makeText(getActivity(), "Chưa có sách trong hoá đơn vui lòng thêm", Toast.LENGTH_SHORT).show();
                 }
@@ -515,9 +578,16 @@ public class Fragment_TaoHoaDon extends Fragment {
                     database.INSERT_CHITIETHOADON(arrayList.get(i).getMaSach(),mahoadon,arrayList.get(i).getSoluongtronghoadon());
                     database.QueryData("UPDATE SACH SET SOQUYEN="+(arrayList.get(i).getSoLuongconlai()-arrayList.get(i).getSoluongtronghoadon())+" WHERE MASACH ="+arrayList.get(i).getMaSach());
                 }
-                database.INSERT_HOADON(mahoadon,makh,adapter.getthanhtientong(),"null");
-                Toast.makeText(getActivity(), "Thêm hoá đơn thành công", Toast.LENGTH_SHORT).show();
-                createXlFile();
+                if(!label_calendar.getText().equals("Ngày Lập hoá đơn")){
+                    database.INSERT_HOADON(mahoadon,makh,adapter.getthanhtientong(),label_calendar.getText().toString());
+                    Toast.makeText(getActivity(), "Thêm hoá đơn thành công", Toast.LENGTH_SHORT).show();
+                    createXlFile();
+                }
+                else {
+                    SimpleDateFormat simpleDateFormat= new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    database.INSERT_HOADON(mahoadon,makh,adapter.getthanhtientong(),simpleDateFormat.format(Calendar.getInstance().getTime()));
+                    Toast.makeText(getActivity(), "Thêm hoá đơn thành công", Toast.LENGTH_SHORT).show();
+                }
             }
             else {
                 Toast.makeText(getActivity(), "Chưa có sách trong hoá đơn vui lòng thêm", Toast.LENGTH_SHORT).show();
@@ -540,29 +610,46 @@ public class Fragment_TaoHoaDon extends Fragment {
                     database.UPDATE_CHITIETHOADON(new CHI_TIET_HOA_DON(arrayList.get(i).getMaSach(), mahoadon, arrayList.get(i).getSoluongtronghoadon()));
                     database.QueryData("UPDATE SACH SET SOQUYEN=" + (arrayList.get(i).getSoLuongconlai() - arrayList.get(i).getSoluongtronghoadon()) + " WHERE MASACH =" + arrayList.get(i).getMaSach());
                 }
-                database.UPDATE_HOADON(new HOADON(mahoadon,makh, adapter.getthanhtientong(),"null"));
-                Toast.makeText(getActivity(), "Chỉnh sửa hoá đơn thành công", Toast.LENGTH_SHORT).show();
-                getActivity().getSupportFragmentManager().popBackStack();
+
+                if(!label_calendar.getText().equals("Ngày Lập hoá đơn")){
+                    database.UPDATE_HOADON(new HOADON(mahoadon,makh, adapter.getthanhtientong(),label_calendar.getText().toString()));
+                    Toast.makeText(getActivity(), "Chỉnh sửa hoá đơn thành công", Toast.LENGTH_SHORT).show();
+                    getActivity().getSupportFragmentManager().popBackStack();
+                    createXlFile();
+                }
+                else {
+                    database.UPDATE_HOADON(new HOADON(mahoadon,makh, adapter.getthanhtientong(),hoadon.getNGAY_HD()));
+                    Toast.makeText(getActivity(), "Chỉnh sửa hoá đơn thành công", Toast.LENGTH_SHORT).show();
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
             }
             else {
                 for (i = 0; i < arrayList_tam.size(); i++) {
                     int dem=0;
                     for (int j=0;j<arrayList.size();j++){
-                        if(arrayList.get(j)==arrayList_tam.get(i)){
+                        if(arrayList.get(j).getMaSach()==arrayList_tam.get(i).getMaSach()){
                             dem+=1;
+                            arrayList_tam.get(i).setSoluongtronghoadon(arrayList.get(j).getSoluongtronghoadon());
                         }
                     }
                     if(dem>0){
-                        database.UPDATE_CHITIETHOADON(new CHI_TIET_HOA_DON(arrayList.get(i).getMaSach(), mahoadon, arrayList.get(i).getSoluongtronghoadon()));
-                        database.QueryData("UPDATE SACH SET SOQUYEN=" + (arrayList.get(i).getSoLuongconlai() - arrayList.get(i).getSoluongtronghoadon()) + " WHERE MASACH =" + arrayList.get(i).getMaSach());
+                        database.UPDATE_CHITIETHOADON(new CHI_TIET_HOA_DON(arrayList_tam.get(i).getMaSach(), mahoadon, arrayList_tam.get(i).getSoluongtronghoadon()));
+                        database.QueryData("UPDATE SACH SET SOQUYEN=" + (arrayList_tam.get(i).getSoLuongconlai() - arrayList_tam.get(i).getSoluongtronghoadon()) + " WHERE MASACH =" + arrayList_tam.get(i).getMaSach());
                     }
                     else {
                         database.DELETE_CHITIETHOADON(mahoadon,arrayList_tam.get(i).getMaSach());
                         database.QueryData("UPDATE SACH SET SOQUYEN=" + arrayList_tam.get(i).getSoLuongconlai() + " WHERE MASACH =" + arrayList_tam.get(i).getMaSach());
                     }
-                    database.UPDATE_HOADON(new HOADON(mahoadon,makh, adapter.getthanhtientong(),"null"));
-                    Toast.makeText(getActivity(), "Chỉnh sửa hoá đơn thành công", Toast.LENGTH_SHORT).show();
-                    getActivity().getSupportFragmentManager().popBackStack();
+                    if(!label_calendar.getText().equals("Ngày Lập hoá đơn")){
+                        database.UPDATE_HOADON(new HOADON(mahoadon,makh, adapter.getthanhtientong(),label_calendar.getText().toString()));
+                        Toast.makeText(getActivity(), "Chỉnh sửa hoá đơn thành công", Toast.LENGTH_SHORT).show();
+                        getActivity().getSupportFragmentManager().popBackStack();
+                    }
+                    else {
+                        database.UPDATE_HOADON(new HOADON(mahoadon,makh, adapter.getthanhtientong(),hoadon.getNGAY_HD()));
+                        Toast.makeText(getActivity(), "Chỉnh sửa hoá đơn thành công", Toast.LENGTH_SHORT).show();
+                        getActivity().getSupportFragmentManager().popBackStack();
+                    }
 
                 }
             }
@@ -582,11 +669,38 @@ public class Fragment_TaoHoaDon extends Fragment {
                 }
             }).setPositiveButton("Không",null).show();
         }
+
     }
 
 
+    private void showDateTimeDialog(final BootstrapLabel date_time_in) {
+        final Calendar calendar=Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener dateSetListener=new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                calendar.set(Calendar.YEAR,year);
+                calendar.set(Calendar.MONTH,month);
+                calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
 
+                TimePickerDialog.OnTimeSetListener timeSetListener=new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
+                        calendar.set(Calendar.MINUTE,minute);
 
+                        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+                        date_time_in.setText(simpleDateFormat.format(calendar.getTime()));
+                    }
+                };
+
+                new TimePickerDialog(getActivity(),timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
+            }
+        };
+
+        new DatePickerDialog(getActivity(),dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
+
+    }
 
     private void createXlFile() {
 
@@ -598,7 +712,7 @@ public class Fragment_TaoHoaDon extends Fragment {
         Cell cell = null;
 
         Sheet sheet = null;
-        sheet = wb.createSheet("Demo Excel Sheet");
+        sheet = wb.createSheet("Quản Lý Cửa Hàng Sách");
         //Now column and row
         Row row = sheet.createRow(0);
 
@@ -660,7 +774,7 @@ public class Fragment_TaoHoaDon extends Fragment {
         }
         SimpleDateFormat simpleDateFormat= new SimpleDateFormat("dd-MM-yyyy");
         ngay=simpleDateFormat.format(Calendar.getInstance().getTime()) ;
-        String folderName = "Export Excel";
+        String folderName = "Hoá Đơn";
         File fi= new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),File.separator+"QuanLyCuaHangSach"+File.separator+folderName);
         fi.mkdirs();
         String fileName = folderName + ngay + ".xls";
@@ -677,10 +791,6 @@ public class Fragment_TaoHoaDon extends Fragment {
             outputStream = new FileOutputStream(path);
             wb.write(outputStream);
             Toast.makeText(getActivity(), "Excel Created in " + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-            Intent share = new Intent(Intent.ACTION_SEND);
-            share.setType("text/plain");
-            share.putExtra(Intent.EXTRA_STREAM, Uri.parse(file.getAbsolutePath()));
-            startActivity(Intent.createChooser(share, "Share Report file"));
         } catch (IOException e) {
             e.printStackTrace();
 

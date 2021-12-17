@@ -31,18 +31,14 @@
                 android:layout_weight="4"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
-                <com.beardedhen.androidbootstrap.BootstrapButton
+                <Button
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="Hiển Thị"
                     android:id="@+id/btn_hienthi_bootstrap_thongke"
                     android:textStyle="bold"
-                    android:outlineProvider="paddedBounds"
-                    app:bootstrapBrand="primary"
-                    app:bootstrapSize="lg"
-                    app:buttonMode="regular"
-                    app:showOutline="false"
-                    app:roundedCorners="true"
+                    android:background="@color/bootstrap_brand_success"
+                    android:textColor="@color/white"
                     />
             </LinearLayout>
             <LinearLayout
@@ -50,18 +46,13 @@
                 android:layout_weight="4"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
-                <com.beardedhen.androidbootstrap.BootstrapButton
+                <Button
+                    android:background="@color/bootstrap_brand_warning"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="Lưu File"
                     android:id="@+id/btn_bootstrap_luufile_thongke"
-                    app:bootstrapBrand="warning"
-                    app:bootstrapSize="lg"
-                    android:textStyle="bold"
-                    app:buttonMode="regular"
-                    app:showOutline="false"
-                    android:outlineProvider="paddedBounds"
-                    app:roundedCorners="true"
+                    android:textColor="@color/white"
                     />
             </LinearLayout>
         </LinearLayout>

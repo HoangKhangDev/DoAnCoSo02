@@ -297,7 +297,7 @@ public class Fragment_Sach extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
-                    File folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"Quanlythuvien");
+                    File folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"QuanLyCuaHangSach");
                     folder.mkdirs();
                     BitmapDrawable drawable = (BitmapDrawable) img_barcode.getDrawable();
                     Bitmap bitmap = drawable.getBitmap();

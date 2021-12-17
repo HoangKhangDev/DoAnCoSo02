@@ -26,6 +26,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -94,7 +96,8 @@ public class Fragment_HienThi extends Fragment {
         recyclerView_hienthi.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
         recyclerView_hienthi.setLayoutManager(linearLayoutManager);
-
+        LayoutAnimationController layoutAnimationController= AnimationUtils.loadLayoutAnimation(getActivity(),R.anim.layout_animation);
+        recyclerView_hienthi.setLayoutAnimation(layoutAnimationController);
 
         Bundle bundle= getArguments();
         //loadlistview
